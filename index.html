@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>The Gateway Designs — Brand-Led Web Design Studio in Delhi</title>
+<meta name="description" content="A Delhi web design studio. We design and build brand-led websites, design systems and interfaces — considered, fast, and built for the people who have to edit them.">
+<meta name="author" content="The Gateway Designs">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.thegatewaydesigns.com/">
+<meta name="theme-color" content="#040a1a">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Gateway Designs">
+<meta property="og:title" content="The Gateway Designs — Brand-Led Web Design Studio in Delhi">
+<meta property="og:description" content="A Delhi studio designing and building brand-led websites, design systems and interfaces.">
+<meta property="og:url" content="https://www.thegatewaydesigns.com/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.thegatewaydesigns.com/og-image.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Gateway Designs — every brand deserves a grand entrance.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Gateway Designs — Brand-Led Web Design Studio in Delhi">
+<meta name="twitter:description" content="A Delhi studio designing and building brand-led websites, design systems and interfaces.">
+<meta name="twitter:image" content="https://www.thegatewaydesigns.com/og-image.jpg">
+<meta name="twitter:image:alt" content="The Gateway Designs — every brand deserves a grand entrance.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "The Gateway Designs",
+  "description": "A Delhi web design studio designing and building brand-led websites, design systems and interfaces.",
+  "url": "https://www.thegatewaydesigns.com/",
+  "image": "https://www.thegatewaydesigns.com/og-image.jpg",
+  "logo": "https://www.thegatewaydesigns.com/apple-touch-icon.png",
+  "email": "hello@thegatewaydesigns.com",
+  "address": { "@type": "PostalAddress", "addressLocality": "Delhi", "addressCountry": "IN" },
+  "makesOffer": [
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Brand-Led Web Design" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Design Systems & UI" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Framer & Webflow Development" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Art Direction & Motion" } }
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="mesh-gradient.js"></script>
+<style>
+*{box-sizing:border-box;}
+body{margin:0;background:#f2f1ec;}
+a{color:#0c0c0c;text-decoration:none;}
+a:hover{color:#6a6a64;}
+::selection{background:#0c0c0c;color:#f2f1ec;}
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@keyframes emeraldShine{to{background-position:200% center;}}
+@keyframes heroDrift{0%{background-position:0% 50%,100% 50%,50% 0%;}50%{background-position:100% 50%,0% 50%,50% 100%;}100%{background-position:0% 50%,100% 50%,50% 0%;}}
+.emerald-ink{background:linear-gradient(110deg,#8a4b12 0%,#c9922e 22%,#ffe7ad 50%,#c9922e 78%,#8a4b12 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:emeraldShine 5s linear infinite;}
+@keyframes blurFadeUp{from{opacity:0;filter:blur(20px);transform:translateY(40px);}to{opacity:1;filter:blur(0);transform:translateY(0);}}
+.animate-blur-fade-up{opacity:0;animation:blurFadeUp 1s ease-out forwards;}
+.liquid-glass{background:rgba(255,255,255,.01);background-blend-mode:luminosity;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);border:none;box-shadow:inset 0 1px 1px rgba(255,255,255,.1);position:relative;overflow:hidden;}
+.liquid-glass::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.4px;background:linear-gradient(180deg,rgba(255,255,255,.45) 0%,rgba(255,255,255,.15) 20%,rgba(255,255,255,0) 40%,rgba(255,255,255,0) 60%,rgba(255,255,255,.15) 80%,rgba(255,255,255,.45) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
+@keyframes blob1{0%{transform:translate(-8%,-6%) scale(1);}50%{transform:translate(14%,10%) scale(1.28);}100%{transform:translate(-8%,-6%) scale(1);}}
+@keyframes blob2{0%{transform:translate(10%,4%) scale(1.15);}50%{transform:translate(-12%,-10%) scale(1);}100%{transform:translate(10%,4%) scale(1.15);}}
+@keyframes blob3{0%{transform:translate(6%,12%) scale(1);}50%{transform:translate(-6%,-8%) scale(1.3);}100%{transform:translate(6%,12%) scale(1);}}
+@keyframes blob4{0%{transform:translate(-10%,8%) scale(1.2);}50%{transform:translate(12%,-6%) scale(1);}100%{transform:translate(-10%,8%) scale(1.2);}}
+@keyframes blob5{0%{transform:translate(4%,-10%) scale(1.05);}50%{transform:translate(-8%,10%) scale(1.25);}100%{transform:translate(4%,-10%) scale(1.05);}}
+@keyframes fade-rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.animate-fade-rise{animation:fade-rise .8s ease-out both;}
+.animate-fade-rise-delay{animation:fade-rise .8s ease-out .25s both;}
+.animate-fade-rise-delay-2{animation:fade-rise .8s ease-out .5s both;}
+.scrollbar-hide::-webkit-scrollbar{display:none;}
+.scrollbar-hide{scrollbar-width:none;}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;}.animate-blur-fade-up,.animate-fade-rise,.animate-fade-rise-delay,.animate-fade-rise-delay-2{opacity:1!important;}}
+@media(max-width:900px){
+[data-hero-sec]{min-height:auto!important;}
+[data-hero-pad]{padding:112px clamp(22px,5vw,44px) 56px!important;min-height:auto!important;justify-content:flex-start!important;flex:none!important;}
+[data-hero-pad] h1{font-size:clamp(30px,8.4vw,46px)!important;}
+[data-hero-meta]{gap:6px 14px!important;margin-bottom:16px!important;font-size:10px!important;}
+[data-hero-meta] svg{width:12px;height:12px;}
+[data-hero-sub]{margin-top:14px!important;font-size:14.5px!important;max-width:38ch!important;}
+[data-hero-cta]{margin-top:20px!important;gap:10px!important;}
+[data-hero-cta] button{padding:11px 18px!important;font-size:13.5px!important;}
+[data-hero-scroll]{display:none!important;}
+}
+@media(max-width:860px){
+[data-m="c3"]{grid-template-columns:repeat(2,1fr)!important;}
+[data-m="c4"]{grid-template-columns:repeat(2,1fr)!important;}
+[data-m="ig"]{grid-template-columns:repeat(3,1fr)!important;}
+[data-m="c2"]{grid-template-columns:1fr!important;gap:36px!important;}
+[data-m="foot"]{grid-template-columns:1fr 1fr!important;gap:32px!important;}
+[data-m="row"]{grid-template-columns:auto 1fr!important;gap:6px 16px!important;}
+[data-m="row"] > :nth-child(3){grid-column:1/-1!important;}
+[data-m="wrow"]{grid-template-columns:auto 1fr!important;gap:4px 14px!important;}
+[data-m="wrow"] > :nth-child(4){grid-column:2!important;text-align:left!important;}
+[data-m="wrow"] > :nth-child(5){grid-column:1/-1!important;}
+}
+@media(max-width:520px){
+[data-m="c3"]{grid-template-columns:1fr!important;}
+[data-m="ig"]{grid-template-columns:repeat(3,1fr)!important;}
+[data-m="foot"]{grid-template-columns:1fr!important;}
+}
+</style>
+</helmet>
+<div data-gw-root style="background:#f2f1ec;color:#0c0c0c;font-family:'Hanken Grotesk',system-ui,sans-serif;min-height:100vh;overflow-x:hidden;font-size:17px;line-height:1.5;">
+
+<svg width="0" height="0" style="position:absolute;" aria-hidden="true"><defs>
+  <clipPath id="archClip" clipPathUnits="objectBoundingBox"><path d="M0,1 L0,0.32 C0,0.12 0.19,0 0.5,0 C0.81,0 1,0.12 1,0.32 L1,1 Z"></path></clipPath>
+</defs></svg>
+
+<header style="position:fixed;top:0;left:0;right:0;z-index:70;">
+  <div style="max-width:1440px;margin:0 auto;padding:26px clamp(22px,5vw,44px);display:flex;align-items:center;justify-content:space-between;gap:24px;">
+    <button onClick="{{ goHome }}" style="display:flex;align-items:center;gap:12px;background:none;border:none;cursor:pointer;padding:0;color:#ffffff;">
+      <svg width="22" height="24" viewBox="0 0 24 26" fill="none" aria-hidden="true"><path d="M2,26 L2,10 C2,4.5 6,1.5 12,1.5 C18,1.5 22,4.5 22,10 L22,26" stroke="#e8b64c" stroke-width="2" stroke-linecap="round"/></svg>
+      <span class="emerald-ink" style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:18px;letter-spacing:-.01em;text-transform:uppercase;">Gateway</span>
+    </button>
+    <button onClick="{{ toggleMenu }}" data-magnetic style="display:flex;align-items:center;gap:14px;background:none;border:none;cursor:pointer;padding:8px 0;color:#e8b64c;font-family:'Spline Sans Mono',monospace;font-size:13px;letter-spacing:.14em;text-transform:uppercase;">
+      <span class="emerald-ink">{{ menuLabel }}</span>
+      <span style="display:flex;flex-direction:column;gap:6px;width:24px;">
+        <span style="height:1.5px;background:#e8b64c;width:100%;transition:transform .4s ease;transform:{{ barTop }};"></span>
+        <span style="height:1.5px;background:#e8b64c;width:100%;transition:transform .4s ease,opacity .3s ease;opacity:{{ barMidOpacity }};"></span>
+        <span style="height:1.5px;background:#e8b64c;width:100%;transition:transform .4s ease;transform:{{ barBot }};"></span>
+      </span>
+    </button>
+  </div>
+</header>
+
+<div style="position:fixed;inset:0;z-index:65;background:#0c0c0c;color:#f2f1ec;display:flex;flex-direction:column;opacity:{{ menuOpacity }};transform:{{ menuTransform }};pointer-events:{{ menuPV }};transition:opacity .4s ease,transform .6s cubic-bezier(.76,0,.24,1);">
+  <div style="max-width:1440px;width:100%;margin:0 auto;padding:96px clamp(22px,5vw,44px) 48px;flex:1;display:flex;flex-direction:column;justify-content:center;">
+    <p style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#77766f;margin:0 0 32px;">Index · Where to?</p>
+    <nav style="display:flex;flex-direction:column;">
+      <button data-menu-item onClick="{{ goHome }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">01</span>Home</button>
+      <button data-menu-item onClick="{{ goWork }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">02</span>Work</button>
+      <button data-menu-item onClick="{{ goAbout }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">03</span>Studio</button>
+      <button data-menu-item onClick="{{ goContact }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">04</span>Contact</button>
+      <a data-menu-item href="/journal/" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;text-decoration:none;" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">05</span>Journal</a>
+    </nav>
+    <div data-menu-item style="display:flex;flex-wrap:wrap;gap:48px;margin-top:45px;padding-top:30px;border-top:1px solid rgba(242,241,236,.14);">
+      <div><p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#77766f;margin:0 0 8px;">Say hello</p><a href="mailto:hello@thegatewaydesigns.com" style="color:#f2f1ec;font-size:17px;" style-hover="color:#8a8a82;">hello@thegatewaydesigns.com</a></div>
+      <div><p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#77766f;margin:0 0 8px;">Studio</p><span style="color:#b7b6ad;font-size:17px;">Delhi, India</span></div>
+      <div><p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#77766f;margin:0 0 8px;">Reading</p><a href="/journal/" style="color:#f2f1ec;font-size:17px;" style-hover="color:#8a8a82;">The journal</a></div>
+    </div>
+  </div>
+</div>
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<main>
+  <section data-hero-sec style="position:relative;min-height:100vh;display:flex;flex-direction:column;background:radial-gradient(120% 90% at 15% 20%,#1e6fd9 0%,rgba(30,111,217,0) 55%),radial-gradient(120% 90% at 85% 30%,#1230a8 0%,rgba(18,48,168,0) 55%),radial-gradient(140% 120% at 50% 100%,#47c3ff 0%,rgba(71,195,255,0) 50%),#040a1a;background-size:180% 180%,180% 180%,180% 180%,100% 100%;animation:heroDrift 22s ease-in-out infinite;overflow:hidden;">
+    <canvas id="gradient-canvas" data-transition-in style="position:absolute;inset:0;width:100%;height:100%;z-index:0;--gradient-color-1:#040a1a;--gradient-color-2:#1230a8;--gradient-color-3:#1e6fd9;--gradient-color-4:#47c3ff;"></canvas>
+    <div aria-hidden="true" style="position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(120% 95% at 50% 42%,rgba(4,10,26,0) 38%,rgba(4,10,26,.62) 100%);"></div>
+    <div aria-hidden="true" style="position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.32;mix-blend-mode:overlay;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E&quot;);"></div>
+    <div data-hero-pad style="position:relative;z-index:10;flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:96px clamp(22px,5vw,44px) 56px;color:#fdf3ee;">
+      <div style="max-width:1440px;margin:0 auto;width:100%;">
+        <div data-hero-meta class="animate-blur-fade-up" style="animation-delay:200ms;display:flex;flex-wrap:wrap;gap:14px 26px;margin-bottom:30px;font-family:'Spline Sans Mono',monospace;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#ffffff;">
+          <span style="display:inline-flex;align-items:center;gap:9px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fdf3ee" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>Design &amp; build</span>
+          <span style="display:inline-flex;align-items:center;gap:9px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fdf3ee" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="17" rx="2"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg>Taking on new projects</span>
+          <span style="display:inline-flex;align-items:center;gap:9px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fdf3ee" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c3 3 3 16 0 19M12 2.5c-3 3-3 16 0 19"/></svg>Delhi → Worldwide</span>
+        </div>
+        <h1 class="animate-blur-fade-up" style="animation-delay:350ms;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(46px,9.6vw,150px);line-height:.9;letter-spacing:-.045em;margin:0;text-transform:uppercase;">Every brand deserves a <span style="color:#ffffff;">grand entrance</span></h1>
+        <p data-hero-sub class="animate-blur-fade-up" style="animation-delay:500ms;max-width:46ch;font-size:clamp(16px,1.4vw,20px);line-height:1.5;color:rgba(255,255,255,.82);margin:28px 0 0;">We design and build the website a brand arrives through — the first room anyone walks into, and the one that has to do the introducing.</p>
+        <div data-hero-cta class="animate-blur-fade-up" style="animation-delay:650ms;display:flex;flex-wrap:wrap;gap:14px;margin-top:36px;">
+          <button onClick="{{ goWork }}" style="display:inline-flex;align-items:center;gap:10px;font-family:'Hanken Grotesk',system-ui,sans-serif;background:#f2f7ff;color:#040a1a;border:none;cursor:pointer;font-size:15px;font-weight:600;padding:14px 26px;border-radius:100px;" style-hover="background:#47c3ff;"><svg width="15" height="15" viewBox="0 0 24 24" fill="#040a1a" aria-hidden="true"><path d="M6 4l14 8-14 8z"/></svg>See what we make</button>
+          <button onClick="{{ goContact }}" style="font-family:'Hanken Grotesk',system-ui,sans-serif;background:rgba(255,255,255,.08);color:#fdf3ee;border:1px solid rgba(253,243,238,.35);cursor:pointer;font-size:15px;font-weight:600;padding:14px 28px;border-radius:100px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);" style-hover="border-color:#fdf3ee;">Start a project</button>
+        </div>
+      </div>
+    </div>
+    <div data-hero-scroll style="position:absolute;left:50%;bottom:24px;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.8);">
+      <span style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;">Scroll</span>
+      <span style="width:1px;height:30px;background:linear-gradient(#ffffff,transparent);"></span>
+    </div>
+  </section>
+
+  <section aria-hidden="true" style="overflow:hidden;padding:24px 0;border-top:1px solid rgba(12,12,12,.16);border-bottom:1px solid rgba(12,12,12,.16);">
+    <div style="display:flex;width:max-content;gap:52px;white-space:nowrap;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(22px,3vw,38px);letter-spacing:-.02em;text-transform:uppercase;color:#0c0c0c;animation:marquee 28s linear infinite;">
+      <span>Brand-led web design</span><span style="color:#c3c2ba;">—</span><span>Design systems</span><span style="color:#c3c2ba;">—</span><span>Framer &amp; Webflow</span><span style="color:#c3c2ba;">—</span><span>Art direction</span><span style="color:#c3c2ba;">—</span>
+      <span>Brand-led web design</span><span style="color:#c3c2ba;">—</span><span>Design systems</span><span style="color:#c3c2ba;">—</span><span>Framer &amp; Webflow</span><span style="color:#c3c2ba;">—</span><span>Art direction</span><span style="color:#c3c2ba;">—</span>
+    </div>
+  </section>
+
+  <section style="max-width:1440px;margin:0 auto;padding:104px clamp(22px,5vw,44px) 40px;">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:16px;margin-bottom:12px;">
+      <h2 data-reveal style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(32px,5vw,62px);letter-spacing:-.03em;margin:0;text-transform:uppercase;">What we make</h2>
+      <span data-reveal style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#6a6a64;">(01) — Services</span>
+    </div>
+    <div style="border-top:1px solid rgba(12,12,12,.16);">
+      <sc-for list="{{ services }}" as="s" hint-placeholder-count="4">
+        <div data-reveal data-m="row" style="display:grid;grid-template-columns:80px 1.1fr 2fr;gap:28px;align-items:baseline;padding:34px 0;border-bottom:1px solid rgba(12,12,12,.16);transition:padding-left .35s ease;" style-hover="padding-left:16px;">
+          <span style="font-family:'Spline Sans Mono',monospace;font-size:14px;color:#6a6a64;">{{ s.n }}</span>
+          <h3 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:700;font-size:clamp(22px,2.6vw,32px);margin:0;letter-spacing:-.02em;">{{ s.t }}</h3>
+          <p style="margin:0;color:#4a4a45;font-size:17px;line-height:1.5;max-width:52ch;">{{ s.d }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1440px;margin:0 auto;padding:64px clamp(22px,5vw,44px) 40px;">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:16px;margin-bottom:42px;">
+      <div><h2 data-reveal style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(32px,5vw,62px);letter-spacing:-.03em;margin:0;text-transform:uppercase;">Concept studies</h2><p data-reveal style="margin:12px 0 0;color:#4a4a45;font-size:16px;max-width:52ch;">Self-initiated. No client attached — these are how we argue with ourselves about structure before it matters.</p></div>
+      <button data-reveal onClick="{{ goWork }}" style="font-family:'Spline Sans Mono',monospace;background:none;border:none;cursor:pointer;color:#0c0c0c;font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid #0c0c0c;padding-bottom:3px;">All studies →</button>
+    </div>
+    <div data-m="c3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:36px 30px;">
+      <sc-for list="{{ projectsHome }}" as="p" hint-placeholder-count="3">
+        <button data-reveal onClick="{{ goWork }}" style="text-align:left;background:none;border:none;padding:0;cursor:pointer;display:flex;flex-direction:column;gap:16px;color:#0c0c0c;">
+          <div style="width:100%;aspect-ratio:3/4;clip-path:url(#archClip);background:{{ p.bg }};display:flex;align-items:flex-end;padding:16px;filter:grayscale(1);">
+            <span style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.06em;color:{{ p.fg }};">{{ p.label }}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;border-top:1px solid rgba(12,12,12,.16);padding-top:12px;">
+            <div><h3 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:700;font-size:19px;margin:0;letter-spacing:-.01em;">{{ p.t }}</h3><span style="color:#6a6a64;font-size:14px;">{{ p.c }}</span></div>
+            <span style="font-family:'Spline Sans Mono',monospace;color:#6a6a64;font-size:11px;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;">Concept</span>
+          </div>
+        </button>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1440px;margin:0 auto;padding:64px clamp(22px,5vw,44px) 40px;">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:16px;margin-bottom:28px;">
+      <h2 data-reveal style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(28px,3.6vw,46px);letter-spacing:-.03em;margin:0;text-transform:uppercase;">From the journal</h2>
+      <a href="/journal/" style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid #0c0c0c;padding-bottom:3px;">All writing →</a>
+    </div>
+    <div data-m="c3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:28px;border-top:1px solid rgba(12,12,12,.16);padding-top:8px;">
+      <sc-for list="{{ articles }}" as="a" hint-placeholder-count="3">
+        <a data-reveal href="{{ a.href }}" style="display:flex;flex-direction:column;gap:12px;padding:26px 0;color:#0c0c0c;" style-hover="color:#6a6a64;">
+          <span style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6a6a64;">{{ a.kicker }}</span>
+          <h3 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:700;font-size:clamp(20px,2vw,25px);line-height:1.12;letter-spacing:-.02em;margin:0;">{{ a.t }}</h3>
+          <p style="margin:0;color:#4a4a45;font-size:16px;line-height:1.55;">{{ a.d }}</p>
+          <span style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6a6a64;margin-top:auto;padding-top:10px;">{{ a.read }}</span>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <section data-cta-section style="position:relative;width:100%;margin-top:96px;overflow:hidden;background:linear-gradient(to bottom,#f2f1ec 0,#0c0c0c 240px);color:#f2f1ec;">
+    <div style="position:relative;max-width:1080px;margin:0 auto;padding:96px clamp(22px,5vw,44px) clamp(380px,42vw,540px);">
+      <div style="position:relative;z-index:20;max-width:440px;">
+        <p data-reveal style="font-family:'Spline Sans Mono',monospace;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#8a8a82;margin:0 0 24px;">(Let's talk)</p>
+        <h2 data-reveal style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(32px,4.4vw,52px);letter-spacing:-.03em;line-height:1.02;margin:0;text-transform:uppercase;color:#f2f1ec;">Tell us where you want people to go.</h2>
+        <p data-reveal style="margin:26px 0 0;color:rgba(255,255,255,.6);font-size:clamp(16px,1.4vw,19px);line-height:1.5;max-width:400px;">Send us the shape of the thing — a brief, a half-formed idea, a site you already have and no longer like. We will tell you what we would do with it and what it would take.</p>
+        <div data-reveal style="margin-top:40px;">
+          <button onClick="{{ goContact }}" data-magnetic style="font-family:'Hanken Grotesk',system-ui,sans-serif;background:rgba(255,255,255,.85);color:#0c0c0c;border:none;cursor:pointer;font-size:15px;font-weight:600;padding:15px 34px;border-radius:100px;" style-hover="background:#ffffff;">Start a project</button>
+        </div>
+      </div>
+    </div>
+
+    <div data-parallax-dash style="position:absolute;top:96px;right:-8%;width:min(680px,66%);z-index:10;will-change:transform;">
+      <div class="liquid-glass" style="width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;padding:12px;">
+        <div data-dash-grid style="display:grid;height:100%;grid-template-columns:1fr;gap:12px;">
+          <div style="position:relative;min-height:0;width:100%;height:100%;overflow:hidden;border-radius:16px;background:hsl(201 30% 12%);">
+            <video autoplay loop muted playsinline preload="auto" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;filter:grayscale(1) contrast(1.05);">
+              <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4" type="video/mp4" />
+            </video>
+            <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 18px;border-bottom:1px solid rgba(255,255,255,.14);">
+              <span style="display:flex;align-items:center;gap:8px;flex:none;white-space:nowrap;">
+                <svg width="11" height="12" viewBox="0 0 24 26" fill="none" aria-hidden="true"><path d="M2,26 L2,10 C2,4.5 6,1.5 12,1.5 C18,1.5 22,4.5 22,10 L22,26" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
+                <span style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:#fff;">Concept</span>
+              </span>
+              <div style="display:flex;gap:15px;font-family:'Spline Sans Mono',monospace;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.55);flex:none;white-space:nowrap;">
+                <span style="color:#fff;">Index</span><span>Studio</span><span>Archive</span>
+              </div>
+              <span style="font-family:'Spline Sans Mono',monospace;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:#fff;border-bottom:1px solid rgba(255,255,255,.55);padding-bottom:2px;flex:none;white-space:nowrap;">Enquire</span>
+            </div>
+            <div style="position:relative;z-index:10;display:grid;grid-template-columns:1fr auto;align-items:end;gap:18px;padding:30px 18px 20px;">
+              <div style="min-width:0;">
+                <span class="animate-fade-rise" style="display:block;font-family:'Spline Sans Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:12px;">(01) — Spatial Identity</span>
+                <div class="animate-fade-rise" aria-hidden="true" style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;line-height:.86;letter-spacing:-.045em;text-transform:uppercase;font-size:clamp(21px,3.3vw,44px);margin:0;color:#fff;">Quiet<br/>Monuments</div>
+                <p class="animate-fade-rise-delay" style="color:rgba(255,255,255,.6);font-size:clamp(8.5px,.95vw,11.5px);line-height:1.55;max-width:30ch;margin:13px 0 0;">Calm, deliberate spaces built for people who think in decades — not quarters.</p>
+              </div>
+              <div class="animate-fade-rise-delay-2" style="display:flex;flex-direction:column;align-items:center;gap:9px;flex:none;">
+                <span style="width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;line-height:1;">↗</span>
+                <span style="font-family:'Spline Sans Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.7);">View work</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div data-parallax-grass aria-hidden="true" style="pointer-events:none;position:absolute;left:0;right:0;bottom:-140px;height:460px;width:100%;z-index:30;will-change:transform;background:radial-gradient(130% 110% at 50% 100%,#000 0%,#000 28%,rgba(12,12,12,.86) 52%,rgba(12,12,12,0) 100%);"></div>
+  </section>
+</main>
+</sc-if>
+
+<sc-if value="{{ isWork }}" hint-placeholder-val="{{ false }}">
+<main style="max-width:1440px;margin:0 auto;padding:128px clamp(22px,5vw,44px) 40px;">
+  <p data-hero-tag style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#6a6a64;margin:0 0 26px;">(02) — Concept studies</p>
+  <h1 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(52px,10vw,150px);line-height:.9;letter-spacing:-.045em;margin:0;text-transform:uppercase;">
+    <span style="display:block;overflow:hidden;padding-bottom:.03em;"><span data-hero style="display:block;">Doors we've</span></span>
+    <span style="display:block;overflow:hidden;padding-bottom:.05em;"><span data-hero class="emerald-ink" style="display:block;">drawn ourselves</span></span>
+  </h1>
+  <p data-hero-tag style="max-width:56ch;font-size:19px;color:#3a3a36;margin:32px 0 14px;">Three self-initiated studies. No client, no brief, no launch date — we set ourselves a problem, take it as far as it needs to go, and keep what we learn for the work that follows.</p>
+  <p data-hero-tag style="font-family:'Spline Sans Mono',monospace;max-width:56ch;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6a6a64;margin:0 0 56px;">Concept work · Not commissioned</p>
+  <div style="border-top:1px solid rgba(12,12,12,.16);">
+    <sc-for list="{{ projects }}" as="p" hint-placeholder-count="3">
+      <div data-reveal data-m="wrow" style="border-bottom:1px solid rgba(12,12,12,.16);display:grid;grid-template-columns:64px 1.4fr 1fr 100px;gap:14px 28px;align-items:baseline;padding:34px 0;color:#0c0c0c;">
+        <span style="font-family:'Spline Sans Mono',monospace;font-size:13px;color:#6a6a64;">{{ p.no }}</span>
+        <h2 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,44px);margin:0;letter-spacing:-.025em;text-transform:uppercase;">{{ p.t }}</h2>
+        <span style="color:#4a4a45;font-size:16px;">{{ p.c }}</span>
+        <span style="font-family:'Spline Sans Mono',monospace;color:#6a6a64;font-size:11px;letter-spacing:.1em;text-transform:uppercase;text-align:right;">Concept</span>
+        <p style="grid-column:2/-1;margin:0;color:#4a4a45;font-size:17px;line-height:1.55;max-width:62ch;">{{ p.d }}</p>
+      </div>
+    </sc-for>
+  </div>
+  <div data-reveal style="display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin-top:56px;">
+    <p style="margin:0;font-size:17px;color:#3a3a36;max-width:44ch;">Client work is what we would rather be doing. If you have a project, it goes at the top of this page.</p>
+    <button onClick="{{ goContact }}" data-magnetic style="font-family:'Hanken Grotesk',system-ui,sans-serif;background:#0c0c0c;color:#f2f1ec;border:none;cursor:pointer;font-size:15px;font-weight:600;padding:14px 28px;border-radius:100px;" style-hover="background:#2a2a26;">Start a project</button>
+  </div>
+</main>
+</sc-if>
+
+<sc-if value="{{ isAbout }}" hint-placeholder-val="{{ false }}">
+<main>
+  <section style="max-width:1440px;margin:0 auto;padding:128px clamp(22px,5vw,44px) 30px;">
+    <p data-hero-tag style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#6a6a64;margin:0 0 26px;">(03) — The studio</p>
+    <h1 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(52px,10vw,150px);line-height:.9;letter-spacing:-.045em;margin:0;text-transform:uppercase;">
+      <span style="display:block;overflow:hidden;padding-bottom:.03em;"><span data-hero style="display:block;">A small studio</span></span>
+      <span style="display:block;overflow:hidden;padding-bottom:.05em;"><span data-hero class="emerald-ink" style="display:block;">a wide doorway</span></span>
+    </h1>
+    <div data-m="c2" style="display:grid;grid-template-columns:1.2fr .8fr;gap:60px;margin-top:45px;align-items:start;">
+      <div data-reveal style="display:flex;flex-direction:column;gap:20px;font-size:19px;line-height:1.6;color:#3a3a36;">
+        <p style="margin:0;">Gateway is a design studio in Delhi. We started it around one idea we keep coming back to: a website is a threshold, and most of them are built like walls. You are asked to scroll past a brand rather than walk into it.</p>
+        <p style="margin:0;">So we work from the entrance backwards. What does someone need in the first four seconds, what can wait, and what is only there because a template had a slot for it. Then we build the thing properly — semantic markup, real performance budgets, motion that stops when a visitor asks it to.</p>
+        <p style="margin:0;">We take one project at a time. That is partly principle and partly arithmetic: the person you talk about the work with is the person doing it, from art direction through to the last line of production code.</p>
+      </div>
+      <div data-reveal aria-hidden="true" style="width:100%;aspect-ratio:4/5;clip-path:url(#archClip);background:radial-gradient(120% 90% at 30% 15%,#1e6fd9 0%,rgba(30,111,217,0) 55%),radial-gradient(130% 100% at 80% 85%,#47c3ff 0%,rgba(71,195,255,0) 50%),linear-gradient(160deg,#12204a,#040a1a);"></div>
+    </div>
+  </section>
+
+  <section style="max-width:1440px;margin:0 auto;padding:64px clamp(22px,5vw,44px) 20px;">
+    <div data-m="c4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:28px;border-top:1px solid rgba(12,12,12,.2);border-bottom:1px solid rgba(12,12,12,.2);padding:38px 0;">
+      <div data-reveal><div style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(24px,2.3vw,31px);letter-spacing:-.025em;line-height:1.05;text-transform:uppercase;">One at a time</div><div style="color:#6a6a64;font-size:15px;line-height:1.5;margin-top:10px;">A single project in the studio, start to finish.</div></div>
+      <div data-reveal><div style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(24px,2.3vw,31px);letter-spacing:-.025em;line-height:1.05;text-transform:uppercase;">Founder-led</div><div style="color:#6a6a64;font-size:15px;line-height:1.5;margin-top:10px;">You brief the person who does the work.</div></div>
+      <div data-reveal><div style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(24px,2.3vw,31px);letter-spacing:-.025em;line-height:1.05;text-transform:uppercase;">Yours to edit</div><div style="color:#6a6a64;font-size:15px;line-height:1.5;margin-top:10px;">Handed over so your team can change it without us.</div></div>
+      <div data-reveal><div style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(24px,2.3vw,31px);letter-spacing:-.025em;line-height:1.05;text-transform:uppercase;">Delhi, remote</div><div style="color:#6a6a64;font-size:15px;line-height:1.5;margin-top:10px;">Based in Delhi; the work travels anywhere.</div></div>
+    </div>
+  </section>
+
+  <section style="max-width:1440px;margin:0 auto;padding:58px clamp(22px,5vw,44px) 20px;">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:16px;margin-bottom:12px;">
+      <h2 data-reveal style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,54px);letter-spacing:-.03em;margin:0;text-transform:uppercase;">How we work</h2>
+      <span data-reveal style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#6a6a64;">A four-step passage</span>
+    </div>
+    <div style="border-top:1px solid rgba(12,12,12,.16);">
+      <sc-for list="{{ steps }}" as="st" hint-placeholder-count="4">
+        <div data-reveal data-m="row" style="display:grid;grid-template-columns:80px 1fr 2fr;gap:28px;align-items:baseline;padding:30px 0;border-bottom:1px solid rgba(12,12,12,.16);">
+          <span style="font-family:'Spline Sans Mono',monospace;font-size:14px;color:#6a6a64;">{{ st.n }}</span>
+          <h3 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:700;font-size:clamp(20px,2.4vw,28px);margin:0;letter-spacing:-.02em;text-transform:uppercase;">{{ st.t }}</h3>
+          <p style="margin:0;color:#4a4a45;font-size:16px;line-height:1.5;max-width:52ch;">{{ st.d }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="margin:64px 0 0;background:#0c0c0c;color:#f2f1ec;">
+    <div data-reveal style="max-width:1440px;margin:0 auto;padding:64px clamp(22px,5vw,44px);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:24px;">
+      <p style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(28px,4vw,52px);letter-spacing:-.03em;margin:0;max-width:18ch;text-transform:uppercase;">Have a project in mind?</p>
+      <button onClick="{{ goContact }}" data-magnetic style="font-family:'Hanken Grotesk',system-ui,sans-serif;background:#f2f1ec;color:#0c0c0c;border:none;cursor:pointer;font-size:15px;font-weight:600;padding:16px 32px;border-radius:100px;" style-hover="background:#c3c2ba;">Get in touch</button>
+    </div>
+  </section>
+</main>
+</sc-if>
+
+<sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
+<main style="max-width:1440px;margin:0 auto;padding:128px clamp(22px,5vw,44px) 40px;">
+  <p data-hero-tag style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#6a6a64;margin:0 0 26px;">(04) — Contact</p>
+  <h1 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(52px,10vw,150px);line-height:.9;letter-spacing:-.045em;margin:0;text-transform:uppercase;">
+    <span style="display:block;overflow:hidden;padding-bottom:.05em;"><span data-hero style="display:block;">Start a <span class="emerald-ink">project</span></span></span>
+  </h1>
+  <div data-m="c2" style="display:grid;grid-template-columns:1.3fr 1fr;gap:64px;margin-top:45px;align-items:start;">
+    <div data-reveal>
+      <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+      <form onSubmit="{{ submit }}" style="display:flex;flex-direction:column;gap:24px;">
+        <sc-if value="{{ failed }}" hint-placeholder-val="{{ false }}">
+        <div role="alert" style="border:1px solid rgba(12,12,12,.28);border-radius:6px;padding:20px 22px;display:flex;flex-direction:column;gap:14px;align-items:flex-start;">
+          <p style="margin:0;font-size:16px;line-height:1.55;color:#3a3a36;max-width:46ch;">We couldn't send that from the site. Nothing's lost — the button below opens your mail app with everything you typed already filled in.</p>
+          <a href="{{ mailtoHref }}" style="font-family:'Hanken Grotesk',system-ui,sans-serif;background:#0c0c0c;color:#f2f1ec;font-size:14px;font-weight:600;padding:12px 24px;border-radius:100px;" style-hover="background:#2a2a26;">Email it to us →</a>
+        </div>
+        </sc-if>
+        <div data-m="c2" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+          <label style="display:flex;flex-direction:column;gap:10px;"><span style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6a6a64;">Your name</span><input type="text" name="name" autocomplete="name" required placeholder="Ada Sharma" style="width:100%;padding:14px 0;border:none;border-bottom:1px solid rgba(12,12,12,.28);background:none;font-family:inherit;font-size:17px;color:#0c0c0c;" /></label>
+          <label style="display:flex;flex-direction:column;gap:10px;"><span style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6a6a64;">Email</span><input type="email" name="email" autocomplete="email" required placeholder="you@company.com" style="width:100%;padding:14px 0;border:none;border-bottom:1px solid rgba(12,12,12,.28);background:none;font-family:inherit;font-size:17px;color:#0c0c0c;" /></label>
+        </div>
+        <label style="display:flex;flex-direction:column;gap:10px;"><span style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6a6a64;">What do you need?</span>
+          <select name="need" style="width:100%;padding:14px 0;border:none;border-bottom:1px solid rgba(12,12,12,.28);background:none;font-family:inherit;font-size:17px;color:#0c0c0c;">
+            <option>Brand-led website</option><option>Design system / UI</option><option>Framer or Webflow build</option><option>Art direction</option><option>Something else</option>
+          </select>
+        </label>
+        <label style="display:flex;flex-direction:column;gap:10px;"><span style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6a6a64;">Tell us about it</span><textarea rows="4" name="message" placeholder="Where do you want people to go?" style="width:100%;padding:14px 0;border:none;border-bottom:1px solid rgba(12,12,12,.28);background:none;font-family:inherit;font-size:17px;color:#0c0c0c;resize:vertical;"></textarea></label>
+        <button type="submit" data-magnetic style="align-self:flex-start;font-family:'Hanken Grotesk',system-ui,sans-serif;background:#0c0c0c;color:#f2f1ec;border:none;cursor:pointer;font-size:15px;font-weight:600;padding:16px 34px;border-radius:100px;margin-top:8px;" style-hover="background:#2a2a26;">{{ submitLabel }}</button>
+      </form>
+      </sc-if>
+      <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+      <div style="border:1px solid rgba(12,12,12,.2);border-radius:6px;padding:52px clamp(22px,5vw,44px);">
+        <svg width="28" height="30" viewBox="0 0 24 26" fill="none" aria-hidden="true" style="margin-bottom:20px;"><path d="M2,26 L2,10 C2,4.5 6,1.5 12,1.5 C18,1.5 22,4.5 22,10 L22,26" stroke="#0c0c0c" stroke-width="2" stroke-linecap="round"/></svg>
+        <h3 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:32px;letter-spacing:-.03em;margin:0 0 12px;text-transform:uppercase;">Thank you</h3>
+        <p style="margin:0;color:#4a4a45;font-size:17px;line-height:1.55;max-width:40ch;">The door's open. Your note is with us and you'll hear back within two working days. If you'd like a sense of how we think in the meantime, the journal is the honest version.</p>
+        <a href="/journal/" style="display:inline-block;margin-top:24px;font-family:'Hanken Grotesk',system-ui,sans-serif;border:1px solid rgba(12,12,12,.3);font-size:15px;font-weight:600;padding:13px 26px;border-radius:100px;color:#0c0c0c;" style-hover="border-color:#0c0c0c;">Read the journal →</a>
+      </div>
+      </sc-if>
+    </div>
+    <div data-reveal style="display:flex;flex-direction:column;gap:30px;">
+      <div><p style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6a6a64;margin:0 0 8px;">Email</p><a href="mailto:hello@thegatewaydesigns.com" style="font-size:19px;">hello@thegatewaydesigns.com</a></div>
+      
+      <div><p style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6a6a64;margin:0 0 8px;">Studio</p><span style="font-size:17px;color:#3a3a36;line-height:1.5;display:block;">Delhi, India<br/>Working remotely with brands anywhere</span></div>
+      <div><p style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6a6a64;margin:0 0 8px;">Hours</p><span style="font-size:17px;color:#3a3a36;">Mon–Fri · 10:00–18:00 IST</span></div>
+    </div>
+  </div>
+</main>
+</sc-if>
+
+<footer style="border-top:1px solid rgba(12,12,12,.16);margin-top:96px;">
+  <div data-m="foot" style="max-width:1440px;margin:0 auto;padding:58px clamp(22px,5vw,44px) 30px;display:grid;grid-template-columns:2fr 1fr 1fr 1.4fr;gap:36px;">
+    <div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+        <svg width="18" height="20" viewBox="0 0 24 26" fill="none" aria-hidden="true"><path d="M2,26 L2,10 C2,4.5 6,1.5 12,1.5 C18,1.5 22,4.5 22,10 L22,26" stroke="#0c0c0c" stroke-width="2" stroke-linecap="round"/></svg>
+        <span style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:17px;text-transform:uppercase;">Gateway</span>
+      </div>
+      <p style="margin:0;max-width:34ch;color:#6a6a64;font-size:15px;line-height:1.55;">A design studio in Delhi. We design and build the website a brand arrives through.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#9a9a92;margin:0 0 4px;">Menu</p>
+      <button onClick="{{ goHome }}" style="text-align:left;font-family:inherit;background:none;border:none;cursor:pointer;color:#3a3a36;font-size:15px;padding:0;" style-hover="color:#0c0c0c;">Home</button>
+      <button onClick="{{ goWork }}" style="text-align:left;font-family:inherit;background:none;border:none;cursor:pointer;color:#3a3a36;font-size:15px;padding:0;" style-hover="color:#0c0c0c;">Work</button>
+      <button onClick="{{ goAbout }}" style="text-align:left;font-family:inherit;background:none;border:none;cursor:pointer;color:#3a3a36;font-size:15px;padding:0;" style-hover="color:#0c0c0c;">Studio</button>
+      <button onClick="{{ goContact }}" style="text-align:left;font-family:inherit;background:none;border:none;cursor:pointer;color:#3a3a36;font-size:15px;padding:0;" style-hover="color:#0c0c0c;">Contact</button>
+      <a href="/journal/" style="color:#3a3a36;font-size:15px;" style-hover="color:#0c0c0c;">Journal</a>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#9a9a92;margin:0 0 4px;">Journal</p>
+      <a href="/journal/the-threshold-problem.html" style="color:#3a3a36;font-size:15px;line-height:1.35;" style-hover="color:#0c0c0c;">The threshold problem</a>
+      <a href="/journal/build-it-so-they-can-edit-it.html" style="color:#3a3a36;font-size:15px;line-height:1.35;" style-hover="color:#0c0c0c;">Build it so they can edit it</a>
+      <a href="/journal/motion-that-earns-its-keep.html" style="color:#3a3a36;font-size:15px;line-height:1.35;" style-hover="color:#0c0c0c;">Motion that earns its keep</a>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#9a9a92;margin:0 0 4px;">Say hello</p>
+      <a href="mailto:hello@thegatewaydesigns.com" style="color:#0c0c0c;font-size:15px;">hello@thegatewaydesigns.com</a>
+      <span style="color:#6a6a64;font-size:15px;">Delhi, IN</span>
+    </div>
+  </div>
+  <div style="max-width:1440px;margin:0 auto;padding:20px clamp(22px,5vw,44px) 40px;border-top:1px solid rgba(12,12,12,.12);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;color:#9a9a92;font-size:13px;font-family:'Spline Sans Mono',monospace;">
+    <span>© 2026 The Gateway Designs</span>
+    <span>Designed &amp; made in Delhi</span>
+  </div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+/* Where contact-form submissions are POSTed as JSON. Any endpoint that accepts
+   a JSON body works (Formspree, Basin, Netlify/Vercel function, your own API).
+   While this is empty — or if the request fails — the form falls back to a
+   prefilled mailto: so inquiries still reach the studio. */
+const FORM_ENDPOINT = '';
+const CONTACT_EMAIL = 'hello@thegatewaydesigns.com';
+
+class Component extends DCLogic {
+  state = { page: 'home', menuOpen: false, status: 'idle', form: null };
+
+  go(p) {
+    return () => {
+      const keep = p === 'contact' && this.state.status === 'sent';
+      this.setState({ page: p, menuOpen: false, status: keep ? 'sent' : 'idle' });
+      try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) { window.scrollTo(0, 0); }
+    };
+  }
+
+  sendInquiry(e) {
+    e.preventDefault();
+    if (this.state.status === 'sending') return;
+    const data = new FormData(e.target);
+    const str = (k) => (data.get(k) == null ? '' : String(data.get(k)).trim());
+    const form = { name: str('name'), email: str('email'), need: str('need'), message: str('message') };
+    if (!FORM_ENDPOINT) { this.setState({ status: 'error', form: form }); return; }
+    this.setState({ status: 'sending', form: form });
+    fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(form)
+    })
+      .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r; })
+      .then(() => this.setState({ status: 'sent' }))
+      .catch(() => this.setState({ status: 'error' }));
+  }
+
+  mailtoHref() {
+    const f = this.state.form || {};
+    const subject = 'Project inquiry' + (f.need ? ' — ' + f.need : '');
+    const body = [
+      'Name: ' + (f.name || ''),
+      'Email: ' + (f.email || ''),
+      'Looking for: ' + (f.need || ''),
+      '',
+      f.message || ''
+    ].join('\n');
+    return 'mailto:' + CONTACT_EMAIL +
+      '?subject=' + encodeURIComponent(subject) +
+      '&body=' + encodeURIComponent(body);
+  }
+
+  componentDidMount() {
+    this._prevState = { page: this.state.page, menuOpen: this.state.menuOpen };
+    this._reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    if (!this._reduce) {
+      this._onMove = (e) => {
+        this._mx = e.clientX; this._my = e.clientY;
+        if (!this._raf) this._raf = requestAnimationFrame(() => { this._raf = null; this.applyMouse(); });
+      };
+      window.addEventListener('mousemove', this._onMove, { passive: true });
+    }
+    this._playVideo = () => { document.querySelectorAll('video').forEach((v) => { v.muted = true; const p = v.play(); if (p && p.catch) p.catch(() => {}); }); };
+    this._playVideo();
+    setTimeout(this._playVideo, 400);
+    window.addEventListener('pointerdown', this._playVideo, { once: true });
+    if (!this._reduce) {
+      this._onScroll = () => { if (!this._sraf) this._sraf = requestAnimationFrame(() => { this._sraf = null; this.applyParallax(); }); };
+      window.addEventListener('scroll', this._onScroll, { passive: true });
+      this.applyParallax();
+    }
+    this._onResize = () => this.setLayout();
+    window.addEventListener('resize', this._onResize, { passive: true });
+    requestAnimationFrame(() => this.setLayout());
+    this.initGradient();
+    this._stops = [];
+    this._tries = 0;
+    this._poll = setInterval(() => {
+      this._tries++;
+      if (window.gsap && window.ScrollTrigger) { clearInterval(this._poll); window.gsap.registerPlugin(window.ScrollTrigger); this._gsapReady = true; this.initAnims(); }
+      else if (this._tries > 80) { clearInterval(this._poll); }
+    }, 60);
+  }
+
+  componentWillUnmount() {
+    if (this._onMove) window.removeEventListener('mousemove', this._onMove);
+    if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+    if (this._onResize) window.removeEventListener('resize', this._onResize);
+    if (this._poll) clearInterval(this._poll);
+    if (this._gpoll) clearInterval(this._gpoll);
+    if (this._grad && this._grad.destroy) { try { this._grad.destroy(); } catch (e) {} }
+    this.cleanup();
+  }
+
+  setLayout() {
+    const sec = document.querySelector('[data-cta-section]');
+    if (!sec) return;
+    const w = window.innerWidth || 1200;
+    const desktop = w >= 1024;
+    const pad = sec.querySelector(':scope > div');
+    const dash = sec.querySelector('[data-parallax-dash]');
+    const grid = sec.querySelector('[data-dash-grid]');
+    if (dash) {
+      if (desktop) {
+        dash.style.position = 'absolute'; dash.style.top = '80px'; dash.style.left = 'auto';
+        dash.style.right = '-8%'; dash.style.width = 'min(680px,64%)'; dash.style.margin = '0';
+      } else {
+        dash.style.position = 'relative'; dash.style.top = '0'; dash.style.left = '0';
+        dash.style.right = '0'; dash.style.width = '94%'; dash.style.margin = '0 auto';
+      }
+    }
+    if (pad) pad.style.paddingBottom = desktop ? 'clamp(380px,42vw,540px)' : '56px';
+    if (grid) grid.style.gridTemplateColumns = '1fr';
+  }
+
+  applyParallax() {
+    const sec = document.querySelector('[data-cta-section]');
+    if (!sec) return;
+    const rect = sec.getBoundingClientRect();
+    const vh = window.innerHeight || 800;
+    let p = (vh - rect.top) / (vh + rect.height);
+    p = Math.max(0, Math.min(1, p));
+    const dash = document.querySelector('[data-parallax-dash]');
+    if (dash) dash.style.transform = 'translateY(' + (120 - 240 * p) + 'px)';
+    const grass = document.querySelector('[data-parallax-grass]');
+    if (grass) {
+      const mobile = (window.innerWidth || 1200) < 768;
+      const from = mobile ? 80 : 200, to = mobile ? -40 : -200;
+      grass.style.transform = 'translateY(' + (from + (to - from) * p) + 'px)';
+    }
+  }
+
+  cleanup() {
+    if (this._stops) this._stops.forEach((s) => { try { s(); } catch (e) {} });
+    this._stops = [];
+    if (this._ctx) { try { this._ctx.revert(); } catch (e) {} this._ctx = null; }
+  }
+
+  initGradient() {
+    let n = 0;
+    this._gpoll = setInterval(() => {
+      n++;
+      const canvas = document.querySelector('#gradient-canvas');
+      if (window.MeshGradient && canvas) {
+        clearInterval(this._gpoll);
+        if (this._grad) { try { this._grad.destroy(); } catch (e) {} }
+        try { this._grad = new window.MeshGradient().init('#gradient-canvas', ['#040a1a','#1230a8','#1e6fd9','#47c3ff']); } catch (e) {}
+      } else if (n > 90) { clearInterval(this._gpoll); }
+    }, 70);
+  }
+
+  componentDidUpdate(prevProps) {
+    // The runtime calls componentDidUpdate with prevProps only, so track the
+    // previous state ourselves rather than reading a second argument.
+    const prev = this._prevState || {};
+    this._prevState = { page: this.state.page, menuOpen: this.state.menuOpen };
+    if (prev.page !== this.state.page) {
+      requestAnimationFrame(() => { this.setLayout(); if (this._gsapReady) this.initAnims(); if (!this._reduce) this.applyParallax(); });
+      if (this.state.page === 'home' && prev.page !== 'home') this.initGradient();
+    }
+    if (prev.menuOpen !== this.state.menuOpen && this.state.menuOpen && window.gsap && !this._reduce) {
+      window.gsap.fromTo('[data-menu-item]', { y: 46, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out', stagger: 0.07, delay: 0.1 });
+    }
+  }
+
+  initAnims() {
+    const g = window.gsap;
+    if (!g || this._reduce) return;
+    this.cleanup();
+    this._ctx = g.context(() => {
+      const lines = g.utils.toArray('[data-hero]');
+      if (lines.length) g.from(lines, { yPercent: 115, duration: 1.1, ease: 'power4.out', stagger: 0.09 });
+      const tags = g.utils.toArray('[data-hero-tag]');
+      if (tags.length) g.from(tags, { y: 26, opacity: 0, duration: 0.8, ease: 'power3.out', stagger: 0.08, delay: 0.28 });
+      g.utils.toArray('[data-reveal]').forEach((el) => {
+        g.from(el, { y: 44, opacity: 0, duration: 0.75, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 88%' } });
+      });
+      window.ScrollTrigger.refresh();
+    });
+  }
+
+  applyMouse() {
+    document.querySelectorAll('[data-magnetic]').forEach((el) => {
+      const r = el.getBoundingClientRect();
+      const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      const dx = this._mx - cx, dy = this._my - cy;
+      const dist = Math.hypot(dx, dy), R = 130;
+      if (dist < R) { const f = 1 - dist / R; el.style.transform = 'translate(' + (dx * 0.28 * f) + 'px,' + (dy * 0.28 * f) + 'px)'; }
+      else if (el.style.transform) { el.style.transform = ''; }
+    });
+  }
+
+  renderVals() {
+    const page = this.state.page, open = this.state.menuOpen;
+    const light = 'linear-gradient(155deg,#e2e1db,#c9c8c1)';
+    const dark = 'linear-gradient(155deg,#2a2a26,#0c0c0c)';
+    const mid = 'linear-gradient(155deg,#b6b5ad,#8f8e86)';
+    const projects = [
+      { no: '01', t: 'Torana', c: 'Product · Slow travel', bg: dark, fg: '#f2f1ec', label: 'TORANA · CONCEPT',
+        d: 'A booking flow for journeys nobody is in a hurry to take. The study was about resisting the urgency patterns the category runs on — no countdowns, no scarcity badges, no seventeen people are viewing this room. What is left has to earn the booking on the strength of the itinerary, so the interface spends its attention on photography, distances and what a day actually feels like.' },
+      { no: '02', t: 'Chowk', c: 'Commerce · Marketplace', bg: light, fg: '#0c0c0c', label: 'CHOWK · CONCEPT',
+        d: 'A storefront for a market of many sellers, where every seller has a different idea of what a product photo is. The interesting constraint is inconsistency: the grid has to stay composed when one vendor shoots on white and the next shoots on a bedsheet. We landed on a system that gives structure to the frame rather than the image inside it.' },
+      { no: '03', t: 'Ledger', c: 'Design system · Interface', bg: mid, fg: '#0c0c0c', label: 'LEDGER · CONCEPT',
+        d: 'A component set for dense financial tables, built to find out how far type and spacing alone can carry hierarchy before colour has to step in. Colour ends up reserved for state that changes — everything static is held by weight, rhythm and rule. It reads at a glance and survives being printed in black and white.' }
+    ];
+    const services = [
+      { n: '01', t: 'Brand-led web design', d: 'A site drawn around your brand rather than a layout it was poured into. Structure, art direction, type and copy shaped together, because they fail together.' },
+      { n: '02', t: 'Design systems & UI', d: 'Components, tokens and the rules that hold them, documented well enough that a developer who has never met us can use them correctly.' },
+      { n: '03', t: 'Framer & Webflow builds', d: 'Built in the tool you will keep it in, so changing a headline never needs a developer or a deployment.' },
+      { n: '04', t: 'Art direction & motion', d: 'How the thing looks and how it moves, settled in one pass. Motion is designed with the layout, not applied to it afterwards.' }
+    ];
+    const steps = [
+      { n: 'Step 01', t: 'Read the room', d: 'Who arrives, what they already believe about you, and what the site has to change in four seconds.' },
+      { n: 'Step 02', t: 'Draw it', d: 'Structure first, then art direction and type. You see real content in real layouts, not lorem ipsum in a mood board.' },
+      { n: 'Step 03', t: 'Build it', d: 'Semantic markup, a performance budget agreed up front, and motion that respects reduced-motion settings.' },
+      { n: 'Step 04', t: 'Hand it over', d: 'You get the keys and a walkthrough. If you need us afterwards it should be because you want us, not because you are stuck.' }
+    ];
+    const articles = [
+      { t: 'The threshold problem', kicker: 'Craft', read: '6 min read', href: '/journal/the-threshold-problem.html',
+        d: 'Most homepages are built as walls to scroll past. What changes when you design the first four seconds as a doorway instead.' },
+      { t: 'Build it so they can edit it', kicker: 'Handover', read: '7 min read', href: '/journal/build-it-so-they-can-edit-it.html',
+        d: 'The CMS decision is a staffing decision. A look at what actually happens to a site six months after handover.' },
+      { t: 'Motion that earns its keep', kicker: 'Motion', read: '6 min read', href: '/journal/motion-that-earns-its-keep.html',
+        d: 'Animation is a cost paid in milliseconds and attention. When it is worth paying, and how to tell before you ship.' }
+    ];
+    return {
+      isHome: page === 'home', isWork: page === 'work', isAbout: page === 'about', isContact: page === 'contact',
+      goHome: this.go('home'), goWork: this.go('work'), goAbout: this.go('about'), goContact: this.go('contact'),
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      menuLabel: open ? 'Close' : 'Menu',
+      menuOpacity: open ? '1' : '0',
+      menuTransform: open ? 'translateY(0)' : 'translateY(-102%)',
+      menuPV: open ? 'auto' : 'none',
+      barTop: open ? 'translateY(7.5px) rotate(45deg)' : 'none',
+      barBot: open ? 'translateY(-7.5px) rotate(-45deg)' : 'none',
+      barMidOpacity: open ? '0' : '1',
+      projects, projectsHome: projects.slice(0, 3), services, steps, articles,
+      sent: this.state.status === 'sent',
+      notSent: this.state.status !== 'sent',
+      failed: this.state.status === 'error',
+      submitLabel: this.state.status === 'sending' ? 'Sending…' : 'Send inquiry →',
+      mailtoHref: this.mailtoHref(),
+      submit: (e) => this.sendInquiry(e)
+    };
+  }
+}
+</script>
+</body>
+</html>
