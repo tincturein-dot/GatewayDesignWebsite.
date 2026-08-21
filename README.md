@@ -105,10 +105,35 @@ markup on both the Templates page and the home teaser.
 into an `sc-for` over a `templates` array, the way `projects` and `services`
 already work — the page was written so that is a contained change.
 
-Note the Templates page has **no URL of its own**: the site is a client-side
-app with no routing, so every page is state, not a path. To send someone a
-direct link to the templates you would need hash routing (`#templates`) or real
-routes; neither is wired up today.
+The Templates page has a direct URL: **`/#templates`**. See Routing below.
+
+## Routing
+
+Every page is component state, not a path, so the site uses hash routing to
+give each one a linkable URL:
+
+| URL | Page |
+|---|---|
+| `/` | Home |
+| `/#work` | Work |
+| `/#templates` | Templates |
+| `/#studio` | Studio |
+| `/#contact` | Contact |
+
+Two tables at the top of the logic script are the whole mapping — `SLUG_TO_PAGE`
+and `PAGE_TO_SLUG`. Home is deliberately the bare path with no fragment, and an
+unrecognised fragment falls back to Home rather than rendering nothing.
+
+Navigation uses `history.pushState` rather than assigning `location.hash`,
+because assigning fires a `hashchange` the app would then have to ignore.
+pushState fires neither event, so the `popstate`/`hashchange` listener only ever
+hears the back button and hand-typed URLs — never the app's own navigation.
+
+Two consequences worth knowing. A fragment is **never sent to the server**, so
+every URL above is one request for `index.html` and no Vercel rewrite is needed.
+And search engines generally treat `/#templates` as the same document as `/`, so
+these are good links to give a person and are not separate entries for
+`sitemap.xml`.
 
 ## Adding a journal article
 

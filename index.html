@@ -61,7 +61,7 @@
   "description": "A premium Framer website template for an Awadhi fine-dining restaurant. Full menu with prices, gallery, private dining, press and reservation sections. Fully responsive and editable in Framer without a developer.",
   "category": "Website Template",
   "brand": { "@type": "Brand", "name": "The Gateway Designs" },
-  "url": "https://www.thegatewaydesigns.com/",
+  "url": "https://www.thegatewaydesigns.com/#templates",
   "offers": {
     "@type": "Offer",
     "price": "59.00",
@@ -568,15 +568,42 @@ const CONTACT_EMAIL = 'hello@thegatewaydesigns.com';
 const CHECKOUT_URL = '';
 const TEMPLATE_PRICE = '$59';
 
+/* Hash routing. Every "page" is component state, so these two tables are the
+   only mapping between a state name and the fragment that appears in the URL.
+   Home is deliberately the bare path with no fragment. Note the Studio page is
+   called 'about' internally but reads better as #studio in a URL. */
+const SLUG_TO_PAGE = { work: 'work', templates: 'templates', studio: 'about', contact: 'contact' };
+const PAGE_TO_SLUG = { work: 'work', templates: 'templates', about: 'studio', contact: 'contact' };
+
+function pageFromHash() {
+  var h = '';
+  try { h = String(window.location.hash || '').replace(/^#\/?/, '').toLowerCase(); } catch (e) {}
+  return SLUG_TO_PAGE[h] || 'home';
+}
+
 class Component extends DCLogic {
-  state = { page: 'home', menuOpen: false, status: 'idle', form: null };
+  state = { page: pageFromHash(), menuOpen: false, status: 'idle', form: null };
 
   go(p) {
     return () => {
       const keep = p === 'contact' && this.state.status === 'sent';
       this.setState({ page: p, menuOpen: false, status: keep ? 'sent' : 'idle' });
+      this.syncUrl(p);
       try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) { window.scrollTo(0, 0); }
     };
+  }
+
+  /* pushState rather than assigning location.hash, because assigning fires a
+     hashchange we would then have to ignore. This fires neither event, so the
+     popstate/hashchange listener only ever hears the back button and hand-typed
+     URLs — never our own navigation. */
+  syncUrl(p) {
+    const slug = PAGE_TO_SLUG[p] || '';
+    try {
+      const target = window.location.pathname + window.location.search + (slug ? '#' + slug : '');
+      if (window.history && window.history.pushState) window.history.pushState({ page: p }, '', target);
+      else window.location.hash = slug;
+    } catch (e) {}
   }
 
   sendInquiry(e) {
@@ -640,6 +667,12 @@ class Component extends DCLogic {
     }
     this._onResize = () => this.setLayout();
     window.addEventListener('resize', this._onResize, { passive: true });
+    this._onRoute = () => {
+      const p = pageFromHash();
+      if (p !== this.state.page) this.setState({ page: p, menuOpen: false, status: 'idle' });
+    };
+    window.addEventListener('popstate', this._onRoute);
+    window.addEventListener('hashchange', this._onRoute);
     requestAnimationFrame(() => this.setLayout());
     this.initGradient();
     this._stops = [];
@@ -655,6 +688,7 @@ class Component extends DCLogic {
     if (this._onMove) window.removeEventListener('mousemove', this._onMove);
     if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
     if (this._onResize) window.removeEventListener('resize', this._onResize);
+    if (this._onRoute) { window.removeEventListener('popstate', this._onRoute); window.removeEventListener('hashchange', this._onRoute); }
     if (this._poll) clearInterval(this._poll);
     if (this._gpoll) clearInterval(this._gpoll);
     if (this._grad && this._grad.destroy) { try { this._grad.destroy(); } catch (e) {} }
