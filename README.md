@@ -75,6 +75,41 @@ if the request fails, the form shows a fallback panel with a **prefilled
 `mailto:`** to `CONTACT_EMAIL` — so inquiries still reach the studio and the
 site never claims to have sent something it didn't.
 
+## Templates
+
+The studio sells premium Framer website templates alongside client work. The
+Templates page lives in `index.html` behind the `isTemplates` page state and is
+reachable from the nav overlay (03), the footer menu, the hero CTA, and the
+teaser section on the home page.
+
+One constant controls checkout:
+
+```js
+const CHECKOUT_URL = '';                           // paste your checkout link here
+const TEMPLATE_PRICE = '$59';
+```
+
+Set `CHECKOUT_URL` to the payment link your processor gives you and the
+**Buy — $59** button points straight at it. While it is empty the button falls
+back to a **prefilled `mailto:`** to `CONTACT_EMAIL` asking for a payment link
+— the same pattern the contact form uses, so the button is never dead and the
+page never advertises a checkout that doesn't exist. The small line under the
+buttons switches wording to match.
+
+Product copy lives in two places: the `templateFeatures` array in
+`renderVals()` (the seven-item feature list) and the markup of the Templates
+page itself (name, price, blurb). The live-demo URL is a plain `href` in the
+markup on both the Templates page and the home teaser.
+
+**Adding a second template** means turning the single hard-coded product block
+into an `sc-for` over a `templates` array, the way `projects` and `services`
+already work — the page was written so that is a contained change.
+
+Note the Templates page has **no URL of its own**: the site is a client-side
+app with no routing, so every page is state, not a path. To send someone a
+direct link to the templates you would need hash routing (`#templates`) or real
+routes; neither is wired up today.
+
 ## Adding a journal article
 
 Copy any file in `journal/`, then update, in order: `<title>`, the description,
