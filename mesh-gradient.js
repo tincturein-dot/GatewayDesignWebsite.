@@ -154,11 +154,37 @@
       self._raf = requestAnimationFrame(loop);
     };
     loop();
+
+    // The hero is one screen tall on a long page, so without this the shader
+    // keeps drawing full-resolution frames for a canvas nobody can see, for
+    // most of a session. Pause when it leaves the viewport; on resume shift the
+    // clock forward by the paused duration so the motion continues from where
+    // it stopped instead of jumping.
+    if (this._io) { this._io.disconnect(); this._io = null; }
+    if (!reduce && window.IntersectionObserver) {
+      this._pausedAt = 0;
+      this._io = new IntersectionObserver(function (entries) {
+        var visible = false;
+        for (var i = 0; i < entries.length; i++) if (entries[i].isIntersecting) visible = true;
+        if (visible === self._running) return;
+        if (visible) {
+          if (self._pausedAt) { self._start += performance.now() - self._pausedAt; self._pausedAt = 0; }
+          self._running = true;
+          self._raf = requestAnimationFrame(loop);
+        } else {
+          self._pausedAt = performance.now();
+          self._running = false;
+          if (self._raf) { cancelAnimationFrame(self._raf); self._raf = null; }
+        }
+      }, { threshold: 0 });
+      this._io.observe(canvas);
+    }
     return this;
   };
 
   MeshGradient.prototype.destroy = function () {
     this._running = false;
+    if (this._io) { this._io.disconnect(); this._io = null; }
     if (this._raf) cancelAnimationFrame(this._raf);
     if (this._rt) { clearTimeout(this._rt); this._rt = null; }
     if (this._onWinResize) window.removeEventListener("resize", this._onWinResize);

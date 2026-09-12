@@ -70,6 +70,13 @@ body{margin:0;background:#f2f1ec;}
 a{color:#0c0c0c;text-decoration:none;}
 a:hover{color:#6a6a64;}
 ::selection{background:#0c0c0c;color:#f2f1ec;}
+/* Display type wraps on its own at every breakpoint, and left alone it rags
+   badly: at 390px the middle line ran to within 19px of the edge, and at 768px
+   line one ended on the orphaned article "A". Balancing evens the line lengths
+   and moves the article down where it belongs. Desktop is unaffected — there
+   the longest line is already near the measure, so no other break is legal. */
+h1,h2{text-wrap:balance;}
+[data-hero-sub]{text-wrap:pretty;}
 @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 @keyframes emeraldShine{to{background-position:200% center;}}
 @keyframes heroDrift{0%{background-position:0% 50%,100% 50%,50% 0%;}50%{background-position:100% 50%,0% 50%,50% 100%;}100%{background-position:0% 50%,100% 50%,50% 0%;}}
