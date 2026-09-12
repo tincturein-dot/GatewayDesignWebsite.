@@ -377,7 +377,7 @@ h1,h2{text-wrap:balance;}
       <span style="display:block;overflow:hidden;padding-bottom:.05em;"><span data-hero class="emerald-ink" style="display:block;">a wide doorway</span></span>
     </h1>
     <div data-m="c2" style="display:grid;grid-template-columns:1.2fr .8fr;gap:60px;margin-top:45px;align-items:start;">
-      <div data-reveal style="display:flex;flex-direction:column;gap:20px;font-size:19px;line-height:1.6;color:#3a3a36;">
+      <div data-reveal style="display:flex;flex-direction:column;gap:20px;font-size:19px;line-height:1.6;color:#3a3a36;max-width:56ch;">
         <p style="margin:0;">Gateway is a design studio in Delhi. We started it around one idea we keep coming back to: a website is a threshold, and most of them are built like walls. You are asked to scroll past a brand rather than walk into it.</p>
         <p style="margin:0;">So we work from the entrance backwards. What does someone need in the first four seconds, what can wait, and what is only there because a template had a slot for it. Then we build the thing properly — semantic markup, real performance budgets, motion that stops when a visitor asks it to.</p>
         <p style="margin:0;">We take one project at a time. That is partly principle and partly arithmetic: the person you talk about the work with is the person doing it, from art direction through to the last line of production code.</p>
@@ -723,6 +723,7 @@ class Component extends DCLogic {
 
   renderVals() {
     const page = this.state.page, open = this.state.menuOpen;
+    const onGround = !open && (this.state.scrolled || page !== 'home');
     const light = 'linear-gradient(155deg,#e2e1db,#c9c8c1)';
     const dark = 'linear-gradient(155deg,#2a2a26,#0c0c0c)';
     const mid = 'linear-gradient(155deg,#b6b5ad,#8f8e86)';
@@ -759,9 +760,13 @@ class Component extends DCLogic {
       goHome: this.go('home'), goWork: this.go('work'), goAbout: this.go('about'), goContact: this.go('contact'),
       toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
       menuLabel: open ? 'Close' : 'Menu',
-      headerBg: (this.state.scrolled && !open) ? 'rgba(12,12,12,.88)' : 'transparent',
-      headerBlur: (this.state.scrolled && !open) ? 'blur(10px)' : 'none',
-      headerBorder: (this.state.scrolled && !open) ? 'rgba(242,241,236,.14)' : 'transparent',
+      // Only the home page opens on the dark hero, where a transparent bar is
+      // right. Work, Studio and Contact start on paper, so gold-on-transparent
+      // is unreadable there from the very first pixel — not just after a scroll.
+      headerGround: onGround,
+      headerBg: onGround ? 'rgba(12,12,12,.88)' : 'transparent',
+      headerBlur: onGround ? 'blur(10px)' : 'none',
+      headerBorder: onGround ? 'rgba(242,241,236,.14)' : 'transparent',
       menuOpacity: open ? '1' : '0',
       menuTransform: open ? 'translateY(0)' : 'translateY(-102%)',
       menuPV: open ? 'auto' : 'none',
