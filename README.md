@@ -94,10 +94,25 @@ The embed renders live but with `pointer-events: none` until the visitor clicks
 it. The piece is 13,000px of scroll-driven cinema, so left interactive it would
 swallow the page's own scroll the moment a cursor crossed it.
 
-**Media lives off-site.** The export references ten CloudFront assets on an
-account-scoped path. They are not in this repo and cannot be re-hosted from it.
-If those URLs ever expire the demo still loads and still scrolls, but the video
-and stills go blank — worth checking if the piece ever looks empty.
+**Media is self-hosted.** The export originally pointed at ten CloudFront
+assets on an account-scoped path — one URL expiry from an empty black page. All
+ten now live in `demos/mars-program/media/` and every reference was rewritten to
+a relative path, so the demo has no external dependency beyond React and the
+fonts. Being same-origin also removes the CORS requirement the export's manifest
+warns about, which is what makes scrub-seeking fail silently in some browsers.
+
+Stills ship as 1920px WebP (1.4 MB) rather than the untouched 2848x1600 PNGs
+(9.9 MB); the filenames differ only by extension, so the rewrite maps `.png` to
+`.webp`. Media filenames are content-stamped and never change, so `vercel.json`
+caches `/demos/*/media/*` for a year as immutable while the demo page itself
+stays on a one-hour revalidate.
+
+Video sources sit on two attributes: `src` on the hero clip, `data-lazysrc` on
+the other four, which a loader promotes about a viewport ahead. The clips are
+scroll-scrubbed — scroll position drives `currentTime` — so if scrubbing ever
+feels jittery the cause is keyframe spacing, not bitrate. The asset manifest in
+`assets/source/mars-program/MEDIA-MANIFEST.md` recommends re-encoding at CRF
+24-26 with a keyframe every 0.5s; the clips ship as generated.
 
 Design source for each demo is archived in `assets/source/<slug>/`, which is not
 deployed.
