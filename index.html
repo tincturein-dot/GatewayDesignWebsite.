@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<!-- Paint the page's own background before anything else runs. The body
+     background lives in the <helmet> block, which the runtime relocates on
+     mount; between the first paint and that mount the page flashed white,
+     then cream, then white again as the runtime emptied the body. Declaring
+     it here makes all three frames cream, so the only visible change is the
+     hero arriving. -->
+<style>html,body{background:#f2f1ec;}body{margin:0;}</style>
+
 <!-- Crawler-critical metadata is served here in the static head. Social
      scrapers and non-JS consumers never run the runtime, so anything the
      runtime injects at render is invisible to them. -->
@@ -82,6 +90,11 @@ h1,h2{text-wrap:balance;}
 @keyframes heroDrift{0%{background-position:0% 50%,100% 50%,50% 0%;}50%{background-position:100% 50%,0% 50%,50% 100%;}100%{background-position:0% 50%,100% 50%,50% 0%;}}
 .emerald-ink{background:linear-gradient(110deg,#8a4b12 0%,#c9922e 22%,#ffe7ad 50%,#c9922e 78%,#8a4b12 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:emeraldShine 5s linear infinite;}
 @keyframes blurFadeUp{from{opacity:0;filter:blur(20px);transform:translateY(40px);}to{opacity:1;filter:blur(0);transform:translateY(0);}}
+/* The shader used to cut in about 500ms after the hero painted: a soft CSS
+   radial blue snapped to a busy marbled mesh in one frame, ahead of the copy's
+   own entrance, which made the load land twice. It now dissolves over the
+   gradient it replaces, so the hero resolves instead of jumping. */
+#gradient-canvas{opacity:0;transition:opacity 1.1s cubic-bezier(.22,1,.36,1);}
 .animate-blur-fade-up{opacity:0;animation:blurFadeUp 1s ease-out forwards;}
 .liquid-glass{background:rgba(255,255,255,.01);background-blend-mode:luminosity;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);border:none;box-shadow:inset 0 1px 1px rgba(255,255,255,.1);position:relative;overflow:hidden;}
 .liquid-glass::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.4px;background:linear-gradient(180deg,rgba(255,255,255,.45) 0%,rgba(255,255,255,.15) 20%,rgba(255,255,255,0) 40%,rgba(255,255,255,0) 60%,rgba(255,255,255,.15) 80%,rgba(255,255,255,.45) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
@@ -615,6 +628,7 @@ class Component extends DCLogic {
     if (this._onHeaderScroll) window.removeEventListener('scroll', this._onHeaderScroll);
     if (this._poll) clearInterval(this._poll);
     if (this._gpoll) clearInterval(this._gpoll);
+    if (this._driftOff) clearTimeout(this._driftOff);
     if (this._grad && this._grad.destroy) { try { this._grad.destroy(); } catch (e) {} }
     this.cleanup();
   }
@@ -676,12 +690,25 @@ class Component extends DCLogic {
         if (this._grad) { try { this._grad.destroy(); } catch (e) {} }
         try {
           this._grad = new window.MeshGradient().init('#gradient-canvas', ['#040a1a','#1230a8','#1e6fd9','#47c3ff']);
-          // The CSS gradient is the no-WebGL fallback. Once the shader is up it
-          // is completely hidden behind the canvas, but heroDrift keeps
-          // animating background-position on three 180%-sized radial gradients
-          // — a full-viewport repaint every frame, for something nobody sees.
-          const sec = document.querySelector('[data-hero-sec]');
-          if (sec) sec.style.animation = 'none';
+          // init() returns early without a `gl` when WebGL is unavailable or
+          // the context is refused — common on older phones and in low-power
+          // mode. Everything below is conditional on it: revealing an empty
+          // canvas and stopping the CSS gradient would leave the hero flat.
+          if (this._grad && this._grad.gl) {
+            // init() draws the first frame synchronously, so there is already
+            // something to dissolve to.
+            requestAnimationFrame(() => { canvas.style.opacity = '1'; });
+            // The CSS gradient is the no-WebGL fallback. Once the shader is up
+            // it is completely hidden behind the canvas, but heroDrift keeps
+            // animating background-position on three 180%-sized radial
+            // gradients — a full-viewport repaint every frame, for something
+            // nobody sees. Stop it only once the canvas has finished covering
+            // it, or the fallback freezes mid-dissolve.
+            this._driftOff = setTimeout(() => {
+              const sec = document.querySelector('[data-hero-sec]');
+              if (sec) sec.style.animation = 'none';
+            }, 1200);
+          }
         } catch (e) {}
       } else if (n > 90) { clearInterval(this._gpoll); }
     }, 70);

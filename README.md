@@ -95,8 +95,8 @@ openable full screen:
   ships `image-slot.js` beside `support.js`; both are referenced relatively from
   the export's `<helmet>` and neither needed changing.
 
-**Two edits are applied to every export** and must be re-applied after a fresh
-one:
+**Three edits are applied to every export** and must be re-applied after a
+fresh one:
 
 1. A `<title>`, description, `robots: noindex, follow` and the favicon links —
    exports ship with none, and a demo should not compete with the studio in
@@ -108,6 +108,23 @@ one:
    `display` outranks the UA's `[hidden]` rule, so the attribute alone leaves it
    visible inside the embed. It sits bottom-left and fades out over the last
    150px of the page, since both demos put their own chrome in the top corners.
+
+3. A mobile stylesheet in the static `<head>`. Exports are laid out for a
+   desktop viewport and break on a phone: Zesto's hero is
+   `repeat(auto-fit, minmax(520px, 1fr))`, which auto-fit cannot take below
+   520px, so the headline, body copy and both CTAs ran off a 390px screen; and
+   both headers pack a wordmark, three section links and a CTA into about
+   490px, which pushed the CTA off entirely. Every rule there overrides an
+   inline style and so needs `!important` — a stylesheet cannot outrank a
+   style attribute otherwise.
+
+   Mars also had a subtler one. Each row of its spec table is
+   `minmax(150px,1fr) minmax(150px,1fr) minmax(120px,.6fr)` plus two 16px gaps
+   — a 452px floor inside a 358px content box. Chrome does not overflow that;
+   it widens the layout viewport to fit (390 → 469), shrinking every other page
+   on the demo. An overflow check that trusts `innerWidth` reads perfectly
+   clean while this is happening, so compare `innerWidth` against the device
+   width you asked for, not against `scrollWidth`.
 
 Each embed renders live but with `pointer-events: none` until the visitor clicks
 it. Each piece is 12,000px or more of scroll-driven cinema, so left interactive

@@ -9,6 +9,31 @@
 <meta name="theme-color" content="#0B7A3B">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="alternate icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<style>
+/* ---- Mobile pass (edit 3 of 3; re-apply after a fresh export) --------------
+   Exports are laid out for a desktop viewport and break on a phone. Every
+   value below overrides an inline style, so each one needs !important — a
+   stylesheet cannot outrank a style attribute otherwise.
+
+   1. The hero is grid-template-columns:repeat(auto-fit,minmax(520px,1fr)).
+      auto-fit cannot drop below the 520px minimum, so on a 390px phone the
+      single track stays 520px and the headline, body copy and both CTAs run
+      off the right edge under the section's overflow:clip.
+   2. The header is wordmark + three links + a pill, which needs ~490px. Below
+      560px the three section links go; the pill is the CTA that matters and
+      the footer still carries the full set.
+   3. Footer and nav links are 15px tall. Padding brings them to ~35px. */
+@media (max-width: 900px) {
+  #top { grid-template-columns: 1fr !important; }
+  header { padding-left: 16px !important; padding-right: 16px !important; gap: 10px !important; }
+  header nav { gap: 14px !important; }
+}
+@media (max-width: 560px) {
+  header nav > a:not(:last-child) { display: none !important; }
+  header nav > a:last-child { padding: 11px 16px !important; font-size: 12px !important; }
+  footer a { padding-block: 10px !important; }
+}
+</style>
 <script src="./support.js"></script>
 </head>
 <body>
