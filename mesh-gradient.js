@@ -115,16 +115,25 @@
 
     var self = this;
     this._lastW = 0; this._lastH = 0;
+    // The shader is a domain-warped fBm: roughly nineteen simplex-noise
+    // evaluations per pixel. At device resolution on a large screen that is
+    // tens of millions of evaluations per frame, which is what made the hero
+    // lag. The output has no high-frequency detail — it is a soft blob field —
+    // so it is drawn into a small buffer and stretched by the browser, which
+    // is visually indistinguishable and costs a fraction as much. Budgeting
+    // total pixels rather than a device-pixel ratio keeps a 4K monitor from
+    // costing any more than a laptop.
+    var MAX_PIXELS = 900 * 560;
     this._resize = function () {
-      var dpr = Math.min(window.devicePixelRatio || 1, 1.75);
       var w = canvas.clientWidth || canvas.offsetWidth || 800;
       var h = canvas.clientHeight || canvas.offsetHeight || 600;
       // Ignore mobile URL-bar height jitter: only resize on real width change
       // or a large (>140px) height change. Prevents buffer-realloc flicker.
       if (Math.abs(w - self._lastW) < 1 && Math.abs(h - self._lastH) < 140) return;
       self._lastW = w; self._lastH = h;
-      canvas.width = Math.max(1, Math.floor(w * dpr));
-      canvas.height = Math.max(1, Math.floor(h * dpr));
+      var scale = Math.min(1, Math.sqrt(MAX_PIXELS / Math.max(w * h, 1)));
+      canvas.width = Math.max(1, Math.floor(w * scale));
+      canvas.height = Math.max(1, Math.floor(h * scale));
       gl.viewport(0, 0, canvas.width, canvas.height);
       gl.uniform2f(self.u_res, canvas.width, canvas.height);
     };

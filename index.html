@@ -116,6 +116,13 @@ h1,h2{text-wrap:balance;}
 [data-m="row"]{grid-template-columns:auto 1fr!important;gap:6px 16px!important;}
 [data-m="row"] > :nth-child(3){grid-column:1/-1!important;}
 }
+/* The tall bottom padding reserves room for the decorative panel, which
+   stacks under the copy on narrow screens. From 901px up the panel sits
+   beside the copy instead, so that reservation became ~450px of empty
+   black below everything. */
+@media(min-width:901px){
+[data-cta-inner]{padding-bottom:220px!important;}
+}
 @media(max-width:520px){
 [data-m="c3"]{grid-template-columns:1fr!important;}
 [data-demo-stage]{aspect-ratio:3/4!important;}
@@ -232,7 +239,7 @@ h1,h2{text-wrap:balance;}
   </section>
 
   <section data-cta-section style="position:relative;width:100%;margin-top:96px;overflow:hidden;background:linear-gradient(to bottom,#f2f1ec 0,#0c0c0c 240px);color:#f2f1ec;">
-    <div style="position:relative;max-width:1080px;margin:0 auto;padding:96px clamp(22px,5vw,44px) clamp(380px,42vw,540px);">
+    <div data-cta-inner style="position:relative;max-width:1440px;margin:0 auto;padding:96px clamp(22px,5vw,44px) clamp(380px,42vw,540px);">
       <div style="position:relative;z-index:20;max-width:440px;">
         <p data-reveal style="font-family:'Spline Sans Mono',monospace;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#8a8a82;margin:0 0 24px;">(Let's talk)</p>
         <h2 data-reveal style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(32px,4.4vw,52px);letter-spacing:-.03em;line-height:1.02;margin:0;text-transform:uppercase;color:#f2f1ec;">Tell us where you want people to go.</h2>
@@ -634,7 +641,15 @@ class Component extends DCLogic {
       if (window.MeshGradient && canvas) {
         clearInterval(this._gpoll);
         if (this._grad) { try { this._grad.destroy(); } catch (e) {} }
-        try { this._grad = new window.MeshGradient().init('#gradient-canvas', ['#040a1a','#1230a8','#1e6fd9','#47c3ff']); } catch (e) {}
+        try {
+          this._grad = new window.MeshGradient().init('#gradient-canvas', ['#040a1a','#1230a8','#1e6fd9','#47c3ff']);
+          // The CSS gradient is the no-WebGL fallback. Once the shader is up it
+          // is completely hidden behind the canvas, but heroDrift keeps
+          // animating background-position on three 180%-sized radial gradients
+          // — a full-viewport repaint every frame, for something nobody sees.
+          const sec = document.querySelector('[data-hero-sec]');
+          if (sec) sec.style.animation = 'none';
+        } catch (e) {}
       } else if (n > 90) { clearInterval(this._gpoll); }
     }, 70);
   }
