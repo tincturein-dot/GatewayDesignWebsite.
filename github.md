@@ -18,8 +18,9 @@ in the repo as `index.html`; everything else keeps its export filename.
 - All unsupported claims removed: launch counts, founding date, stats band,
   client-count copy, six invented client projects, Instagram grid and handle,
   phone number, "six weeks" promise, placeholder social links.
-- Work page carries one live build, Aphelion / Mars Program, embedded from
-  `demos/mars-program/` and also openable full screen.
+- Work page carries two live builds — Aphelion / Mars Program from
+  `demos/mars-program/` and Zesto / Mango Pickle from `demos/zesto/` — each
+  embedded and also openable full screen.
 - New journal at /journal/ — index + three articles as static pages, outside the
   Design Component so they have real, crawlable URLs.
 

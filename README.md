@@ -87,9 +87,13 @@ and not something about how it is hosted. It only appears to work in the design
 tool's preview, where `window.__resources` routes loading down a different path.
 Build from the `.dc.html` instead.
 
-Live now: `demos/mars-program/` — *Aphelion, Mars Program*, a scroll-cinema
-product site. It is embedded in the Work page as a lazy-loaded `<iframe>` and
-also opens full screen.
+Live now, both embedded in the Work page as lazy-loaded `<iframe>`s and both
+openable full screen:
+
+- `demos/mars-program/` — *Aphelion, Mars Program*, a scroll-cinema product site.
+- `demos/zesto/` — *Zesto, Mango Pickle*, a brand and shop page. This one also
+  ships `image-slot.js` beside `support.js`; both are referenced relatively from
+  the export's `<helmet>` and neither needed changing.
 
 **Two edits are applied to every export** and must be re-applied after a fresh
 one:
@@ -99,22 +103,30 @@ one:
    search.
 2. A back-link to `/`, hidden unless the demo is the top-level document
    (`window.self === window.top`). Full screen it is the only way back; inside
-   the Work-page embed the studio header is already on screen.
+   the Work-page embed the studio header is already on screen. It is shown by
+   setting `style.display`, not by clearing the `hidden` attribute — an inline
+   `display` outranks the UA's `[hidden]` rule, so the attribute alone leaves it
+   visible inside the embed. It sits bottom-left and fades out over the last
+   150px of the page, since both demos put their own chrome in the top corners.
 
-The embed renders live but with `pointer-events: none` until the visitor clicks
-it. The piece is 13,000px of scroll-driven cinema, so left interactive it would
-swallow the page's own scroll the moment a cursor crossed it.
+Each embed renders live but with `pointer-events: none` until the visitor clicks
+it. Each piece is 12,000px or more of scroll-driven cinema, so left interactive
+it would swallow the page's own scroll the moment a cursor crossed it. Only one
+demo is armed at a time — `state.liveDemo` holds the id, and `demoVals(id)`
+builds that demo's bindings — because two scroll-capturing frames on one page
+fight each other.
 
-**Media is self-hosted.** The export originally pointed at ten CloudFront
-assets on an account-scoped path — one URL expiry from an empty black page. All
-ten now live in `demos/mars-program/media/` and every reference was rewritten to
-a relative path, so the demo has no external dependency beyond React and the
-fonts. Being same-origin also removes the CORS requirement the export's manifest
-warns about, which is what makes scrub-seeking fail silently in some browsers.
+**Media is self-hosted.** Both exports pointed at CloudFront assets on an
+account-scoped path — one URL expiry from an empty black page. Every asset now
+lives in the demo's own `media/` and every reference was rewritten to a relative
+path, so neither demo has an external dependency beyond React and the fonts.
+Being same-origin also removes the CORS requirement the exports' manifests warn
+about, which is what makes scrub-seeking fail silently in some browsers.
 
-Stills ship as 1920px WebP (1.4 MB) rather than the untouched 2848x1600 PNGs
-(9.9 MB); the filenames differ only by extension, so the rewrite maps `.png` to
-`.webp`. Media filenames are content-stamped and never change, so `vercel.json`
+Stills ship as WebP rather than the untouched PNGs — Mars 1.4 MB instead of
+9.9 MB, Zesto 2.3 MB instead of 13.2 MB. Watch for indirect references when
+rewriting: Zesto builds three of its eight URLs by concatenating hashes onto an
+`IMG` prefix constant, so a plain search-and-replace of full URLs misses them. Media filenames are content-stamped and never change, so `vercel.json`
 caches `/demos/*/media/*` for a year as immutable while the demo page itself
 stays on a one-hour revalidate.
 

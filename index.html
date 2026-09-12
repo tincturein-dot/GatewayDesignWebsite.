@@ -117,10 +117,10 @@ h1,h2{text-wrap:balance;}
 [data-m="row"] > :nth-child(3){grid-column:1/-1!important;}
 }
 /* The tall bottom padding reserves room for the decorative panel, which
-   stacks under the copy on narrow screens. From 901px up the panel sits
-   beside the copy instead, so that reservation became ~450px of empty
-   black below everything. */
-@media(min-width:901px){
+   stacks under the copy on narrow screens. From 1024px up setLayout() moves
+   the panel beside the copy instead, so that reservation became ~450px of
+   empty black below everything. The breakpoint must match setLayout()'s. */
+@media(min-width:1024px){
 [data-cta-inner]{padding-bottom:220px!important;}
 }
 @media(max-width:520px){
@@ -250,7 +250,7 @@ h1,h2{text-wrap:balance;}
       </div>
     </div>
 
-    <div data-parallax-dash aria-hidden="true" style="position:absolute;top:96px;right:-8%;width:min(680px,66%);z-index:10;will-change:transform;">
+    <div data-parallax-dash aria-hidden="true" style="position:absolute;top:80px;right:calc(max(0px, (100% - 1440px) / 2) + clamp(22px, 5vw, 44px));width:min(680px, calc(min(100%, 1440px) - 560px));z-index:10;will-change:transform;">
       <div class="liquid-glass" style="width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;padding:12px;">
         <div data-dash-grid style="display:grid;height:100%;grid-template-columns:1fr;gap:12px;">
           <div style="position:relative;min-height:0;width:100%;height:100%;overflow:hidden;border-radius:16px;background:hsl(201 30% 12%);">
@@ -295,7 +295,7 @@ h1,h2{text-wrap:balance;}
     <span style="display:block;overflow:hidden;padding-bottom:.03em;"><span data-hero style="display:block;">Doors we've</span></span>
     <span style="display:block;overflow:hidden;padding-bottom:.05em;"><span data-hero class="emerald-ink" style="display:block;">drawn ourselves</span></span>
   </h1>
-  <p data-hero-tag style="max-width:56ch;font-size:19px;color:#3a3a36;margin:32px 0 14px;">One site, built end to end and running live. No client, no brief, no launch date — we set ourselves a problem, take it as far as it needs to go, and keep what we learn for the work that follows.</p>
+  <p data-hero-tag style="max-width:56ch;font-size:19px;color:#3a3a36;margin:32px 0 14px;">Two sites, built end to end and running live. No client, no brief, no launch date — we set ourselves a problem, take it as far as it needs to go, and keep what we learn for the work that follows.</p>
   <p data-hero-tag style="font-family:'Spline Sans Mono',monospace;max-width:56ch;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6a6a64;margin:0 0 56px;">Self-initiated · Not commissioned</p>
 
   <section data-reveal style="margin:0 0 84px;">
@@ -312,12 +312,12 @@ h1,h2{text-wrap:balance;}
       <div style="display:flex;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid rgba(242,242,242,.14);background:#0c0c0c;">
         <span style="display:flex;gap:6px;"><span style="width:9px;height:9px;border-radius:50%;background:#2f2f2c;display:block;"></span><span style="width:9px;height:9px;border-radius:50%;background:#2f2f2c;display:block;"></span><span style="width:9px;height:9px;border-radius:50%;background:#2f2f2c;display:block;"></span></span>
         <span style="font-family:'Spline Sans Mono',monospace;flex:1;text-align:center;font-size:11px;letter-spacing:.1em;color:#7b7a73;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">thegatewaydesigns.com/demos/mars-program</span>
-        <span style="font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:{{ demoHintColor }};white-space:nowrap;">{{ demoHint }}</span>
+        <span style="font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:{{ marsHintColor }};white-space:nowrap;">{{ marsHint }}</span>
       </div>
       <div data-demo-stage style="position:relative;width:100%;aspect-ratio:16/10;background:#050505;">
-        <iframe src="/demos/mars-program/" loading="lazy" title="Aphelion Mars Program — live demo" style="position:absolute;inset:0;width:100%;height:100%;border:0;display:block;pointer-events:{{ demoPV }};"></iframe>
-        <sc-if value="{{ demoIdle }}" hint-placeholder-val="{{ true }}">
-        <button onClick="{{ activateDemo }}" aria-label="Enable interaction with the Aphelion demo" style="position:absolute;inset:0;width:100%;height:100%;background:transparent;border:none;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding:0 0 18px;"><span style="font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#f2f2f2;background:rgba(5,5,5,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(242,242,242,.22);padding:9px 16px;">Click to scroll inside</span></button>
+        <iframe src="/demos/mars-program/" loading="lazy" title="Aphelion Mars Program — live demo" style="position:absolute;inset:0;width:100%;height:100%;border:0;display:block;pointer-events:{{ marsPV }};"></iframe>
+        <sc-if value="{{ marsIdle }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ activateMars }}" aria-label="Enable interaction with the Aphelion demo" style="position:absolute;inset:0;width:100%;height:100%;background:transparent;border:none;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding:0 0 18px;"><span style="font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#f2f2f2;background:rgba(5,5,5,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(242,242,242,.22);padding:9px 16px;">Click to scroll inside</span></button>
         </sc-if>
       </div>
     </div>
@@ -325,6 +325,36 @@ h1,h2{text-wrap:balance;}
     <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:22px;">
       <a href="/demos/mars-program/" target="_blank" rel="noopener" data-magnetic style="font-family:'Hanken Grotesk',system-ui,sans-serif;display:inline-flex;align-items:center;gap:9px;background:#0c0c0c;color:#f2f1ec;border:none;cursor:pointer;font-size:15px;font-weight:600;padding:14px 28px;border-radius:100px;" style-hover="background:#2a2a26;color:#f2f1ec;">Open the demo<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
       <span style="font-family:'Spline Sans Mono',monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:#6a6a64;">Best full screen · 13,000px of scroll</span>
+    </div>
+  </section>
+
+  <section data-reveal style="margin:0 0 84px;">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:10px 24px;border-top:1px solid rgba(12,12,12,.16);padding-top:22px;margin-bottom:26px;">
+      <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 18px;">
+        <h2 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:700;font-size:clamp(26px,3.6vw,44px);margin:0;letter-spacing:-.025em;text-transform:uppercase;">Zesto — Mango Pickle</h2>
+        <span style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6a6a64;">Scroll cinema · Brand &amp; shop</span>
+      </div>
+      <span style="font-family:'Spline Sans Mono',monospace;display:inline-flex;align-items:center;gap:7px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#0c0c0c;white-space:nowrap;"><span style="width:6px;height:6px;border-radius:50%;background:#1e9e5a;display:inline-block;"></span>Live build</span>
+    </div>
+    <p style="margin:0 0 26px;color:#4a4a45;font-size:17px;line-height:1.6;max-width:62ch;">A brand and shop page for a small mango-pickle house in Ratnagiri, built to answer one question: how loud can a page get before it stops being easy to buy from. All the noise is spent in one place — a full-bleed scroll film and type set at hoarding scale — and everything carrying a price sits underneath it on a flat, quiet grid.</p>
+
+    <div data-demo-frame style="border:1px solid rgba(12,12,12,.22);background:#0B7A3B;overflow:hidden;">
+      <div style="display:flex;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid rgba(242,242,242,.14);background:#0c0c0c;">
+        <span style="display:flex;gap:6px;"><span style="width:9px;height:9px;border-radius:50%;background:#2f2f2c;display:block;"></span><span style="width:9px;height:9px;border-radius:50%;background:#2f2f2c;display:block;"></span><span style="width:9px;height:9px;border-radius:50%;background:#2f2f2c;display:block;"></span></span>
+        <span style="font-family:'Spline Sans Mono',monospace;flex:1;text-align:center;font-size:11px;letter-spacing:.1em;color:#7b7a73;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">thegatewaydesigns.com/demos/zesto</span>
+        <span style="font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:{{ zestoHintColor }};white-space:nowrap;">{{ zestoHint }}</span>
+      </div>
+      <div data-demo-stage style="position:relative;width:100%;aspect-ratio:16/10;background:#0B7A3B;">
+        <iframe src="/demos/zesto/" loading="lazy" title="Zesto Mango Pickle — live demo" style="position:absolute;inset:0;width:100%;height:100%;border:0;display:block;pointer-events:{{ zestoPV }};"></iframe>
+        <sc-if value="{{ zestoIdle }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ activateZesto }}" aria-label="Enable interaction with the Zesto demo" style="position:absolute;inset:0;width:100%;height:100%;background:transparent;border:none;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding:0 0 18px;"><span style="font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#f2f2f2;background:rgba(5,5,5,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(242,242,242,.22);padding:9px 16px;">Click to scroll inside</span></button>
+        </sc-if>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:22px;">
+      <a href="/demos/zesto/" target="_blank" rel="noopener" data-magnetic style="font-family:'Hanken Grotesk',system-ui,sans-serif;display:inline-flex;align-items:center;gap:9px;background:#0c0c0c;color:#f2f1ec;border:none;cursor:pointer;font-size:15px;font-weight:600;padding:14px 28px;border-radius:100px;" style-hover="background:#2a2a26;color:#f2f1ec;">Open the demo<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+      <span style="font-family:'Spline Sans Mono',monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:#6a6a64;">Best full screen · 12,000px of scroll</span>
     </div>
   </section>
 
@@ -481,12 +511,12 @@ const FORM_ENDPOINT = '';
 const CONTACT_EMAIL = 'hello@thegatewaydesigns.com';
 
 class Component extends DCLogic {
-  state = { page: 'home', menuOpen: false, status: 'idle', form: null, demoLive: false, scrolled: false };
+  state = { page: 'home', menuOpen: false, status: 'idle', form: null, liveDemo: null, scrolled: false };
 
   go(p) {
     return () => {
       const keep = p === 'contact' && this.state.status === 'sent';
-      this.setState({ page: p, menuOpen: false, status: keep ? 'sent' : 'idle', demoLive: false });
+      this.setState({ page: p, menuOpen: false, status: keep ? 'sent' : 'idle', liveDemo: null });
       try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) { window.scrollTo(0, 0); }
     };
   }
@@ -600,7 +630,10 @@ class Component extends DCLogic {
     if (dash) {
       if (desktop) {
         dash.style.position = 'absolute'; dash.style.top = '80px'; dash.style.left = 'auto';
-        dash.style.right = '-8%'; dash.style.width = 'min(680px,64%)'; dash.style.margin = '0';
+        // Right edge on the page's 1440px grid, same gutter as the copy; width
+        // sized to leave the 440px copy column a constant 32px of air.
+        dash.style.right = 'calc(max(0px, (100% - 1440px) / 2) + clamp(22px, 5vw, 44px))';
+        dash.style.width = 'min(680px, calc(min(100%, 1440px) - 560px))'; dash.style.margin = '0';
       } else {
         dash.style.position = 'relative'; dash.style.top = '0'; dash.style.left = '0';
         dash.style.right = '0'; dash.style.width = '94%'; dash.style.margin = '0 auto';
@@ -696,6 +729,19 @@ class Component extends DCLogic {
     });
   }
 
+  // Per-demo binding set: <id>Idle / <id>PV / <id>Hint / <id>HintColor / activate<Id>.
+  demoVals(id) {
+    const live = this.state.liveDemo === id;
+    const Id = id[0].toUpperCase() + id.slice(1);
+    return {
+      [id + 'Idle']: !live,
+      [id + 'PV']: live ? 'auto' : 'none',
+      [id + 'Hint']: live ? 'Interactive' : 'Live preview',
+      [id + 'HintColor']: live ? '#8fbf7a' : '#7b7a73',
+      ['activate' + Id]: () => this.setState({ liveDemo: id }),
+    };
+  }
+
   renderVals() {
     const page = this.state.page, open = this.state.menuOpen;
     const onGround = !open && (this.state.scrolled || page !== 'home');
@@ -740,14 +786,12 @@ class Component extends DCLogic {
       barBot: open ? 'translateY(-7.5px) rotate(-45deg)' : 'none',
       barMidOpacity: open ? '0' : '1',
       services, steps, articles,
-      // The demo is a 13,000px scroll-cinema piece. Left interactive by default
-      // it would swallow the page's own scroll the moment a cursor crossed it,
-      // so it renders live but inert until someone asks for it.
-      demoIdle: !this.state.demoLive,
-      demoPV: this.state.demoLive ? 'auto' : 'none',
-      demoHint: this.state.demoLive ? 'Interactive' : 'Live preview',
-      demoHintColor: this.state.demoLive ? '#8fbf7a' : '#7b7a73',
-      activateDemo: () => this.setState({ demoLive: true }),
+      // Each demo is a scroll-cinema piece of 12,000px or more. Left interactive
+      // by default one would swallow the page's own scroll the moment a cursor
+      // crossed it, so they render live but inert until someone asks. Only one
+      // is armed at a time — two scroll-capturing frames on one page fight.
+      ...this.demoVals('mars'),
+      ...this.demoVals('zesto'),
       sent: this.state.status === 'sent',
       notSent: this.state.status !== 'sent',
       failed: this.state.status === 'error',

@@ -578,11 +578,26 @@ class Component extends DCLogic {
   }
 }
 </script>
-<a href="/" data-back-to-studio style="position:fixed;top:0;left:0;z-index:99999;display:none;align-items:center;gap:8px;padding:9px 14px 10px;background:rgba(5,5,5,.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-right:1px solid rgba(242,242,242,.14);border-bottom:1px solid rgba(242,242,242,.14);color:#8c8c8c;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;" onmouseover="this.style.color='#f2f2f2'" onmouseout="this.style.color='#8c8c8c'"><svg width="11" height="12" viewBox="0 0 24 26" fill="none" aria-hidden="true"><path d="M2,26 L2,10 C2,4.5 6,1.5 12,1.5 C18,1.5 22,4.5 22,10 L22,26" stroke="#e8b64c" stroke-width="2.4" stroke-linecap="round"/></svg>Gateway Designs</a>
+<a href="/" data-back-to-studio style="position:fixed;bottom:16px;left:16px;z-index:99999;display:none;align-items:center;gap:8px;padding:9px 15px 10px;background:rgba(5,5,5,.76);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(242,242,242,.16);border-radius:999px;color:#8c8c8c;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;opacity:1;transition:opacity .3s ease,color .2s ease;" onmouseover="this.style.color='#f2f2f2'" onmouseout="this.style.color='#8c8c8c'"><svg width="11" height="12" viewBox="0 0 24 26" fill="none" aria-hidden="true"><path d="M2,26 L2,10 C2,4.5 6,1.5 12,1.5 C18,1.5 22,4.5 22,10 L22,26" stroke="#e8b64c" stroke-width="2.4" stroke-linecap="round"/></svg>Gateway Designs</a>
 <script>
 (function () {
   var el = document.querySelector('[data-back-to-studio]');
-  if (el && window.self === window.top) el.style.display = 'inline-flex';
+  if (!el || window.self !== window.top) return;
+  el.style.display = 'inline-flex';
+  var tick = function () {
+    // Fade out over the footer, where every demo puts its own links. The
+    // `over` guard matters: this runs before the component mounts, when
+    // scrollHeight is still one viewport and any position reads as "at end".
+    var over = document.documentElement.scrollHeight - window.innerHeight;
+    var atEnd = over > 400 && window.scrollY > over - 150;
+    el.style.opacity = atEnd ? '0' : '1';
+    el.style.pointerEvents = atEnd ? 'none' : 'auto';
+  };
+  tick();
+  addEventListener('scroll', tick, { passive: true });
+  addEventListener('resize', tick, { passive: true });
+  // The page grows when the component renders; re-measure when it does.
+  if (window.ResizeObserver) new ResizeObserver(tick).observe(document.documentElement);
 })();
 </script>
 </body>
