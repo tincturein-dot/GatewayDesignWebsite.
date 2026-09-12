@@ -111,19 +111,14 @@ h1,h2{text-wrap:balance;}
 @media(max-width:860px){
 [data-m="c3"]{grid-template-columns:repeat(2,1fr)!important;}
 [data-m="c4"]{grid-template-columns:repeat(2,1fr)!important;}
-[data-m="ig"]{grid-template-columns:repeat(3,1fr)!important;}
 [data-m="c2"]{grid-template-columns:1fr!important;gap:36px!important;}
 [data-m="foot"]{grid-template-columns:1fr 1fr!important;gap:32px!important;}
 [data-m="row"]{grid-template-columns:auto 1fr!important;gap:6px 16px!important;}
 [data-m="row"] > :nth-child(3){grid-column:1/-1!important;}
-[data-m="wrow"]{grid-template-columns:auto 1fr!important;gap:4px 14px!important;}
-[data-m="wrow"] > :nth-child(4){grid-column:2!important;text-align:left!important;}
-[data-m="wrow"] > :nth-child(5){grid-column:1/-1!important;}
 }
 @media(max-width:520px){
 [data-m="c3"]{grid-template-columns:1fr!important;}
 [data-demo-stage]{aspect-ratio:3/4!important;}
-[data-m="ig"]{grid-template-columns:repeat(3,1fr)!important;}
 [data-m="foot"]{grid-template-columns:1fr!important;}
 }
 </style>
@@ -153,18 +148,18 @@ h1,h2{text-wrap:balance;}
 
 <div id="site-menu" style="position:fixed;inset:0;z-index:65;background:#0c0c0c;color:#f2f1ec;display:flex;flex-direction:column;opacity:{{ menuOpacity }};transform:{{ menuTransform }};pointer-events:{{ menuPV }};visibility:{{ menuVis }};transition:opacity .4s ease,transform .6s cubic-bezier(.76,0,.24,1),visibility .6s;">
   <div style="max-width:1440px;width:100%;margin:0 auto;padding:96px clamp(22px,5vw,44px) 48px;flex:1;display:flex;flex-direction:column;justify-content:center;">
-    <p style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#77766f;margin:0 0 32px;">Index · Where to?</p>
+    <p style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#7b7a73;margin:0 0 32px;">Index · Where to?</p>
     <nav style="display:flex;flex-direction:column;">
-      <button data-menu-item onClick="{{ goHome }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">01</span>Home</button>
-      <button data-menu-item onClick="{{ goWork }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">02</span>Work</button>
-      <button data-menu-item onClick="{{ goAbout }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">03</span>Studio</button>
-      <button data-menu-item onClick="{{ goContact }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">04</span>Contact</button>
-      <a data-menu-item href="/journal/" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;text-decoration:none;" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">05</span>Journal</a>
+      <button data-menu-item onClick="{{ goHome }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#7b7a73;">01</span>Home</button>
+      <button data-menu-item onClick="{{ goWork }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#7b7a73;">02</span>Work</button>
+      <button data-menu-item onClick="{{ goAbout }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#7b7a73;">03</span>Studio</button>
+      <button data-menu-item onClick="{{ goContact }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#7b7a73;">04</span>Contact</button>
+      <a data-menu-item href="/journal/" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;text-decoration:none;" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#7b7a73;">05</span>Journal</a>
     </nav>
     <div data-menu-item style="display:flex;flex-wrap:wrap;gap:48px;margin-top:45px;padding-top:30px;border-top:1px solid rgba(242,241,236,.14);">
-      <div><p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#77766f;margin:0 0 8px;">Say hello</p><a href="mailto:hello@thegatewaydesigns.com" style="color:#f2f1ec;font-size:17px;" style-hover="color:#8a8a82;">hello@thegatewaydesigns.com</a></div>
-      <div><p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#77766f;margin:0 0 8px;">Studio</p><span style="color:#b7b6ad;font-size:17px;">Delhi, India</span></div>
-      <div><p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#77766f;margin:0 0 8px;">Reading</p><a href="/journal/" style="color:#f2f1ec;font-size:17px;" style-hover="color:#8a8a82;">The journal</a></div>
+      <div><p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#7b7a73;margin:0 0 8px;">Say hello</p><a href="mailto:hello@thegatewaydesigns.com" style="color:#f2f1ec;font-size:17px;" style-hover="color:#8a8a82;">hello@thegatewaydesigns.com</a></div>
+      <div><p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#7b7a73;margin:0 0 8px;">Studio</p><span style="color:#b7b6ad;font-size:17px;">Delhi, India</span></div>
+      <div><p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#7b7a73;margin:0 0 8px;">Reading</p><a href="/journal/" style="color:#f2f1ec;font-size:17px;" style-hover="color:#8a8a82;">The journal</a></div>
     </div>
   </div>
 </div>
@@ -309,7 +304,7 @@ h1,h2{text-wrap:balance;}
     <div data-demo-frame style="border:1px solid rgba(12,12,12,.22);background:#050505;overflow:hidden;">
       <div style="display:flex;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid rgba(242,242,242,.14);background:#0c0c0c;">
         <span style="display:flex;gap:6px;"><span style="width:9px;height:9px;border-radius:50%;background:#2f2f2c;display:block;"></span><span style="width:9px;height:9px;border-radius:50%;background:#2f2f2c;display:block;"></span><span style="width:9px;height:9px;border-radius:50%;background:#2f2f2c;display:block;"></span></span>
-        <span style="font-family:'Spline Sans Mono',monospace;flex:1;text-align:center;font-size:11px;letter-spacing:.1em;color:#77766f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">thegatewaydesigns.com/demos/mars-program</span>
+        <span style="font-family:'Spline Sans Mono',monospace;flex:1;text-align:center;font-size:11px;letter-spacing:.1em;color:#7b7a73;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">thegatewaydesigns.com/demos/mars-program</span>
         <span style="font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:{{ demoHintColor }};white-space:nowrap;">{{ demoHint }}</span>
       </div>
       <div data-demo-stage style="position:relative;width:100%;aspect-ratio:16/10;background:#050505;">
@@ -443,7 +438,7 @@ h1,h2{text-wrap:balance;}
       <p style="margin:0;max-width:34ch;color:#6a6a64;font-size:15px;line-height:1.55;">A design studio in Delhi. We design and build the website a brand arrives through.</p>
     </div>
     <div style="display:flex;flex-direction:column;gap:12px;">
-      <p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#9a9a92;margin:0 0 4px;">Menu</p>
+      <p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6a6a64;margin:0 0 4px;">Menu</p>
       <button onClick="{{ goHome }}" style="text-align:left;font-family:inherit;background:none;border:none;cursor:pointer;color:#3a3a36;font-size:15px;padding:0;" style-hover="color:#0c0c0c;">Home</button>
       <button onClick="{{ goWork }}" style="text-align:left;font-family:inherit;background:none;border:none;cursor:pointer;color:#3a3a36;font-size:15px;padding:0;" style-hover="color:#0c0c0c;">Work</button>
       <button onClick="{{ goAbout }}" style="text-align:left;font-family:inherit;background:none;border:none;cursor:pointer;color:#3a3a36;font-size:15px;padding:0;" style-hover="color:#0c0c0c;">Studio</button>
@@ -451,18 +446,18 @@ h1,h2{text-wrap:balance;}
       <a href="/journal/" style="color:#3a3a36;font-size:15px;" style-hover="color:#0c0c0c;">Journal</a>
     </div>
     <div style="display:flex;flex-direction:column;gap:12px;">
-      <p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#9a9a92;margin:0 0 4px;">Journal</p>
+      <p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6a6a64;margin:0 0 4px;">Journal</p>
       <a href="/journal/the-threshold-problem.html" style="color:#3a3a36;font-size:15px;line-height:1.35;" style-hover="color:#0c0c0c;">The threshold problem</a>
       <a href="/journal/build-it-so-they-can-edit-it.html" style="color:#3a3a36;font-size:15px;line-height:1.35;" style-hover="color:#0c0c0c;">Build it so they can edit it</a>
       <a href="/journal/motion-that-earns-its-keep.html" style="color:#3a3a36;font-size:15px;line-height:1.35;" style-hover="color:#0c0c0c;">Motion that earns its keep</a>
     </div>
     <div style="display:flex;flex-direction:column;gap:12px;">
-      <p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#9a9a92;margin:0 0 4px;">Say hello</p>
+      <p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6a6a64;margin:0 0 4px;">Say hello</p>
       <a href="mailto:hello@thegatewaydesigns.com" style="color:#0c0c0c;font-size:15px;">hello@thegatewaydesigns.com</a>
       <span style="color:#6a6a64;font-size:15px;">Delhi, IN</span>
     </div>
   </div>
-  <div style="max-width:1440px;margin:0 auto;padding:20px clamp(22px,5vw,44px) 40px;border-top:1px solid rgba(12,12,12,.12);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;color:#9a9a92;font-size:13px;font-family:'Spline Sans Mono',monospace;">
+  <div style="max-width:1440px;margin:0 auto;padding:20px clamp(22px,5vw,44px) 40px;border-top:1px solid rgba(12,12,12,.12);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;color:#6a6a64;font-size:13px;font-family:'Spline Sans Mono',monospace;">
     <span>© 2026 The Gateway Designs</span>
     <span>Designed &amp; made in Delhi</span>
   </div>
@@ -689,9 +684,6 @@ class Component extends DCLogic {
   renderVals() {
     const page = this.state.page, open = this.state.menuOpen;
     const onGround = !open && (this.state.scrolled || page !== 'home');
-    const light = 'linear-gradient(155deg,#e2e1db,#c9c8c1)';
-    const dark = 'linear-gradient(155deg,#2a2a26,#0c0c0c)';
-    const mid = 'linear-gradient(155deg,#b6b5ad,#8f8e86)';
     const services = [
       { n: '01', t: 'Brand-led web design', d: 'A site drawn around your brand rather than a layout it was poured into. Structure, art direction, type and copy shaped together, because they fail together.' },
       { n: '02', t: 'Design systems & UI', d: 'Components, tokens and the rules that hold them, documented well enough that a developer who has never met us can use them correctly.' },
@@ -739,7 +731,7 @@ class Component extends DCLogic {
       demoIdle: !this.state.demoLive,
       demoPV: this.state.demoLive ? 'auto' : 'none',
       demoHint: this.state.demoLive ? 'Interactive' : 'Live preview',
-      demoHintColor: this.state.demoLive ? '#8fbf7a' : '#77766f',
+      demoHintColor: this.state.demoLive ? '#8fbf7a' : '#7b7a73',
       activateDemo: () => this.setState({ demoLive: true }),
       sent: this.state.status === 'sent',
       notSent: this.state.status !== 'sent',

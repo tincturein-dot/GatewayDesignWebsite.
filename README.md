@@ -180,7 +180,6 @@ JSON-LD's `blogPost` array), `sitemap.xml`, and the `articles` array in
 Copy, project lists and nav all live in the `renderVals()` method of the
 `<script type="text/x-dc">` block at the bottom of `index.html`:
 
-- `projects` — the concept studies (all three also feed the home grid)
 - `services` — the "What we make" rows
 - `steps` — the "How we work" rows
 - `articles` — the three journal entries shown on the home page
