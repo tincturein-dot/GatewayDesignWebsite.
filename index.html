@@ -817,13 +817,14 @@ class Component extends DCLogic {
       { n: 'Step 03', t: 'Build it', d: 'Semantic markup, a performance budget agreed up front, and motion that respects reduced-motion settings.' },
       { n: 'Step 04', t: 'Hand it over', d: 'You get the keys and a walkthrough. If you need us afterwards it should be because you want us, not because you are stuck.' }
     ];
+    // Newest first; the teaser shows three and the index carries the rest.
     const articles = [
+      { t: 'Built to be quoted', kicker: 'Search', read: '7 min read', href: '/journal/built-to-be-quoted.html',
+        d: 'Search traffic is falling because the answer arrives before the link does. Why llms.txt is not the fix it is being sold as.' },
       { t: 'The threshold problem', kicker: 'Craft', read: '6 min read', href: '/journal/the-threshold-problem.html',
         d: 'Most homepages are built as walls to scroll past. What changes when you design the first four seconds as a doorway instead.' },
       { t: 'Build it so they can edit it', kicker: 'Handover', read: '7 min read', href: '/journal/build-it-so-they-can-edit-it.html',
-        d: 'The CMS decision is a staffing decision. A look at what actually happens to a site six months after handover.' },
-      { t: 'Motion that earns its keep', kicker: 'Motion', read: '6 min read', href: '/journal/motion-that-earns-its-keep.html',
-        d: 'Animation is a cost paid in milliseconds and attention. When it is worth paying, and how to tell before you ship.' }
+        d: 'The CMS decision is a staffing decision. A look at what actually happens to a site six months after handover.' }
     ];
     return {
       isHome: page === 'home', isWork: page === 'work', isAbout: page === 'about', isContact: page === 'contact',
