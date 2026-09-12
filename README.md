@@ -51,6 +51,13 @@ Vercel, repo root as the publish directory. No framework, no build command, no
 output directory — `vercel.json` only sets cache and security headers, and
 `.vercelignore` keeps `assets/source/` and the docs out of the deploy.
 
+**Production deploys from `main`.** Pushing to `main` updates the live site at
+www.thegatewaydesigns.com; any other branch gets a preview deployment. If a push
+does not appear on the live site, check that the Vercel project serving the
+custom domain is the one connected to this repository — a second project
+pointing at the same repo will happily build the same commits without ever
+touching the domain.
+
 Any other static host works the same way (Netlify, Cloudflare Pages, GitHub
 Pages); there is nothing to build.
 
