@@ -69,6 +69,39 @@ touching the domain.
 Any other static host works the same way (Netlify, Cloudflare Pages, GitHub
 Pages); there is nothing to build.
 
+## Demos
+
+`demos/<slug>/index.html` holds a self-contained Claude Design export — the
+**recordable** build, which inlines its own runtime, so it needs no `support.js`
+next to it and cannot collide with the site's copy (they are different
+versions). Each demo is a normal page at `/demos/<slug>/`.
+
+Live now: `demos/mars-program/` — *Aphelion, Mars Program*, a scroll-cinema
+product site. It is embedded in the Work page as a lazy-loaded `<iframe>` and
+also opens full screen.
+
+**Two edits are applied to every export** and must be re-applied after a fresh
+one:
+
+1. A `<title>`, description, `robots: noindex, follow` and the favicon links —
+   exports ship with none, and a demo should not compete with the studio in
+   search.
+2. A back-link to `/`, hidden unless the demo is the top-level document
+   (`window.self === window.top`). Full screen it is the only way back; inside
+   the Work-page embed the studio header is already on screen.
+
+The embed renders live but with `pointer-events: none` until the visitor clicks
+it. The piece is 13,000px of scroll-driven cinema, so left interactive it would
+swallow the page's own scroll the moment a cursor crossed it.
+
+**Media lives off-site.** The export references ten CloudFront assets on an
+account-scoped path. They are not in this repo and cannot be re-hosted from it.
+If those URLs ever expire the demo still loads and still scrolls, but the video
+and stills go blank — worth checking if the piece ever looks empty.
+
+Design source for each demo is archived in `assets/source/<slug>/`, which is not
+deployed.
+
 ## Contact form
 
 `index.html` defines two constants at the top of the logic script:

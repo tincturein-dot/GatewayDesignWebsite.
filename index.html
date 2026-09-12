@@ -122,6 +122,7 @@ h1,h2{text-wrap:balance;}
 }
 @media(max-width:520px){
 [data-m="c3"]{grid-template-columns:1fr!important;}
+[data-demo-stage]{aspect-ratio:3/4!important;}
 [data-m="ig"]{grid-template-columns:repeat(3,1fr)!important;}
 [data-m="foot"]{grid-template-columns:1fr!important;}
 }
@@ -133,7 +134,7 @@ h1,h2{text-wrap:balance;}
   <clipPath id="archClip" clipPathUnits="objectBoundingBox"><path d="M0,1 L0,0.32 C0,0.12 0.19,0 0.5,0 C0.81,0 1,0.12 1,0.32 L1,1 Z"></path></clipPath>
 </defs></svg>
 
-<header style="position:fixed;top:0;left:0;right:0;z-index:70;">
+<header style="position:fixed;top:0;left:0;right:0;z-index:70;background:{{ headerBg }};-webkit-backdrop-filter:{{ headerBlur }};backdrop-filter:{{ headerBlur }};border-bottom:1px solid {{ headerBorder }};transition:background .35s ease,border-color .35s ease;">
   <div style="max-width:1440px;margin:0 auto;padding:26px clamp(22px,5vw,44px);display:flex;align-items:center;justify-content:space-between;gap:24px;">
     <button onClick="{{ goHome }}" style="display:flex;align-items:center;gap:12px;background:none;border:none;cursor:pointer;padding:0;color:#ffffff;">
       <svg width="22" height="24" viewBox="0 0 24 26" fill="none" aria-hidden="true"><path d="M2,26 L2,10 C2,4.5 6,1.5 12,1.5 C18,1.5 22,4.5 22,10 L22,26" stroke="#e8b64c" stroke-width="2" stroke-linecap="round"/></svg>
@@ -220,7 +221,7 @@ h1,h2{text-wrap:balance;}
 
   <section style="max-width:1440px;margin:0 auto;padding:64px clamp(22px,5vw,44px) 40px;">
     <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:16px;margin-bottom:42px;">
-      <div><h2 data-reveal style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(32px,5vw,62px);letter-spacing:-.03em;margin:0;text-transform:uppercase;">Concept studies</h2><p data-reveal style="margin:12px 0 0;color:#4a4a45;font-size:16px;max-width:52ch;">Self-initiated. No client attached — these are how we argue with ourselves about structure before it matters.</p></div>
+      <div><h2 data-reveal style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(32px,5vw,62px);letter-spacing:-.03em;margin:0;text-transform:uppercase;">Concept studies</h2><p data-reveal style="margin:12px 0 0;color:#4a4a45;font-size:16px;max-width:52ch;">Self-initiated. No client attached — these are how we argue with ourselves about structure before it matters. One of them is built and running; you can scroll it.</p></div>
       <button data-reveal onClick="{{ goWork }}" style="font-family:'Spline Sans Mono',monospace;background:none;border:none;cursor:pointer;color:#0c0c0c;font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid #0c0c0c;padding-bottom:3px;">All studies →</button>
     </div>
     <div data-m="c3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:36px 30px;">
@@ -307,13 +308,48 @@ h1,h2{text-wrap:balance;}
 
 <sc-if value="{{ isWork }}" hint-placeholder-val="{{ false }}">
 <main style="max-width:1440px;margin:0 auto;padding:128px clamp(22px,5vw,44px) 40px;">
-  <p data-hero-tag style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#6a6a64;margin:0 0 26px;">(02) — Concept studies</p>
+  <p data-hero-tag style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#6a6a64;margin:0 0 26px;">(02) — Work</p>
   <h1 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(52px,10vw,150px);line-height:.9;letter-spacing:-.045em;margin:0;text-transform:uppercase;">
     <span style="display:block;overflow:hidden;padding-bottom:.03em;"><span data-hero style="display:block;">Doors we've</span></span>
     <span style="display:block;overflow:hidden;padding-bottom:.05em;"><span data-hero class="emerald-ink" style="display:block;">drawn ourselves</span></span>
   </h1>
-  <p data-hero-tag style="max-width:56ch;font-size:19px;color:#3a3a36;margin:32px 0 14px;">Three self-initiated studies. No client, no brief, no launch date — we set ourselves a problem, take it as far as it needs to go, and keep what we learn for the work that follows.</p>
-  <p data-hero-tag style="font-family:'Spline Sans Mono',monospace;max-width:56ch;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6a6a64;margin:0 0 56px;">Concept work · Not commissioned</p>
+  <p data-hero-tag style="max-width:56ch;font-size:19px;color:#3a3a36;margin:32px 0 14px;">One site built end to end and running live, plus three studies that stayed on paper. No client, no brief, no launch date — we set ourselves a problem, take it as far as it needs to go, and keep what we learn for the work that follows.</p>
+  <p data-hero-tag style="font-family:'Spline Sans Mono',monospace;max-width:56ch;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6a6a64;margin:0 0 56px;">Self-initiated · Not commissioned</p>
+
+  <section data-reveal style="margin:0 0 84px;">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:10px 24px;border-top:1px solid rgba(12,12,12,.16);padding-top:22px;margin-bottom:26px;">
+      <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 18px;">
+        <h2 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:700;font-size:clamp(26px,3.6vw,44px);margin:0;letter-spacing:-.025em;text-transform:uppercase;">Aphelion — Mars Program</h2>
+        <span style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6a6a64;">Scroll cinema · Product site</span>
+      </div>
+      <span style="font-family:'Spline Sans Mono',monospace;display:inline-flex;align-items:center;gap:7px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#0c0c0c;white-space:nowrap;"><span style="width:6px;height:6px;border-radius:50%;background:#1e9e5a;display:inline-block;"></span>Live build</span>
+    </div>
+    <p style="margin:0 0 26px;color:#4a4a45;font-size:17px;line-height:1.6;max-width:62ch;">A single-page site for a reusable Mars vehicle, built to test one idea: that scroll position can be the only clock. It drives the video, the exploded view of the stack and every counter, so the visitor is always the one advancing time. Nothing on the page auto-plays a narrative.</p>
+
+    <div data-demo-frame style="border:1px solid rgba(12,12,12,.22);background:#050505;overflow:hidden;">
+      <div style="display:flex;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid rgba(242,242,242,.14);background:#0c0c0c;">
+        <span style="display:flex;gap:6px;"><span style="width:9px;height:9px;border-radius:50%;background:#2f2f2c;display:block;"></span><span style="width:9px;height:9px;border-radius:50%;background:#2f2f2c;display:block;"></span><span style="width:9px;height:9px;border-radius:50%;background:#2f2f2c;display:block;"></span></span>
+        <span style="font-family:'Spline Sans Mono',monospace;flex:1;text-align:center;font-size:11px;letter-spacing:.1em;color:#77766f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">thegatewaydesigns.com/demos/mars-program</span>
+        <span style="font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:{{ demoHintColor }};white-space:nowrap;">{{ demoHint }}</span>
+      </div>
+      <div data-demo-stage style="position:relative;width:100%;aspect-ratio:16/10;background:#050505;">
+        <iframe src="/demos/mars-program/" loading="lazy" title="Aphelion Mars Program — live demo" style="position:absolute;inset:0;width:100%;height:100%;border:0;display:block;pointer-events:{{ demoPV }};"></iframe>
+        <sc-if value="{{ demoIdle }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ activateDemo }}" aria-label="Enable interaction with the Aphelion demo" style="position:absolute;inset:0;width:100%;height:100%;background:transparent;border:none;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding:0 0 18px;"><span style="font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#f2f2f2;background:rgba(5,5,5,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(242,242,242,.22);padding:9px 16px;">Click to scroll inside</span></button>
+        </sc-if>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:22px;">
+      <a href="/demos/mars-program/" target="_blank" rel="noopener" data-magnetic style="font-family:'Hanken Grotesk',system-ui,sans-serif;display:inline-flex;align-items:center;gap:9px;background:#0c0c0c;color:#f2f1ec;border:none;cursor:pointer;font-size:15px;font-weight:600;padding:14px 28px;border-radius:100px;" style-hover="background:#2a2a26;color:#f2f1ec;">Open the demo<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+      <span style="font-family:'Spline Sans Mono',monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:#6a6a64;">Best full screen · 13,000px of scroll</span>
+    </div>
+  </section>
+
+  <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:16px;margin-bottom:8px;">
+    <h2 data-reveal style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(24px,3vw,34px);letter-spacing:-.03em;margin:0;text-transform:uppercase;">Concept studies</h2>
+    <span data-reveal style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#6a6a64;">Three · On paper</span>
+  </div>
   <div style="border-top:1px solid rgba(12,12,12,.16);">
     <sc-for list="{{ projects }}" as="p" hint-placeholder-count="3">
       <div data-reveal data-m="wrow" style="border-bottom:1px solid rgba(12,12,12,.16);display:grid;grid-template-columns:64px 1.4fr 1fr 100px;gap:14px 28px;align-items:baseline;padding:34px 0;color:#0c0c0c;">
@@ -478,12 +514,12 @@ const FORM_ENDPOINT = '';
 const CONTACT_EMAIL = 'hello@thegatewaydesigns.com';
 
 class Component extends DCLogic {
-  state = { page: 'home', menuOpen: false, status: 'idle', form: null };
+  state = { page: 'home', menuOpen: false, status: 'idle', form: null, demoLive: false, scrolled: false };
 
   go(p) {
     return () => {
       const keep = p === 'contact' && this.state.status === 'sent';
-      this.setState({ page: p, menuOpen: false, status: keep ? 'sent' : 'idle' });
+      this.setState({ page: p, menuOpen: false, status: keep ? 'sent' : 'idle', demoLive: false });
       try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) { window.scrollTo(0, 0); }
     };
   }
@@ -544,6 +580,16 @@ class Component extends DCLogic {
       window.addEventListener('scroll', this._onScroll, { passive: true });
       this.applyParallax();
     }
+    // The header is gold on transparent, which is 10.6:1 over the navy hero and
+    // 1.65:1 once the paper-coloured page scrolls under it — unreadable. Give it
+    // a ground to sit on as soon as it leaves the hero. Only fires setState when
+    // the boolean actually flips, not on every scroll frame.
+    this._onHeaderScroll = () => {
+      const s = window.scrollY > 24;
+      if (s !== this.state.scrolled) this.setState({ scrolled: s });
+    };
+    window.addEventListener('scroll', this._onHeaderScroll, { passive: true });
+    this._onHeaderScroll();
     this._onResize = () => this.setLayout();
     window.addEventListener('resize', this._onResize, { passive: true });
     this._onKey = (e) => {
@@ -569,6 +615,7 @@ class Component extends DCLogic {
     if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
     if (this._onResize) window.removeEventListener('resize', this._onResize);
     if (this._onKey) window.removeEventListener('keydown', this._onKey);
+    if (this._onHeaderScroll) window.removeEventListener('scroll', this._onHeaderScroll);
     if (this._poll) clearInterval(this._poll);
     if (this._gpoll) clearInterval(this._gpoll);
     if (this._grad && this._grad.destroy) { try { this._grad.destroy(); } catch (e) {} }
@@ -712,6 +759,9 @@ class Component extends DCLogic {
       goHome: this.go('home'), goWork: this.go('work'), goAbout: this.go('about'), goContact: this.go('contact'),
       toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
       menuLabel: open ? 'Close' : 'Menu',
+      headerBg: (this.state.scrolled && !open) ? 'rgba(12,12,12,.88)' : 'transparent',
+      headerBlur: (this.state.scrolled && !open) ? 'blur(10px)' : 'none',
+      headerBorder: (this.state.scrolled && !open) ? 'rgba(242,241,236,.14)' : 'transparent',
       menuOpacity: open ? '1' : '0',
       menuTransform: open ? 'translateY(0)' : 'translateY(-102%)',
       menuPV: open ? 'auto' : 'none',
@@ -721,6 +771,14 @@ class Component extends DCLogic {
       barBot: open ? 'translateY(-7.5px) rotate(-45deg)' : 'none',
       barMidOpacity: open ? '0' : '1',
       projects, projectsHome: projects.slice(0, 3), services, steps, articles,
+      // The demo is a 13,000px scroll-cinema piece. Left interactive by default
+      // it would swallow the page's own scroll the moment a cursor crossed it,
+      // so it renders live but inert until someone asks for it.
+      demoIdle: !this.state.demoLive,
+      demoPV: this.state.demoLive ? 'auto' : 'none',
+      demoHint: this.state.demoLive ? 'Interactive' : 'Live preview',
+      demoHintColor: this.state.demoLive ? '#8fbf7a' : '#77766f',
+      activateDemo: () => this.setState({ demoLive: true }),
       sent: this.state.status === 'sent',
       notSent: this.state.status !== 'sent',
       failed: this.state.status === 'error',

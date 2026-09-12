@@ -1,0 +1,2506 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aphelion — Mars Program · a Gateway Designs demo</title>
+<meta name="description" content="A scroll-cinema concept site for a reusable Mars vehicle. Built by The Gateway Designs as a demonstration piece.">
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#050505">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<script>
+// GENERATED from dc-runtime/src/*.ts — do not edit. Rebuild with `cd dc-runtime && bun run build`.
+"use strict";
+(() => {
+  var __defProp = Object.defineProperty;
+  var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+  var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+
+  // src/react.ts
+  function getReact() {
+    const R = window.React;
+    if (!R) throw new Error("dc-runtime: window.React is not available yet");
+    return R;
+  }
+  function getReactDOM() {
+    const RD = window.ReactDOM;
+    if (!RD) throw new Error("dc-runtime: window.ReactDOM is not available yet");
+    return RD;
+  }
+  var h = ((...args) => getReact().createElement(
+    ...args
+  ));
+
+  // src/parse.ts
+  function parseDcDocument(doc) {
+    const dc = doc.querySelector("x-dc");
+    if (!dc) return null;
+    const scriptEl = doc.querySelector("script[data-dc-script]");
+    const { props, preview } = parseDataProps(
+      scriptEl?.getAttribute("data-props") ?? null
+    );
+    return {
+      template: dc.innerHTML,
+      js: scriptEl ? scriptEl.textContent || "" : "",
+      props,
+      preview
+    };
+  }
+  function parseDcText(src) {
+    const openMatch = /<x-dc(?:\s[^>]*)?>/.exec(src);
+    if (!openMatch) return null;
+    const close = src.lastIndexOf("</x-dc>");
+    if (close === -1 || close < openMatch.index) return null;
+    const template = src.slice(openMatch.index + openMatch[0].length, close);
+    const doc = new DOMParser().parseFromString(src, "text/html");
+    const scriptEl = doc.querySelector("script[data-dc-script]");
+    const { props, preview } = parseDataProps(
+      scriptEl?.getAttribute("data-props") ?? null
+    );
+    return {
+      template,
+      js: scriptEl ? scriptEl.textContent || "" : "",
+      props,
+      preview
+    };
+  }
+  function parseDataProps(raw) {
+    if (!raw) return { props: null, preview: null };
+    let parsed;
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      return { props: null, preview: null };
+    }
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      return { props: null, preview: null };
+    }
+    const obj = parsed;
+    const preview = obj.$preview && typeof obj.$preview === "object" ? obj.$preview : null;
+    const rest = {};
+    for (const k of Object.keys(obj)) {
+      if (k[0] !== "$") rest[k] = obj[k];
+    }
+    return { props: Object.keys(rest).length ? rest : null, preview };
+  }
+  function dcNameFromPath(pathname) {
+    let p = pathname || "";
+    try {
+      p = decodeURIComponent(p);
+    } catch {
+    }
+    const base = p.split("/").pop() || "Root";
+    return base.replace(/\.dc\.html$/, "").replace(/\.html?$/, "") || "Root";
+  }
+
+  // src/boot.ts
+  var BASE_CSS = `
+    .sc-placeholder{background:color-mix(in srgb,currentColor 8%,transparent);
+      border:1px solid color-mix(in srgb,currentColor 50%,transparent);
+      border-radius:2px;box-sizing:border-box;overflow:hidden}
+    @keyframes sc-shine{0%{background-position:100% 50%}100%{background-position:0% 50%}}
+    html.sc-dc-streaming .sc-placeholder,
+    html.sc-dc-streaming .sc-interp.sc-missing{position:relative;
+      background:color-mix(in srgb,currentColor 5%,transparent);
+      border-color:transparent}
+    html.sc-dc-streaming .sc-placeholder::before,
+    html.sc-dc-streaming .sc-interp.sc-missing::before{content:'';
+      position:absolute;inset:0;pointer-events:none;
+      background:linear-gradient(90deg,rgba(217,119,87,0) 25%,rgba(247,225,211,.95) 37%,rgba(217,119,87,0) 63%);
+      background-size:400% 100%;animation:sc-shine 1.4s ease infinite}
+    html.sc-dc-streaming .sc-placeholder:nth-child(n+9 of .sc-placeholder)::before,
+    html.sc-dc-streaming .sc-interp.sc-missing:nth-child(n+9 of .sc-interp.sc-missing)::before{animation:none;
+      background:color-mix(in srgb,currentColor 8%,transparent)}
+    .sc-placeholder-error{padding:4px 8px;font:11px/1.4 ui-monospace,monospace;
+      color:color-mix(in srgb,currentColor 70%,transparent);word-break:break-word}
+    .sc-interp.sc-missing{display:inline-block;width:2em;height:1em;overflow:hidden;
+      vertical-align:text-bottom;background:rgba(255,255,255,.3);border:1px solid rgba(0,0,0,.5);
+      border-radius:2px;box-sizing:border-box;color:transparent;
+      user-select:none}
+    .sc-interp.sc-unresolved{font-family:ui-monospace,monospace;font-size:.85em;
+      color:color-mix(in srgb,currentColor 50%,transparent);
+      background:color-mix(in srgb,currentColor 10%,transparent);border-radius:3px;
+      padding:0 3px}
+    .sc-host.sc-has-error{position:relative}
+    .sc-logic-error{position:absolute;top:8px;left:8px;z-index:2147483647;max-width:60ch;
+      padding:6px 10px;background:#b00020;color:#fff;font:12px/1.4 ui-monospace,monospace;
+      border-radius:4px;white-space:pre-wrap;pointer-events:none}
+    /* Mirrors PRINT_BASELINE_CSS in apps/web deck-stage-export.ts \u2014 keep both
+       in sync until dc-runtime regains a build step. */
+    @media print {
+      @page { margin: 0.5cm; }
+      figure, table { break-inside: avoid; }
+      #dc-root, #dc-root > .sc-host { height: auto; }
+      *, *::before, *::after {
+        print-color-adjust: exact; -webkit-print-color-adjust: exact;
+        backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+        animation-delay: -99s !important; animation-duration: .001s !important;
+        animation-iteration-count: 1 !important; animation-fill-mode: both !important;
+        animation-play-state: running !important; transition-duration: 0s !important;
+      }
+    }
+  `;
+  var FULL_PAGE_CSS = "html,body{height:100%;margin:0}#dc-root,#dc-root>.sc-host{height:100%}";
+  function rootNameForDocument(doc, loc) {
+    let bootPath = loc.pathname || "";
+    if (!/\.dc\.html?$/i.test(safeDecode(bootPath))) {
+      try {
+        bootPath = new URL(doc.baseURI || "/").pathname;
+      } catch {
+      }
+    }
+    return dcNameFromPath(bootPath);
+  }
+  function safeDecode(s) {
+    try {
+      return decodeURIComponent(s);
+    } catch {
+      return s;
+    }
+  }
+  function boot(runtime, doc = document) {
+    const parsed = parseDcDocument(doc);
+    if (!parsed) return null;
+    const React = getReact();
+    const rootName = rootNameForDocument(doc, location);
+    runtime.markFetched(rootName);
+    runtime.setRootName(rootName);
+    runtime.adoptParsed(rootName, parsed);
+    if (!window.__resources) {
+      fetch(location.href).then((res) => res.ok ? res.text() : "").then((t) => {
+        const raw = t ? parseDcText(t) : null;
+        if (raw?.template) runtime.updateHtml(rootName, raw.template);
+      }).catch(() => {
+      });
+    }
+    const dc = doc.querySelector("x-dc");
+    const hostEl = doc.createElement("div");
+    hostEl.id = "dc-root";
+    dc.replaceWith(hostEl);
+    if (!parsed.preview) {
+      const s = doc.createElement("style");
+      s.textContent = FULL_PAGE_CSS;
+      doc.head.appendChild(s);
+    }
+    const Root = runtime.getDC(rootName);
+    const entry = runtime.registry.get(rootName);
+    function StandaloneRoot() {
+      const [, setTick] = React.useState(0);
+      React.useEffect(() => {
+        const sub = () => setTick((n) => n + 1);
+        entry.subs.add(sub);
+        return () => {
+          entry.subs.delete(sub);
+        };
+      }, []);
+      const defaults = React.useMemo(() => {
+        const d = {};
+        for (const k in entry.propsMeta || {}) {
+          const v = entry.propsMeta?.[k]?.default;
+          if (v !== void 0) d[k] = v;
+        }
+        return d;
+      }, [entry.propsMeta]);
+      return h(Root, { ...defaults, ...entry.propOverrides || {} });
+    }
+    const ReactDOM = getReactDOM();
+    if (ReactDOM.createRoot)
+      ReactDOM.createRoot(hostEl).render(h(StandaloneRoot));
+    else ReactDOM.render(h(StandaloneRoot), hostEl);
+    return rootName;
+  }
+
+  // src/expr.ts
+  var IDENT_RE = /^[A-Za-z_$][A-Za-z0-9_$]*/;
+  var NUMBER_RE = /^-?\d+(\.\d+)?$/;
+  function resolve(vals, src) {
+    const expr = String(src).trim();
+    if (!expr) return void 0;
+    if (expr[0] === "(" && expr[expr.length - 1] === ")" && parensWrapWhole(expr)) {
+      return resolve(vals, expr.slice(1, -1));
+    }
+    const eq = findTopLevelEquality(expr);
+    if (eq) {
+      const lv = resolve(vals, expr.slice(0, eq.index));
+      const rv = resolve(vals, expr.slice(eq.index + eq.op.length));
+      switch (eq.op) {
+        case "===":
+          return lv === rv;
+        case "!==":
+          return lv !== rv;
+        case "==":
+          return lv == rv;
+        default:
+          return lv != rv;
+      }
+    }
+    if (expr[0] === "!") return !resolve(vals, expr.slice(1));
+    if (expr === "true") return true;
+    if (expr === "false") return false;
+    if (expr === "null") return null;
+    if (expr === "undefined") return void 0;
+    if (NUMBER_RE.test(expr)) return Number(expr);
+    if (expr.length >= 2 && (expr[0] === '"' || expr[0] === "'") && expr[expr.length - 1] === expr[0]) {
+      return expr.slice(1, -1);
+    }
+    return resolvePath(vals, expr);
+  }
+  function parensWrapWhole(expr) {
+    let depth = 0;
+    for (let i = 0; i < expr.length - 1; i++) {
+      if (expr[i] === "(") depth++;
+      else if (expr[i] === ")") {
+        depth--;
+        if (depth === 0) return false;
+      }
+    }
+    return true;
+  }
+  function findTopLevelEquality(expr) {
+    let depth = 0;
+    for (let i = 0; i < expr.length; i++) {
+      const c = expr[i];
+      if (c === "[" || c === "(") depth++;
+      else if (c === "]" || c === ")") depth--;
+      else if (depth === 0 && (c === "=" || c === "!") && expr[i + 1] === "=") {
+        if (i > 0 && (expr[i - 1] === "=" || expr[i - 1] === "!")) continue;
+        if (!expr.slice(0, i).trim()) continue;
+        const op = expr[i + 2] === "=" ? c + "==" : c + "=";
+        return { index: i, op };
+      }
+    }
+    return null;
+  }
+  function resolvePath(vals, expr) {
+    const head = expr.match(IDENT_RE);
+    if (!head) return void 0;
+    let cur = vals == null ? void 0 : vals[head[0]];
+    let i = head[0].length;
+    while (i < expr.length) {
+      if (expr[i] === ".") {
+        const m = expr.slice(i + 1).match(IDENT_RE) || expr.slice(i + 1).match(/^\d+/);
+        if (!m) return void 0;
+        cur = cur == null ? void 0 : cur[m[0]];
+        i += 1 + m[0].length;
+      } else if (expr[i] === "[") {
+        let depth = 1;
+        let j = i + 1;
+        while (j < expr.length && depth > 0) {
+          if (expr[j] === "[") depth++;
+          else if (expr[j] === "]") {
+            depth--;
+            if (depth === 0) break;
+          }
+          j++;
+        }
+        if (depth !== 0) return void 0;
+        const key = resolve(vals, expr.slice(i + 1, j));
+        cur = cur == null ? void 0 : cur[key];
+        i = j + 1;
+      } else {
+        return void 0;
+      }
+    }
+    return cur;
+  }
+
+  // src/encode.ts
+  var CAMEL_ATTR = "sc-camel-";
+  var INLINE_TEXT_TAGS = new Set(
+    "a abbr b bdi bdo br cite code del dfn em i ins kbd mark q s samp small span strike strong sub sup u var wbr".split(
+      " "
+    )
+  );
+  var RAW_WRAP = {
+    select: "sc-raw-select",
+    table: "sc-raw-table",
+    tbody: "sc-raw-tbody",
+    thead: "sc-raw-thead",
+    tfoot: "sc-raw-tfoot",
+    tr: "sc-raw-tr",
+    td: "sc-raw-td",
+    th: "sc-raw-th",
+    caption: "sc-raw-caption"
+  };
+  var RAW_UNWRAP = Object.fromEntries(
+    Object.entries(RAW_WRAP).map(([k, v]) => [v, k])
+  );
+  var EVENT_MAP = {
+    onclick: "onClick",
+    onchange: "onChange",
+    oninput: "onInput",
+    onsubmit: "onSubmit",
+    onkeydown: "onKeyDown",
+    onkeyup: "onKeyUp",
+    onkeypress: "onKeyPress",
+    onmousedown: "onMouseDown",
+    onmouseup: "onMouseUp",
+    onmouseenter: "onMouseEnter",
+    onmouseleave: "onMouseLeave",
+    onfocus: "onFocus",
+    onblur: "onBlur",
+    ondoubleclick: "onDoubleClick",
+    oncontextmenu: "onContextMenu",
+    onmousemove: "onMouseMove",
+    onmouseover: "onMouseOver",
+    onmouseout: "onMouseOut",
+    onpointerdown: "onPointerDown",
+    onpointerup: "onPointerUp",
+    onpointermove: "onPointerMove",
+    onpointerenter: "onPointerEnter",
+    onpointerleave: "onPointerLeave",
+    onpointercancel: "onPointerCancel",
+    onpointerover: "onPointerOver",
+    onpointerout: "onPointerOut",
+    ongotpointercapture: "onGotPointerCapture",
+    onlostpointercapture: "onLostPointerCapture",
+    ontouchstart: "onTouchStart",
+    ontouchend: "onTouchEnd",
+    ontouchmove: "onTouchMove",
+    ontouchcancel: "onTouchCancel",
+    ondragstart: "onDragStart",
+    ondragend: "onDragEnd",
+    ondragenter: "onDragEnter",
+    ondragleave: "onDragLeave",
+    ondragover: "onDragOver",
+    onanimationstart: "onAnimationStart",
+    onanimationend: "onAnimationEnd",
+    onanimationiteration: "onAnimationIteration",
+    ontransitionend: "onTransitionEnd"
+  };
+  var ATTRS = `(?:[^>"']|"[^"]*"|'[^']*')*`;
+  var IMPORT_SELF_CLOSE_RE = new RegExp(
+    "<(x-import|dc-import)(" + ATTRS + ")/>",
+    "gi"
+  );
+  var CAMEL_ATTR_RE = /(\s)([a-z]+[A-Z][A-Za-z0-9]*)(\s*=)/g;
+  function encodeCamelAttrs(html) {
+    return html.replace(
+      CAMEL_ATTR_RE,
+      (_, sp, name, eq) => sp + CAMEL_ATTR + name.replace(/[A-Z]/g, (c) => "-" + c.toLowerCase()) + eq
+    );
+  }
+  function encodeCase(html) {
+    html = html.replace(
+      IMPORT_SELF_CLOSE_RE,
+      (_, t, a) => "<" + t + a + "></" + t + ">"
+    );
+    html = html.replace(/<helmet(\s|>)/gi, "<sc-helmet$1");
+    html = html.replace(/<\/helmet\s*>/gi, "</sc-helmet>");
+    html = encodeCamelAttrs(html);
+    for (const [real, alias] of Object.entries(RAW_WRAP)) {
+      html = html.replace(
+        new RegExp("(</?)" + real + "(?=[\\s>])", "gi"),
+        "$1" + alias
+      );
+    }
+    return html;
+  }
+  function kebabToCamel(s) {
+    return s.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+  }
+  function cssToObj(css) {
+    const o = {};
+    for (const decl of css.split(";")) {
+      const i = decl.indexOf(":");
+      if (i < 0) continue;
+      const prop = decl.slice(0, i).trim();
+      o[prop.startsWith("--") ? prop : kebabToCamel(prop)] = decl.slice(i + 1).trim();
+    }
+    return o;
+  }
+  function compileAttr(raw) {
+    const whole = raw.match(/^\s*\{\{([\s\S]+?)\}\}\s*$/);
+    if (whole) {
+      const path = whole[1];
+      return (vals) => resolve(vals, path);
+    }
+    if (raw.includes("{{")) {
+      const parts = raw.split(/\{\{([\s\S]+?)\}\}/g);
+      return (vals) => parts.map((s, i) => i & 1 ? resolve(vals, s) ?? "" : s).join("");
+    }
+    return () => raw;
+  }
+
+  // src/compile.ts
+  function collectProps(node, kind, host) {
+    const propGetters = [];
+    const pseudoClasses = [];
+    let hintSize = null;
+    for (const { name, value } of [...node.attributes]) {
+      if (name === "sc-name" || name === "data-dc-tpl") continue;
+      let key = name;
+      if (key.startsWith(CAMEL_ATTR))
+        key = kebabToCamel(key.slice(CAMEL_ATTR.length));
+      if (key === "hint-size") {
+        hintSize = value;
+        continue;
+      }
+      if (key.startsWith("style-")) {
+        pseudoClasses.push(host.pseudoClass(key.slice(6), value));
+        continue;
+      }
+      if (kind !== "dom") {
+        if (key.includes("-") && !(kind === "x-import" && (key.startsWith("aria-") || key.startsWith("data-"))))
+          key = kebabToCamel(key);
+      } else {
+        if (key === "class") key = "className";
+        else if (key === "for") key = "htmlFor";
+        else if (key.startsWith("on"))
+          key = EVENT_MAP[key] || "on" + key[2].toUpperCase() + key.slice(3);
+      }
+      propGetters.push([key, compileAttr(value)]);
+    }
+    return { propGetters, pseudoClasses, hintSize };
+  }
+  var HOST_STYLE_PROPS = /* @__PURE__ */ new Set([
+    "position",
+    "left",
+    "right",
+    "top",
+    "bottom",
+    "inset",
+    "width",
+    "height",
+    "z-index",
+    "transform"
+  ]);
+  function hostPositionStyle(style) {
+    const all = typeof style === "string" ? cssToObj(style) : style != null && typeof style === "object" ? style : null;
+    if (!all) return void 0;
+    const out = {};
+    for (const [k, v] of Object.entries(all)) {
+      const kebab = k.replace(/[A-Z]/g, (c) => "-" + c.toLowerCase());
+      if (HOST_STYLE_PROPS.has(kebab)) out[k] = v;
+    }
+    return Object.keys(out).length ? out : void 0;
+  }
+  function compileTemplate(html, host) {
+    const tpl = document.createElement("template");
+    //! nosemgrep: direct-inner-html-assignment
+    tpl.innerHTML = encodeCase(html);
+    let tplN = 0;
+    (function stamp(node) {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        node.setAttribute("data-dc-tpl", String(tplN++));
+      }
+      for (const c of node.childNodes) stamp(c);
+    })(tpl.content);
+    const builders = walkChildren(tpl.content, host);
+    const render = ((vals, ctx) => builders.map((b, i) => b(vals || {}, ctx, i)));
+    render.__annotated = tpl.innerHTML;
+    return render;
+  }
+  function walkChildren(node, host) {
+    return [...node.childNodes].map((c) => walk(c, host)).filter((b) => b != null);
+  }
+  var SLIDE_ID_VALUE_RE = /^[0-9a-f]{8}$/;
+  var DECK_CONTROL_FLOW_RE = /^(sc-if|sc-for|sc-else|dc-import|x-import)$/;
+  var DECK_AUX_RE = /^(template|script|style|sc-helmet|helmet)$/;
+  function isDeckMountTag(el) {
+    if (el.localName === "deck-stage") return true;
+    return el.localName === "x-import" && (el.getAttribute("component-from-global-scope") || "") === "deck-stage";
+  }
+  function walkDeckChildren(el, host) {
+    const pairs = [...el.childNodes].map((c) => ({ c, b: walk(c, host) })).filter((p) => p.b !== null);
+    const kids = pairs.map((p) => p.b);
+    const seen = /* @__PURE__ */ new Set();
+    const wsSeen = /* @__PURE__ */ new Map();
+    const keys = [];
+    const nextSlideId = new Array(pairs.length);
+    {
+      let upcoming = null;
+      for (let j = pairs.length - 1; j >= 0; j--) {
+        const n = pairs[j].c;
+        if (n.nodeType === Node.ELEMENT_NODE) {
+          const t = n.localName;
+          upcoming = !DECK_AUX_RE.test(t) && !DECK_CONTROL_FLOW_RE.test(t) ? n.getAttribute("data-om-slide-id") : null;
+        }
+        nextSlideId[j] = upcoming;
+      }
+    }
+    for (let j = 0; j < pairs.length; j++) {
+      const { c } = pairs[j];
+      if (c.nodeType === Node.TEXT_NODE) {
+        if ((c.nodeValue ?? "").trim() === "") {
+          const base = nextSlideId[j] ? "omid-ws:" + nextSlideId[j] : "omid-ws:aux";
+          const n = wsSeen.get(base) ?? 0;
+          wsSeen.set(base, n + 1);
+          keys.push(n === 0 ? base : base + ":" + n);
+          continue;
+        }
+        return { kids, keys: null };
+      }
+      if (c.nodeType !== Node.ELEMENT_NODE) {
+        keys.push(j);
+        continue;
+      }
+      const child = c;
+      const tag = child.localName;
+      if (DECK_AUX_RE.test(tag)) {
+        keys.push(j);
+        continue;
+      }
+      if (DECK_CONTROL_FLOW_RE.test(tag)) return { kids, keys: null };
+      const v = child.getAttribute("data-om-slide-id");
+      if (!v || !SLIDE_ID_VALUE_RE.test(v) || seen.has(v)) {
+        return { kids, keys: null };
+      }
+      seen.add(v);
+      keys.push("omid:" + v);
+    }
+    return { kids, keys };
+  }
+  function renderDeckKids(kids, kidKeys, vals, ctx) {
+    return kids.map((b, j) => {
+      const k = kidKeys ? kidKeys[j] : j;
+      const out = b(vals, ctx, k);
+      return kidKeys != null && typeof out === "string" ? h(getReact().Fragment, { key: k }, out) : out;
+    });
+  }
+  function walk(node, host) {
+    if (node.nodeType === Node.TEXT_NODE) return walkText(node);
+    if (node.nodeType !== Node.ELEMENT_NODE) return null;
+    const el = node;
+    const tag = el.tagName.toLowerCase();
+    if (tag === "sc-for") return walkFor(el, host);
+    if (tag === "sc-if") return walkIf(el, host);
+    if (tag === "x-import") return walkXImport(el, host);
+    if (tag === "sc-helmet") return host.helmet(el);
+    if (tag === "dc-import") return walkComponent(el, host);
+    return walkElement(el, host);
+  }
+  var warnedHoles = /* @__PURE__ */ new Set();
+  function warnUnresolved(ctx, what) {
+    const key = (ctx?.__name || "?") + "\0" + what;
+    if (warnedHoles.has(key)) return;
+    warnedHoles.add(key);
+    console.warn("[dc-runtime] " + (ctx?.__name || "template") + ": " + what);
+  }
+  function walkText(node) {
+    const txt = node.nodeValue ?? "";
+    if (!txt.includes("{{")) {
+      if (!txt.trim() && !txt.includes(" ")) return null;
+      return () => txt;
+    }
+    const parts = txt.split(/\{\{([\s\S]+?)\}\}/g);
+    return (vals, ctx, key) => h(
+      getReact().Fragment,
+      { key },
+      ...parts.map((p, i) => {
+        if (!(i & 1)) return p;
+        const v = resolve(vals, p);
+        if (v === void 0) {
+          if (!ctx?.__streamingNow) {
+            if (document.body?.hasAttribute("data-dc-editor-on")) {
+              return h(
+                "span",
+                { key: i, className: "sc-interp sc-unresolved" },
+                "{{ " + p.trim() + " }}"
+              );
+            }
+            warnUnresolved(
+              ctx,
+              "{{ " + p.trim() + " }} never resolved \u2014 rendered as empty"
+            );
+            return null;
+          }
+          return h(
+            "span",
+            { key: i, className: "sc-interp sc-missing" },
+            p.trim()
+          );
+        }
+        if (getReact().isValidElement(v) || Array.isArray(v)) {
+          return h(getReact().Fragment, { key: i }, v);
+        }
+        if (v === null || typeof v === "boolean") return null;
+        return h("span", { key: i, className: "sc-interp" }, String(v));
+      })
+    );
+  }
+  function walkFor(el, host) {
+    const listGet = compileAttr(el.getAttribute("list") || "");
+    const asName = el.getAttribute("as") || "item";
+    const hintN = parseInt(el.getAttribute("hint-placeholder-count") || "0", 10);
+    const kids = walkChildren(el, host);
+    const listSrc = el.getAttribute("list") || "";
+    return (vals, ctx, key) => {
+      let list = listGet(vals);
+      if (!Array.isArray(list)) {
+        if (!ctx?.__streamingNow) {
+          if (list !== void 0 && list !== null) {
+            warnUnresolved(
+              ctx,
+              'sc-for list="' + listSrc + '" is not an array (' + typeof list + ")"
+            );
+          }
+          list = [];
+        } else {
+          list = hintN > 0 ? Array(hintN).fill(void 0) : [];
+        }
+      }
+      return h(
+        getReact().Fragment,
+        { key },
+        list.map((item, i) => {
+          const sub = { ...vals, [asName]: item, $index: i };
+          return h(
+            getReact().Fragment,
+            { key: i },
+            kids.map((b, j) => b(sub, ctx, j))
+          );
+        })
+      );
+    };
+  }
+  function walkIf(el, host) {
+    const valGet = compileAttr(el.getAttribute("value") || "");
+    const hintRaw = el.getAttribute("hint-placeholder-val");
+    const hintGet = hintRaw != null ? compileAttr(hintRaw) : null;
+    const kids = walkChildren(el, host);
+    return (vals, ctx, key) => {
+      let v = valGet(vals);
+      if (v === void 0 && hintGet && ctx?.__streamingNow) v = hintGet(vals);
+      return v ? h(
+        getReact().Fragment,
+        { key },
+        kids.map((b, j) => b(vals, ctx, j))
+      ) : null;
+    };
+  }
+  function walkComponent(el, host) {
+    const name = el.getAttribute("name") || el.getAttribute("component") || "";
+    el.removeAttribute("name");
+    el.removeAttribute("component");
+    const tplId = el.getAttribute("data-dc-tpl");
+    const styleRaw = el.getAttribute("style");
+    el.removeAttribute("style");
+    const styleGet = styleRaw != null ? compileAttr(styleRaw) : null;
+    const { propGetters, hintSize } = collectProps(el, "dc-import", host);
+    const kids = walkChildren(el, host);
+    return (vals, ctx, key) => {
+      const props = {
+        key,
+        __hintSize: hintSize,
+        __tplId: tplId,
+        __hostStyle: styleGet ? hostPositionStyle(styleGet(vals)) : void 0
+      };
+      for (const [k, g] of propGetters) {
+        const v = g(vals);
+        if (k === "dcProps") {
+          if (v && typeof v === "object") Object.assign(props, v);
+          continue;
+        }
+        props[k] = v;
+      }
+      if (kids.length) props.children = kids.map((b, j) => b(vals, ctx, j));
+      return h(host.component(name), props);
+    };
+  }
+  function walkXImport(el, host) {
+    const globalNameGet = compileAttr(
+      el.getAttribute("component-from-global-scope") || ""
+    );
+    const exportNameGet = compileAttr(
+      el.getAttribute("component") || el.getAttribute("name") || ""
+    );
+    const fromRaw = el.getAttribute("from") || (el.getAttribute("component-from-global-scope") ? "" : el.getAttribute("src") || el.getAttribute("import") || "");
+    const urls = fromRaw.trim() ? fromRaw.trim().split(/\s+/) : [];
+    const url = urls.length ? urls[urls.length - 1] : "";
+    const kindOf = (u) => /\.(jsx|tsx)(\?|#|$)/i.test(u) ? "jsx" : "js";
+    const tplId = el.getAttribute("data-dc-tpl");
+    const styleRaw = el.getAttribute("style");
+    el.removeAttribute("style");
+    const styleGet = styleRaw != null ? compileAttr(styleRaw) : null;
+    const wrap = tplId != null || styleGet != null;
+    const { propGetters, hintSize } = collectProps(el, "x-import", host);
+    const hasContent = el.children.length > 0 || !!(el.textContent || "").trim();
+    const deckKeyed = hasContent && isDeckMountTag(el) ? walkDeckChildren(el, host) : null;
+    const kids = deckKeyed ? deckKeyed.kids : hasContent ? walkChildren(el, host) : [];
+    const kidKeys = deckKeyed?.keys ?? null;
+    const urlBindable = fromRaw.includes("{{");
+    if (urls.length && !urlBindable) {
+      let prev;
+      for (const u of urls) prev = host.loadExternal(kindOf(u), u, prev);
+    }
+    const evalName = (g, vals) => {
+      const v = g(vals);
+      const s = v == null ? "" : String(v);
+      return s.includes("{{") ? "" : s;
+    };
+    return (vals, ctx, key) => {
+      const globalName = evalName(globalNameGet, vals);
+      const name = globalName || evalName(exportNameGet, vals);
+      const C = !name || urlBindable ? null : globalName ? host.resolveExternalGlobal(url, globalName) : host.resolveExternal(url, name);
+      const hostStyle = styleGet ? hostPositionStyle(styleGet(vals)) : void 0;
+      const wrapper = wrap ? {
+        key,
+        className: "sc-host-x",
+        "data-dc-tpl": tplId,
+        style: hostStyle || { display: "contents" }
+      } : null;
+      if (!C) {
+        const error = urlBindable ? "x-import `from` cannot contain {{ \u2026 }} \u2014 module URLs are resolved at parse time; use a literal URL" : host.resolveExternalError(url, name);
+        const ph = host.placeholder({
+          key: wrapper ? void 0 : key,
+          name,
+          hintSize,
+          error
+        });
+        return wrapper ? h("div", wrapper, ph) : ph;
+      }
+      const props = wrapper ? {} : { key };
+      let unresolvedHole = false;
+      for (const [k, g] of propGetters) {
+        if (k === "component" || k === "componentFromGlobalScope" || k === "from") {
+          continue;
+        }
+        const v = g(vals);
+        if (v === void 0) unresolvedHole = true;
+        if (k === "dcProps") {
+          if (v && typeof v === "object") Object.assign(props, v);
+          continue;
+        }
+        props[k] = v;
+      }
+      if (unresolvedHole && ctx?.__htmlStreamingNow) {
+        const ph = host.placeholder({
+          key: wrapper ? void 0 : key,
+          name,
+          hintSize,
+          error: null
+        });
+        return wrapper ? h("div", wrapper, ph) : ph;
+      }
+      if (kids.length) {
+        props.children = renderDeckKids(kids, kidKeys, vals, ctx);
+      }
+      return wrapper ? h("div", wrapper, h(C, props)) : h(C, props);
+    };
+  }
+  function contentKey(el) {
+    const clone = el.cloneNode(true);
+    for (const d of clone.querySelectorAll("*")) {
+      while (d.attributes.length) d.removeAttribute(d.attributes[0].name);
+    }
+    const s = clone.innerHTML;
+    let h2 = 5381;
+    for (let i = 0; i < s.length; i++) h2 = (h2 << 5) + h2 + s.charCodeAt(i) | 0;
+    return s.length + "." + (h2 >>> 0).toString(36);
+  }
+  var NEVER_CONTENT_KEYED = new Set(
+    "script style textarea option title select canvas iframe video audio".split(
+      " "
+    )
+  );
+  var NOT_INLINE_SELECTOR = ":not(" + [...INLINE_TEXT_TAGS].join(",") + ")";
+  function walkElement(el, host) {
+    const realTag = RAW_UNWRAP[el.localName] || el.localName;
+    const tplId = el.getAttribute("data-dc-tpl");
+    const inlineOnly = el.childNodes.length > 0 && !NEVER_CONTENT_KEYED.has(realTag) && el.querySelector(NOT_INLINE_SELECTOR) === null;
+    const keySuffix = inlineOnly ? "|" + contentKey(el) : "";
+    const { propGetters, pseudoClasses } = collectProps(el, "dom", host);
+    const deckKeyed = isDeckMountTag(el) ? walkDeckChildren(el, host) : null;
+    const kids = deckKeyed ? deckKeyed.kids : walkChildren(el, host);
+    const kidKeys = deckKeyed?.keys ?? null;
+    return (vals, ctx, key) => {
+      const props = {
+        key: key + keySuffix,
+        "data-dc-tpl": tplId
+      };
+      for (const [k, g] of propGetters) {
+        let v = g(vals);
+        if (k === "style" && typeof v === "string") v = cssToObj(v);
+        if ((k === "value" || k === "checked") && v === void 0) {
+          v = k === "checked" ? false : "";
+        }
+        props[k] = v;
+      }
+      if (pseudoClasses.length) {
+        props.className = [props.className, ...pseudoClasses].filter(Boolean).join(" ");
+      }
+      return h(realTag, props, ...renderDeckKids(kids, kidKeys, vals, ctx));
+    };
+  }
+
+  // src/logic.ts
+  var StreamableLogic = class {
+    constructor(props) {
+      __publicField(this, "props");
+      __publicField(this, "state", {});
+      /** Back-pointer to the wrapper component, installed after construction. */
+      __publicField(this, "__host");
+      this.props = props || {};
+    }
+    setState(update, cb) {
+      this.__host && this.__host.__setLogicState(update, cb);
+    }
+    forceUpdate() {
+      this.__host && this.__host.forceUpdate();
+    }
+    componentDidMount() {
+    }
+    componentDidUpdate(_prevProps) {
+    }
+    componentWillUnmount() {
+    }
+    /** The flat object the template renders against (merged over props). */
+    renderVals() {
+      return {};
+    }
+  };
+  function evalDcLogic(src) {
+    //! nosemgrep: eval-and-function-constructor
+    const fn = new Function(
+      "DCLogic",
+      "StreamableLogic",
+      "React",
+      src + '\n;return (typeof Component!=="undefined"&&Component)||undefined;'
+    );
+    return fn(StreamableLogic, StreamableLogic, getReact());
+  }
+
+  // src/component.ts
+  function shallowEqual(a, b) {
+    if (!b) return false;
+    const ak = Object.keys(a).filter((k) => k !== "children");
+    const bk = Object.keys(b).filter((k) => k !== "children");
+    if (ak.length !== bk.length) return false;
+    for (const k of ak) if (a[k] !== b[k]) return false;
+    return true;
+  }
+  function Placeholder({
+    name,
+    hintSize,
+    streaming,
+    error
+  }) {
+    const [w, hgt] = (hintSize || "100%,60px").split(",");
+    return h(
+      "div",
+      {
+        className: "sc-placeholder" + (streaming ? " sc-streaming" : ""),
+        style: { width: w.trim(), height: hgt && hgt.trim() },
+        title: name
+      },
+      error ? h(
+        "div",
+        { className: "sc-placeholder-error" },
+        (name ? name + ": " : "") + error
+      ) : null
+    );
+  }
+  function hintToMin(hint) {
+    if (!hint) return void 0;
+    const [w, hgt] = hint.split(",");
+    return { minWidth: w.trim(), minHeight: hgt && hgt.trim() };
+  }
+  function createComponentFactory(registry, ensureFetched) {
+    const React = getReact();
+    const AncestorContext = React.createContext([]);
+    class StreamableComponent extends React.Component {
+      constructor(props) {
+        super(props);
+        __publicField(this, "__name");
+        __publicField(this, "__sub");
+        __publicField(this, "__needsDidMount", false);
+        /** Snapshot of the registry's streaming flags taken at render time —
+         *  builders read it off the RenderCtx (this) to pick placeholder vs
+         *  render-nothing for unresolved values. */
+        __publicField(this, "__streamingNow", false);
+        __publicField(this, "__htmlStreamingNow", false);
+        /** When a construct throws, remember the (class, registry.ver, props)
+         *  triple so render-time reconcile doesn't re-attempt it on every parent
+         *  re-render. A registry bump (new class, template, external module
+         *  resolving via bumpAll) changes `ver` and breaks the memo so an
+         *  env-dependent constructor can self-heal. */
+        __publicField(this, "__failedLogic", null);
+        __publicField(this, "__failedUserProps", null);
+        __publicField(this, "__failedVer", -1);
+        /** Per-instance constructor error — kept here (not on the registry entry)
+         *  so one instance's successful construct can't hide a sibling's failure,
+         *  and a construct can never wipe an eval error `updateJs` recorded on
+         *  `r.logicError`. */
+        __publicField(this, "__ctorError", null);
+        __publicField(this, "logic");
+        this.__name = props.__name;
+        this.state = { __v: 0, __err: null };
+        this.__sub = () => {
+          if (this.state.__err) this.setState({ __err: null });
+          this.forceUpdate();
+        };
+        this.__makeLogic(registry.get(this.__name).Logic, null);
+        ensureFetched(this.__name);
+      }
+      /** Error-boundary hook: a render crash anywhere in this DC's subtree
+       *  (its own template, an x-import'd component, a child DC without its
+       *  own deeper boundary) lands here instead of unmounting the page. */
+      static getDerivedStateFromError(e) {
+        return { __err: e instanceof Error && e.message ? e.message : String(e) };
+      }
+      componentDidCatch(e, info) {
+        console.error(
+          "[dc-runtime] render error in <" + this.__name + ">:",
+          e,
+          info?.componentStack || ""
+        );
+      }
+      /** Instantiate the logic class (or the no-op base) and adopt `prevState`
+       *  over its initial state — used both at mount and on hot-swap. */
+      __makeLogic(Logic, prevState) {
+        const L = Logic || StreamableLogic;
+        try {
+          this.logic = new L(this.__userProps());
+          this.__failedLogic = null;
+          this.__failedUserProps = null;
+          this.__ctorError = null;
+        } catch (e) {
+          console.error(e);
+          this.__failedLogic = Logic;
+          this.__failedUserProps = this.__userProps();
+          this.__failedVer = registry.get(this.__name).ver;
+          this.__ctorError = this.__name + ": " + (e instanceof Error && e.message ? e.message : String(e));
+          this.logic = new StreamableLogic(
+            this.__userProps()
+          );
+        }
+        this.logic.__host = this;
+        if (prevState)
+          this.logic.state = { ...this.logic.state || {}, ...prevState };
+      }
+      /** The props the author's logic + template see — internal __-prefixed
+       *  wiring stripped. */
+      __userProps() {
+        const { __name, __hintSize, __tplId, __hostStyle, ...rest } = this.props;
+        return rest;
+      }
+      __setLogicState(update, cb) {
+        const prev = this.logic.state;
+        const patch = typeof update === "function" ? update(prev) : update;
+        this.logic.state = { ...prev, ...patch };
+        this.setState((s) => ({ __v: s.__v + 1 }), cb);
+      }
+      /** Swap the logic instance when the registry's Logic class changed
+       *  (streaming completion, hot reload). State carries over; didMount
+       *  re-fires after the swap commits so refs exist. */
+      __reconcileLogic() {
+        const r = registry.get(this.__name);
+        const Next = r.Logic;
+        const Cur = this.logic.constructor;
+        if (Next === Cur || !Next && Cur === StreamableLogic || Next === this.__failedLogic && r.ver === this.__failedVer && shallowEqual(this.__userProps(), this.__failedUserProps)) {
+          return;
+        }
+        if (!this.__needsDidMount) {
+          try {
+            this.logic.componentWillUnmount();
+          } catch (e) {
+            console.error(e);
+          }
+        }
+        this.__makeLogic(Next, this.logic.state);
+        this.__needsDidMount = true;
+      }
+      componentDidMount() {
+        registry.get(this.__name).subs.add(this.__sub);
+        try {
+          this.logic.componentDidMount();
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      componentDidUpdate(prevProps) {
+        this.logic.props = this.__userProps();
+        if (this.__needsDidMount) {
+          if (this.state.__err || !registry.get(this.__name).tpl) return;
+          this.__needsDidMount = false;
+          try {
+            this.logic.componentDidMount();
+          } catch (e) {
+            console.error(e);
+          }
+        } else {
+          try {
+            this.logic.componentDidUpdate(prevProps);
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      }
+      componentWillUnmount() {
+        registry.get(this.__name).subs.delete(this.__sub);
+        if (!this.__needsDidMount) {
+          try {
+            this.logic.componentWillUnmount();
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      }
+      render() {
+        const r = registry.get(this.__name);
+        const cls = "sc-host" + (r.htmlStreaming ? " sc-streaming-html" : "") + (r.jsStreaming ? " sc-streaming-js" : "");
+        const hintStyle = r.htmlStreaming ? hintToMin(this.props.__hintSize) : void 0;
+        const hostStyle = this.props.__hostStyle || hintStyle ? { ...hintStyle || {}, ...this.props.__hostStyle || {} } : void 0;
+        const hostBase = {
+          className: cls,
+          style: hostStyle,
+          "data-sc-name": this.__name,
+          "data-dc-tpl": this.props.__tplId
+        };
+        const chain = Array.isArray(this.context) ? this.context : [];
+        if (chain.includes(this.__name)) {
+          const cycle = [
+            ...chain.slice(chain.indexOf(this.__name)),
+            this.__name
+          ].join(" \u2192 ");
+          return h(
+            "div",
+            { ...hostBase, className: cls + " sc-has-error" },
+            h(Placeholder, {
+              name: this.__name,
+              hintSize: this.props.__hintSize,
+              error: "circular import: " + cycle
+            })
+          );
+        }
+        if (this.state.__err) {
+          return h(
+            "div",
+            { ...hostBase, className: cls + " sc-has-error" },
+            h(
+              "div",
+              { className: "sc-logic-error", "data-omelette-chrome": "" },
+              this.__name + ": " + this.state.__err
+            ),
+            h(Placeholder, {
+              name: this.__name,
+              hintSize: this.props.__hintSize,
+              error: this.state.__err
+            })
+          );
+        }
+        this.__reconcileLogic();
+        if (!r.tpl) {
+          return h(
+            "div",
+            hostBase,
+            h(Placeholder, { name: this.__name, hintSize: this.props.__hintSize })
+          );
+        }
+        const userProps = this.__userProps();
+        this.logic.props = userProps;
+        let vals = userProps;
+        let renderErr = r.logicError || this.__ctorError;
+        try {
+          vals = { ...userProps, ...this.logic.renderVals() || {} };
+        } catch (e) {
+          console.error(e);
+          renderErr = this.__name + ".renderVals(): " + (e instanceof Error && e.message ? e.message : String(e));
+        }
+        this.__streamingNow = !!(r.htmlStreaming || r.jsStreaming);
+        this.__htmlStreamingNow = !!r.htmlStreaming;
+        return h(
+          "div",
+          { ...hostBase, className: cls + (renderErr ? " sc-has-error" : "") },
+          renderErr && h(
+            "div",
+            { className: "sc-logic-error", "data-omelette-chrome": "" },
+            renderErr
+          ),
+          h(
+            AncestorContext.Provider,
+            { value: [...chain, this.__name] },
+            r.tpl(vals, this)
+          )
+        );
+      }
+    }
+    __publicField(StreamableComponent, "contextType", AncestorContext);
+    const named = /* @__PURE__ */ new Map();
+    function getDC(name) {
+      const hit = named.get(name);
+      if (hit) return hit;
+      function Dispatcher(p) {
+        const [, setTick] = React.useState(0);
+        React.useEffect(() => {
+          const sub = () => setTick((n) => n + 1);
+          registry.get(name).subs.add(sub);
+          return () => {
+            registry.get(name).subs.delete(sub);
+          };
+        }, []);
+        ensureFetched(name);
+        return h(StreamableComponent, { ...p, __name: name });
+      }
+      Dispatcher.displayName = name;
+      named.set(name, Dispatcher);
+      return Dispatcher;
+    }
+    return {
+      getDC,
+      StreamableComponent
+    };
+  }
+
+  // src/bundled.ts
+  function bundledBlob(url) {
+    const blobs = window.__resourceBlobs;
+    const b = blobs ? blobs[url.split("#")[0]] : void 0;
+    return b instanceof Blob ? b : null;
+  }
+
+  // src/cdn.ts
+  var REACT_URL = "https://unpkg.com/react@18.3.1/umd/react.production.min.js";
+  var REACT_SRI = "sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z";
+  var REACT_DOM_URL = "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js";
+  var REACT_DOM_SRI = "sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1";
+  var BABEL_URL = "https://unpkg.com/@babel/standalone@7.29.0/babel.min.js";
+  var BABEL_SRI = "sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y";
+  function cdnScriptFor(url, sri) {
+    const res = window.__resources;
+    const v = res ? res[url] : void 0;
+    return typeof v === "string" && v ? { src: v } : { src: url, integrity: sri };
+  }
+
+  // src/external.ts
+  var isCustomElementName = (n) => !n.includes(".") && n.includes("-");
+  function isRenderableType(g) {
+    if (typeof g === "function") return !isElementClass(g);
+    return typeof g === "object" && g !== null && typeof g.$$typeof === "symbol";
+  }
+  function resolveDottedPath(root, name) {
+    let cur = root;
+    for (const seg of name.split(".")) {
+      if (cur == null) return void 0;
+      cur = cur[seg];
+    }
+    return cur;
+  }
+  var GLOBAL_POLL_INTERVAL_MS = 50;
+  var GLOBAL_POLL_TIMEOUT_MS = 3e4;
+  function createExternalModules(onResolved) {
+    const cache = /* @__PURE__ */ new Map();
+    let babelLoading = null;
+    const reportedMissing = /* @__PURE__ */ new Map();
+    const polling = /* @__PURE__ */ new Set();
+    function ensureBabel() {
+      if (window.Babel) return Promise.resolve();
+      if (babelLoading) return babelLoading;
+      const babel = cdnScriptFor(BABEL_URL, BABEL_SRI);
+      babelLoading = new Promise((res, rej) => {
+        const s = document.createElement("script");
+        s.src = babel.src;
+        if (babel.integrity) {
+          s.integrity = babel.integrity;
+          s.crossOrigin = "anonymous";
+        }
+        s.onload = () => res();
+        s.onerror = rej;
+        document.head.appendChild(s);
+      });
+      return babelLoading;
+    }
+    const pending = /* @__PURE__ */ new Map();
+    function load(kind, url, after) {
+      const existing = pending.get(url);
+      if (existing) return existing;
+      cache.set(url, null);
+      console.info("[dc-runtime] x-import: loading", url, "(" + kind + ")");
+      const ready = Promise.all([
+        kind === "jsx" ? ensureBabel() : Promise.resolve(),
+        after ?? Promise.resolve()
+      ]);
+      const p = ready.then(() => {
+        const pre = bundledBlob(url);
+        if (pre) return pre.text();
+        return fetch(url).then((r) => {
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          return r.text();
+        });
+      }).then((src) => {
+        const code = kind === "jsx" ? window.Babel.transform(src, {
+          filename: url,
+          presets: ["react", "typescript"]
+        }).code : src;
+        const module = { exports: {} };
+        const before = new Set(Object.keys(window));
+        //! nosemgrep: eval-and-function-constructor
+        new Function("React", "module", "exports", "require", code)(
+          getReact(),
+          module,
+          module.exports,
+          () => ({})
+        );
+        const globals = {};
+        for (const k of Object.keys(window)) {
+          if (!before.has(k) && typeof window[k] === "function") {
+            globals[k] = window[k];
+          }
+        }
+        cache.set(url, { mod: module.exports, globals });
+        console.info(
+          "[dc-runtime] x-import: loaded",
+          url,
+          "\u2014 exports:",
+          Object.keys(module.exports),
+          "window globals:",
+          Object.keys(globals)
+        );
+        onResolved();
+      }).catch((e) => {
+        cache.set(url, {
+          mod: {},
+          globals: {},
+          error: "failed to load: " + (e instanceof Error && e.message ? e.message : String(e))
+        });
+        console.error(
+          "[dc-runtime] x-import: FAILED to load",
+          url,
+          "(" + kind + ")",
+          e
+        );
+        onResolved();
+      });
+      pending.set(url, p);
+      return p;
+    }
+    function resolve2(url, name) {
+      const entry = cache.get(url);
+      if (!entry) return null;
+      const { mod, globals } = entry;
+      const C = mod && mod[name] || globals && globals[name] || typeof window !== "undefined" && window[name] || mod && mod.default;
+      if (typeof C === "function") return C;
+      const key = url + "\0" + name;
+      if (!reportedMissing.has(key)) {
+        reportedMissing.set(
+          key,
+          entry.error || 'no export named "' + name + '" (has: ' + Object.keys(mod).join(", ") + ")"
+        );
+        console.error(
+          "[dc-runtime] x-import: module",
+          url,
+          "loaded but has no component named",
+          JSON.stringify(name),
+          "\u2014 available exports:",
+          Object.keys(mod),
+          "window globals:",
+          Object.keys(globals),
+          ". The module must `module.exports = {" + name + "}` or set `window." + name + "`."
+        );
+      }
+      return null;
+    }
+    function waitForGlobal(name) {
+      if (polling.has(name)) return;
+      polling.add(name);
+      const started = Date.now();
+      const isCE = isCustomElementName(name);
+      const tick = () => {
+        const found = isCE ? customElements.get(name) : isRenderableType(resolveDottedPath(window, name));
+        if (found) {
+          polling.delete(name);
+          onResolved();
+          return;
+        }
+        if (Date.now() - started >= GLOBAL_POLL_TIMEOUT_MS) {
+          console.warn(
+            "[dc-runtime] x-import: global",
+            JSON.stringify(name),
+            "never appeared on window after " + GLOBAL_POLL_TIMEOUT_MS + "ms"
+          );
+          return;
+        }
+        setTimeout(tick, GLOBAL_POLL_INTERVAL_MS);
+      };
+      setTimeout(tick, GLOBAL_POLL_INTERVAL_MS);
+    }
+    function resolveGlobal(url, name) {
+      const isCE = isCustomElementName(name);
+      if (!url) {
+        if (isCE) {
+          if (customElements.get(name)) return name;
+          waitForGlobal(name);
+          return null;
+        }
+        const g2 = resolveDottedPath(window, name);
+        if (isRenderableType(g2)) return g2;
+        waitForGlobal(name);
+        return null;
+      }
+      const entry = cache.get(url);
+      if (!entry) return null;
+      if (isCE && customElements.get(name)) return name;
+      const g = entry.globals[name] ?? resolveDottedPath(window, name);
+      if (isRenderableType(g)) return g;
+      if (name.includes(".")) return null;
+      const key = url + "\0global\0" + name;
+      if (!reportedMissing.has(key)) {
+        reportedMissing.set(key, null);
+        if (isCE && !customElements.get(name)) {
+          console.warn(
+            "[dc-runtime] x-import:",
+            url,
+            "loaded but no custom element",
+            JSON.stringify(name),
+            "is registered and window." + name + " is not a function \u2014 rendering <" + name + "> as an unknown element."
+          );
+        }
+      }
+      return name;
+    }
+    function getError(url, name) {
+      const entry = cache.get(url);
+      if (entry?.error) return entry.error;
+      return reportedMissing.get(url + "\0" + name) || null;
+    }
+    return { load, resolve: resolve2, resolveGlobal, getError };
+  }
+  function isElementClass(g) {
+    try {
+      return typeof g === "function" && typeof HTMLElement !== "undefined" && g.prototype instanceof HTMLElement;
+    } catch {
+      return false;
+    }
+  }
+
+  // src/atomics.ts
+  var ATOMIC_CSS = (
+    // layout
+    ".fx{display:flex}.col{display:flex;flex-direction:column}.grid{display:grid}.ac{align-items:center}.jc{justify-content:center}.jb{justify-content:space-between}.f1{flex:1}.noshrink{flex-shrink:0}.wrap{flex-wrap:wrap}.fw5{font-weight:500}.fw6{font-weight:600}.fw7{font-weight:700}.fw8{font-weight:800}.fs11{font-size:11px}.fs12{font-size:12px}.fs13{font-size:13px}.fs14{font-size:14px}.fs15{font-size:15px}.fs16{font-size:16px}.fs20{font-size:20px}.fs22{font-size:22px}.upper{text-transform:uppercase}.tc{text-align:center}.nowrap{white-space:nowrap}.gap8{gap:8px}.gap10{gap:10px}.gap12{gap:12px}.gap16{gap:16px}.gap24{gap:24px}.m0{margin:0}.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mb8{margin-bottom:8px}.mb12{margin-bottom:12px}.mb16{margin-bottom:16px}.posrel{position:relative}.posabs{position:absolute}.round{border-radius:50%}.ohide{overflow:hidden}.bbox{box-sizing:border-box}.pointer{cursor:pointer}.w100{width:100%}.b0{border:none}"
+  );
+
+  // src/helmet.ts
+  var DESIGN_DOC_MODE_RE = /<meta\b[^>]*\bname\s*=\s*["']design_doc_mode["'][^>]*\b(?:content|value)\s*=\s*["'](\w+)["']/i;
+  var CANVAS_BG_LIGHT = "#f0eee6";
+  var CANVAS_BG_DARK = "#2e2c26";
+  function createHelmetManager(doc, isStreaming) {
+    const mounted = /* @__PURE__ */ new Set();
+    const live = /* @__PURE__ */ new Map();
+    let designDocMode = null;
+    let canvasStyleEl = null;
+    let appTheme = "light";
+    try {
+      const ds = doc.documentElement.dataset.theme;
+      appTheme = ds === "dark" || ds === "light" ? ds : new URLSearchParams(doc.defaultView?.location.search ?? "").get(
+        "theme"
+      ) === "dark" ? "dark" : "light";
+    } catch {
+    }
+    function applyCanvasBg() {
+      if (!canvasStyleEl) return;
+      const bg = appTheme === "dark" ? CANVAS_BG_DARK : CANVAS_BG_LIGHT;
+      canvasStyleEl.textContent = `html,body{background:${bg}}#dc-root>.sc-host{position:relative}`;
+    }
+    function postDesignMode(mode) {
+      if (window.parent === window) return;
+      try {
+        window.parent.postMessage({ type: "__dc_design_mode", mode }, "*");
+      } catch {
+      }
+    }
+    function setDesignDocMode(mode) {
+      if (mode === designDocMode) return;
+      designDocMode = mode;
+      postDesignMode(mode);
+      if (mode === "canvas") {
+        doc.documentElement.setAttribute("data-dc-canvas", "");
+        canvasStyleEl = doc.createElement("style");
+        canvasStyleEl.setAttribute("data-dc-canvas", "");
+        applyCanvasBg();
+        doc.head.appendChild(canvasStyleEl);
+      } else {
+        doc.documentElement.removeAttribute("data-dc-canvas");
+        canvasStyleEl?.remove();
+        canvasStyleEl = null;
+      }
+    }
+    window.addEventListener("message", (e) => {
+      const type = e.data && e.data.type;
+      if (type === "__dc_theme") {
+        const t = e.data.theme;
+        if (t === "light" || t === "dark") {
+          appTheme = t;
+          applyCanvasBg();
+        }
+        return;
+      }
+      if (!designDocMode || type !== "__dc_probe") return;
+      postDesignMode(designDocMode);
+    });
+    function compile(node) {
+      const raw = [...node.children];
+      const helmetClosed = node.nextSibling != null || node.parentNode?.nextSibling != null;
+      if (node.hasAttribute("data-dc-atomics") && !mounted.has("__dc-atomics")) {
+        mounted.add("__dc-atomics");
+        const el = doc.createElement("style");
+        el.id = "__dc-atomics";
+        el.textContent = ATOMIC_CSS;
+        doc.head.appendChild(el);
+      }
+      return (_vals, ctx) => {
+        const name = ctx && ctx.__name || "";
+        const streaming = !!(name && isStreaming(name));
+        for (let i = 0; i < raw.length; i++) {
+          const child = raw[i];
+          const tag = child.tagName;
+          const mayBePartial = streaming && !helmetClosed && i === raw.length - 1;
+          if (tag === "SCRIPT") {
+            if (mayBePartial) continue;
+            const key = "SCRIPT|" + (child.getAttribute("src") || child.textContent || "");
+            if (mounted.has(key)) continue;
+            mounted.add(key);
+            const el = doc.createElement("script");
+            for (const { name: an, value } of [...child.attributes])
+              el.setAttribute(an, value);
+            if (child.textContent) el.textContent = child.textContent;
+            doc.head.appendChild(el);
+          } else if (tag === "LINK" || tag === "META") {
+            if (mayBePartial) continue;
+            const key = tag + "|" + (child.getAttribute("href") || child.getAttribute("src") || child.outerHTML);
+            if (mounted.has(key)) continue;
+            mounted.add(key);
+            if (tag === "LINK") {
+              const rel = (child.getAttribute("rel") || "").toLowerCase().split(/\s+/);
+              const href = (child.getAttribute("href") || "").trim();
+              const res = window.__resources;
+              const pre = res && rel.includes("stylesheet") && !rel.includes("alternate") ? res[href] : void 0;
+              const blob = typeof pre === "string" && pre ? bundledBlob(pre) : null;
+              if (blob) {
+                const el = doc.createElement("style");
+                if (child.hasAttribute("disabled")) {
+                  el.setAttribute("media", "not all");
+                } else if (child.getAttribute("media")) {
+                  el.setAttribute("media", child.getAttribute("media"));
+                }
+                if (child.getAttribute("title"))
+                  el.setAttribute("title", child.getAttribute("title"));
+                void blob.text().then((css) => {
+                  el.textContent = css;
+                });
+                doc.head.appendChild(el);
+                continue;
+              }
+            }
+            doc.head.appendChild(child.cloneNode(true));
+          } else {
+            const key = name + "|" + i;
+            let el = live.get(key);
+            if (!el || el.tagName !== tag) {
+              if (el) el.remove();
+              el = doc.createElement(tag.toLowerCase());
+              live.set(key, el);
+              doc.head.appendChild(el);
+            }
+            for (const { name: an, value } of [...child.attributes]) {
+              if (el.getAttribute(an) !== value) el.setAttribute(an, value);
+            }
+            if (el.textContent !== child.textContent)
+              el.textContent = child.textContent;
+          }
+        }
+        return null;
+      };
+    }
+    return { compile, setDesignDocMode };
+  }
+
+  // src/pseudo.ts
+  function scanUnquotedUrl(css, i) {
+    if (css[i] !== "u" && css[i] !== "U" || css.slice(i, i + 4).toLowerCase() !== "url(" || /[a-z0-9_-]/i.test(css[i - 1] ?? "")) {
+      return -1;
+    }
+    let j = i + 4;
+    while (j < css.length && /\s/.test(css[j])) j++;
+    if (css[j] === '"' || css[j] === "'") return -1;
+    while (j < css.length && css[j] !== ")") {
+      if (css[j] === "\\") j++;
+      j++;
+    }
+    return j < css.length ? j + 1 : css.length;
+  }
+  function stripComments(css) {
+    let out = "";
+    let quote = "";
+    for (let i = 0; i < css.length; i++) {
+      const c = css[i];
+      if (quote) {
+        if (c === "\\") {
+          out += c + (css[i + 1] ?? "");
+          i++;
+          continue;
+        }
+        if (c === quote) quote = "";
+        out += c;
+      } else if (c === "'" || c === '"') {
+        quote = c;
+        out += c;
+      } else if (c === "/" && css[i + 1] === "*") {
+        const end = css.indexOf("*/", i + 2);
+        i = end === -1 ? css.length : end + 1;
+        out += " ";
+      } else {
+        const end = scanUnquotedUrl(css, i);
+        if (end === -1) out += c;
+        else {
+          out += css.slice(i, end);
+          i = end - 1;
+        }
+      }
+    }
+    return out;
+  }
+  function importantify(css) {
+    css = stripComments(css);
+    const decls = [];
+    let start = 0;
+    let depth = 0;
+    let quote = "";
+    for (let i = 0; i < css.length; i++) {
+      const c = css[i];
+      if (quote) {
+        if (c === "\\") i++;
+        else if (c === quote) quote = "";
+      } else if (c === "'" || c === '"') quote = c;
+      else if (c === "(") depth++;
+      else if (c === ")") depth = Math.max(0, depth - 1);
+      else if (c === ";" && depth === 0) {
+        decls.push(css.slice(start, i));
+        start = i + 1;
+      } else {
+        const end = scanUnquotedUrl(css, i);
+        if (end !== -1) i = end - 1;
+      }
+    }
+    decls.push(css.slice(start));
+    return decls.map((d) => d.trim()).filter(Boolean).map((d) => /!\s*important$/i.test(d) ? d : d + " !important").join(";");
+  }
+  function createPseudoSheet(doc) {
+    let el = null;
+    const cache = /* @__PURE__ */ new Map();
+    let n = 0;
+    return (pseudo, css) => {
+      const k = pseudo + "|" + css;
+      const hit = cache.get(k);
+      if (hit) return hit;
+      if (!el) {
+        el = doc.createElement("style");
+        doc.head.appendChild(el);
+      }
+      const cls = "scp" + (n++).toString(36);
+      const isPseudoElement = pseudo === "before" || pseudo === "after";
+      const sel = isPseudoElement ? "." + cls + "::" + pseudo : "." + cls + ":" + pseudo;
+      el.sheet.insertRule(
+        sel + "{" + (isPseudoElement ? css : importantify(css)) + "}",
+        el.sheet.cssRules.length
+      );
+      cache.set(k, cls);
+      return cls;
+    };
+  }
+
+  // src/registry.ts
+  function createRegistry() {
+    const entries = /* @__PURE__ */ Object.create(null);
+    function get(name) {
+      return entries[name] || (entries[name] = {
+        html: "",
+        tpl: null,
+        Logic: null,
+        jsStreaming: false,
+        htmlStreaming: false,
+        ver: 0,
+        subs: /* @__PURE__ */ new Set(),
+        fetched: false
+      });
+    }
+    function bump(name) {
+      const r = get(name);
+      r.ver++;
+      for (const fn of r.subs) fn();
+    }
+    return {
+      entries,
+      get,
+      bump,
+      bumpAll() {
+        for (const n in entries) bump(n);
+      }
+    };
+  }
+
+  // src/runtime.ts
+  var COMPONENT_DIR = ".";
+  function createRuntime(doc = document) {
+    const registry = createRegistry();
+    const pseudoClass = createPseudoSheet(doc);
+    const helmet = createHelmetManager(
+      doc,
+      (name) => registry.get(name).htmlStreaming
+    );
+    const external = createExternalModules(() => registry.bumpAll());
+    const factory = createComponentFactory(registry, ensureFetched);
+    const host = {
+      component: (name) => factory.getDC(name),
+      placeholder: (props) => h(Placeholder, props),
+      helmet: (node) => helmet.compile(node),
+      loadExternal: (kind, url, after) => external.load(kind, url, after),
+      resolveExternal: (url, name) => external.resolve(url, name),
+      resolveExternalGlobal: (url, name) => external.resolveGlobal(url, name),
+      resolveExternalError: (url, name) => external.getError(url, name),
+      pseudoClass
+    };
+    function ensureFetched(name) {
+      const r = registry.get(name);
+      if (r.fetched) return;
+      r.fetched = true;
+      const url = COMPONENT_DIR + "/" + encodeURIComponent(name) + ".dc.html";
+      const res = window.__resources;
+      const pre = res ? res[url] : void 0;
+      const target = typeof pre === "string" && pre ? pre : url;
+      const blob = bundledBlob(target);
+      (blob ? blob.text() : fetch(target).then((res2) => {
+        if (!res2.ok) {
+          console.error(
+            '[dc-runtime] sibling fetch for "' + name + '" failed:',
+            url,
+            "returned",
+            res2.status,
+            "\u2014 the reference renders as an empty placeholder."
+          );
+          return "";
+        }
+        return res2.text();
+      })).then((t) => {
+        if (!t) return;
+        const parsed = parseDcText(t);
+        if (!parsed) {
+          console.error(
+            '[dc-runtime] sibling fetch for "' + name + '":',
+            url,
+            "has no <x-dc> block \u2014 not a Design Component."
+          );
+          return;
+        }
+        if (parsed.props) r.propsMeta = parsed.props;
+        if (parsed.preview) r.preview = parsed.preview;
+        if (parsed.template && !r.html) updateHtml(name, parsed.template);
+        if (parsed.js && !r.Logic) updateJs(name, parsed.js);
+      }).catch(
+        (e) => console.error(
+          '[dc-runtime] sibling fetch for "' + name + '" threw:',
+          url,
+          e
+        )
+      );
+    }
+    let rootName = null;
+    function updateHtml(name, html) {
+      const r = registry.get(name);
+      r.html = html;
+      if (name === rootName) {
+        const mode = DESIGN_DOC_MODE_RE.exec(html)?.[1] ?? null;
+        if (mode || !r.htmlStreaming) helmet.setDesignDocMode(mode);
+      }
+      try {
+        r.tpl = compileTemplate(html, host);
+      } catch (e) {
+        console.error("[dc-runtime] template compile FAILED for", name, e);
+      }
+      registry.bump(name);
+    }
+    function updateJs(name, src) {
+      const r = registry.get(name);
+      const seq = r.jsSeq = (r.jsSeq || 0) + 1;
+      try {
+        const Cls = evalDcLogic(src);
+        if (r.jsSeq !== seq) return;
+        if (typeof Cls !== "function") {
+          r.logicError = name + ".dc.html: <script data-dc-script> must define `class Component extends DCLogic`";
+        } else {
+          r.logicError = null;
+          r.Logic = Cls;
+        }
+      } catch (e) {
+        if (r.jsSeq !== seq) return;
+        console.error(
+          "[dc-runtime] logic class eval FAILED for",
+          name,
+          "\u2014 the template renders with props only.",
+          e
+        );
+        r.logicError = name + ": " + (e instanceof Error && e.message ? e.message : String(e));
+      }
+      registry.bump(name);
+    }
+    function setStreaming(name, kind, on) {
+      const r = registry.get(name);
+      if (kind === "html") r.htmlStreaming = !!on;
+      else r.jsStreaming = !!on;
+      let any = false;
+      for (const n in registry.entries) {
+        const e = registry.entries[n];
+        if (e && (e.htmlStreaming || e.jsStreaming)) {
+          any = true;
+          break;
+        }
+      }
+      doc.documentElement.classList.toggle("sc-dc-streaming", any);
+      registry.bump(name);
+    }
+    function dcUpdate(name, kind, content, streaming) {
+      if (streaming) registry.get(name).fetched = true;
+      if (kind === "html") {
+        setStreaming(name, "html", !!streaming);
+        updateHtml(name, content);
+      } else if (kind === "js") {
+        setStreaming(name, "js", !!streaming);
+        if (!streaming) updateJs(name, content);
+      } else if (kind === "props") {
+        const { props, preview } = parseDataProps(content);
+        const r = registry.get(name);
+        r.propsMeta = props ?? void 0;
+        r.preview = preview;
+        registry.bump(name);
+      }
+    }
+    function setProps(name, overrides) {
+      registry.get(name).propOverrides = overrides && typeof overrides === "object" ? { ...overrides } : null;
+      registry.bump(name);
+    }
+    function adoptParsed(name, parsed) {
+      if (!parsed) return;
+      const r = registry.get(name);
+      if (parsed.props) r.propsMeta = parsed.props;
+      if (parsed.preview) r.preview = parsed.preview;
+      if (parsed.template) updateHtml(name, parsed.template);
+      if (parsed.js) updateJs(name, parsed.js);
+    }
+    return {
+      registry,
+      getDC: factory.getDC,
+      updateHtml,
+      updateJs,
+      dcUpdate,
+      setProps,
+      adoptParsed,
+      setRootName: (name) => {
+        rootName = name;
+      },
+      markFetched: (name) => {
+        registry.get(name).fetched = true;
+      },
+      annotatedTemplate: (name) => {
+        const r = registry.get(name);
+        return r.tpl && r.tpl.__annotated || null;
+      },
+      templateSource: (name) => registry.get(name).html || null,
+      StreamableLogic
+    };
+  }
+
+  // src/stream-state.ts
+  function createStreamTracker(staleMs = 6e4, now = Date.now) {
+    const since = /* @__PURE__ */ new Map();
+    const liveOne = (n) => {
+      const t = since.get(n);
+      if (t === void 0) return false;
+      if (now() - t > staleMs) {
+        since.delete(n);
+        return false;
+      }
+      return true;
+    };
+    return {
+      push(name, streaming, viewportKey) {
+        if (viewportKey === "dc-model") return;
+        if (streaming) since.set(name, now());
+        else since.delete(name);
+      },
+      live(name) {
+        if (name !== void 0) return liveOne(name);
+        for (const n of [...since.keys()]) if (liveOne(n)) return true;
+        return false;
+      }
+    };
+  }
+
+  // src/index.ts
+  function hideRawTemplate() {
+    const s = document.createElement("style");
+    s.textContent = "x-dc{display:none!important}";
+    document.head.appendChild(s);
+  }
+  function loadScript(src, integrity) {
+    return new Promise((resolve2, reject) => {
+      //! nosemgrep: create-script-element
+      const s = document.createElement("script");
+      s.src = src;
+      if (integrity) {
+        s.integrity = integrity;
+        s.crossOrigin = "anonymous";
+      }
+      s.async = false;
+      s.onload = () => resolve2();
+      s.onerror = () => reject(new Error(`failed to load ${src}`));
+      document.head.appendChild(s);
+    });
+  }
+  function loadReactUmd() {
+    const w = window;
+    if (w.React && w.ReactDOM) return Promise.resolve();
+    const react = cdnScriptFor(REACT_URL, REACT_SRI);
+    const reactDom = cdnScriptFor(REACT_DOM_URL, REACT_DOM_SRI);
+    return Promise.all([
+      loadScript(react.src, react.integrity),
+      loadScript(reactDom.src, reactDom.integrity)
+    ]).then(() => void 0);
+  }
+  function init() {
+    const runtime = createRuntime(document);
+    let rootName = "Root";
+    const baseCss = document.createElement("style");
+    baseCss.textContent = BASE_CSS;
+    document.head.prepend(baseCss);
+    const notifyHost = () => {
+      if (window.parent === window) return;
+      const r = runtime.registry.entries[rootName];
+      try {
+        window.parent.postMessage(
+          {
+            type: "__dc_booted",
+            rootName,
+            propsMeta: r && r.propsMeta || null,
+            preview: r && r.preview || null
+          },
+          "*"
+        );
+      } catch {
+      }
+    };
+    const streams = createStreamTracker();
+    const api = {
+      __dcUpdate: (name, kind, content, streaming, viewportKey) => {
+        streams.push(name, streaming, viewportKey);
+        runtime.dcUpdate(name, kind, content, streaming);
+        if (name === rootName && !streaming && kind === "props") notifyHost();
+      },
+      __dcStreaming: (name) => streams.live(name),
+      __dcSetProps: (name, overrides) => runtime.setProps(name, overrides),
+      /** Name of the component currently mounted as the page root — DC tools
+       *  push their template-stream here when targeting "the open page". */
+      __dcRootName: () => rootName,
+      /** Editor bridge — the encoded, `data-dc-tpl`-annotated template source.
+       *  The host editor parses this into its own template DOM so it can map a
+       *  rendered node (carrying the same `data-dc-tpl`) back to the source
+       *  node that emitted it. Returns the encoded form (`sc-camel-*` attrs,
+       *  `<sc-raw-*>`/`<sc-helmet>` tags); the editor decodes on serialize. */
+      __dcAnnotatedTemplate: (name) => runtime.annotatedTemplate(name),
+      /** Editor bridge — the *original* (decoded) template source. */
+      __dcTemplateSource: (name) => runtime.templateSource(name),
+      __dcBoot: () => {
+        rootName = boot(runtime, document) ?? rootName;
+        notifyHost();
+      },
+      __dcRegistry: runtime.registry.entries,
+      getDC: (name) => runtime.getDC(name),
+      // `DCLogic` is the documented base class name; `StreamableLogic` is the
+      // implementation alias kept for any project that already references it.
+      DCLogic: runtime.StreamableLogic,
+      StreamableLogic: runtime.StreamableLogic
+    };
+    Object.assign(window, api);
+    window.__dcContentKeyed = true;
+    if (document.readyState !== "loading") api.__dcBoot();
+    else document.addEventListener("DOMContentLoaded", () => api.__dcBoot());
+  }
+  hideRawTemplate();
+  loadReactUmd().then(init).catch((err) => {
+    console.error("[dc] failed to load React or boot:", err);
+    throw err;
+  });
+})();
+
+</script>
+</head>
+<body>
+<a href="/" data-back-to-studio style="position:fixed;top:0;left:0;z-index:99999;display:none;align-items:center;gap:8px;padding:9px 14px 10px;background:rgba(5,5,5,.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-right:1px solid rgba(242,242,242,.14);border-bottom:1px solid rgba(242,242,242,.14);color:#8c8c8c;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;" onmouseover="this.style.color='#f2f2f2'" onmouseout="this.style.color='#8c8c8c'"><svg width="11" height="12" viewBox="0 0 24 26" fill="none" aria-hidden="true"><path d="M2,26 L2,10 C2,4.5 6,1.5 12,1.5 C18,1.5 22,4.5 22,10 L22,26" stroke="#e8b64c" stroke-width="2.4" stroke-linecap="round"/></svg>Gateway Designs</a>
+
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  html { background: #050505; }
+  body { margin: 0; background: #050505; color: #f2f2f2; font-family: Archivo, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  * { box-sizing: border-box; }
+  a { color: #f2f2f2; text-decoration: none; }
+  a:hover { color: #9d9d9d; }
+  ::selection { background: #f2f2f2; color: #050505; }
+  html { scrollbar-width: none; -ms-overflow-style: none; }
+  html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; }
+  @keyframes hintbob { 0%,100% { transform: translateY(0); opacity: .3 } 50% { transform: translateY(9px); opacity: .9 } }
+  @keyframes ticker { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+</style>
+</helmet>
+
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#050505"/><text x="50" y="62" font-family="Helvetica, sans-serif" font-size="34" font-weight="900" fill="#f2f2f2" text-anchor="middle">AP</text></svg></template>
+
+<div id="top" style="position: relative; width: 100%; background: #050505;">
+
+  <header id="hdr" style="position: fixed; top: 0; left: 0; right: 0; z-index: 90; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 26px clamp(16px, 4vw, 56px); border-bottom: 1px solid rgba(242,242,242,0); transition: padding .26s cubic-bezier(.16,1,.3,1), background-color .26s linear, border-color .26s linear;">
+    <a href="#top" style="display: flex; align-items: baseline; gap: 10px; flex-shrink: 0;">
+      <span style="font-weight: 900; font-size: clamp(15px, 3.4vw, 19px); letter-spacing: .3em; text-transform: uppercase;">Aphelion</span>
+      <span id="hdrsub" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .2em; color: #8c8c8c; text-transform: uppercase; transition: opacity .3s linear;">Mars Program</span>
+    </a>
+    <nav style="display: flex; align-items: center; gap: clamp(12px, 2.4vw, 32px); font-family: 'JetBrains Mono', monospace; font-size: clamp(9px, 2.1vw, 11px); letter-spacing: .16em; text-transform: uppercase;">
+      <a href="#vehicle">Vehicle</a>
+      <a href="#specs">Specs</a>
+      <a href="#surface">Surface</a>
+      <a href="#manifest" style="padding: 10px 18px; border: 1px solid #f2f2f2; background: #f2f2f2; color: #050505; font-weight: 500;" style-hover="background: transparent; color: #f2f2f2;">Reserve</a>
+    </nav>
+  </header>
+
+  <section id="hero" data-screen-label="Hero" style="position: relative; height: 260vh;">
+    <div style="position: sticky; top: 0; height: 100vh; overflow: hidden; background: #050505;">
+      <video id="scrub" src="https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260812_191533_597e2cab-2325-45b8-8176-5e64d580d015.mp4" muted="" playsinline="" preload="auto" poster="https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260812_183055_35968279-c439-410a-8224-a9b5388c4dd3.png" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.15); will-change: opacity;"></video>
+      <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,5,5,.72) 0%, rgba(5,5,5,.15) 38%, rgba(5,5,5,.35) 70%, rgba(5,5,5,.92) 100%);"></div>
+
+      <div id="herotext" style="position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 clamp(16px, 4vw, 56px); will-change: transform, opacity;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: clamp(9px, 2vw, 11px); letter-spacing: .34em; text-transform: uppercase; color: #b4b4b4; margin-bottom: clamp(14px, 2vw, 26px);">Window 2031 · Transfer orbit 259 days</div>
+        <h1 style="margin: 0; font-weight: 900; font-size: clamp(46px, 13.5vw, 220px); line-height: .84; letter-spacing: -.045em; text-transform: uppercase;">Flights<br />to Mars</h1>
+        <p style="margin: clamp(20px, 3vw, 38px) 0 0; max-width: 40ch; font-size: clamp(15px, 1.5vw, 21px); line-height: 1.5; color: #c8c8c8; text-wrap: pretty;">A fully reusable heavy-lift vehicle built for one purpose: moving people and cargo between two planets on a fixed schedule.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(26px, 3vw, 44px);">
+          <a href="#manifest" style="padding: 17px 34px; background: #f2f2f2; color: #050505; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase;" style-hover="background: #050505; color: #f2f2f2; box-shadow: inset 0 0 0 1px #f2f2f2;">Reserve a seat</a>
+          <a href="#vehicle" style="padding: 17px 34px; box-shadow: inset 0 0 0 1px rgba(242,242,242,.35); font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #f2f2f2;" style-hover="box-shadow: inset 0 0 0 1px #f2f2f2;">The vehicle</a>
+        </div>
+      </div>
+
+      <div id="hint" style="position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: .28em; text-transform: uppercase; color: #8c8c8c;">
+        <span>Scroll to launch</span>
+        <span style="width: 1px; height: 34px; background: linear-gradient(180deg, #8c8c8c, transparent); animation: hintbob 2.4s ease-in-out infinite;"></span>
+      </div>
+
+      <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(242,242,242,.12);">
+        <div id="scrubbar" style="height: 100%; width: 0%; background: #f2f2f2;"></div>
+      </div>
+    </div>
+  </section>
+
+  <div style="position: relative; overflow: hidden; border-top: 1px solid rgba(242,242,242,.12); border-bottom: 1px solid rgba(242,242,242,.12); background: #050505; padding: 16px 0;">
+    <div style="display: flex; width: max-content; animation: ticker 34s linear infinite; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: #8c8c8c;">
+      <div style="display: flex; gap: 44px; padding-right: 44px;"><span>Pad 41-B nominal</span><span>·</span><span>Static fire complete</span><span>·</span><span>Crew 6 assigned</span><span>·</span><span>Next window T-412 days</span><span>·</span><span>Booster 14 recovered</span><span>·</span></div>
+      <div style="display: flex; gap: 44px; padding-right: 44px;"><span>Pad 41-B nominal</span><span>·</span><span>Static fire complete</span><span>·</span><span>Crew 6 assigned</span><span>·</span><span>Next window T-412 days</span><span>·</span><span>Booster 14 recovered</span><span>·</span></div>
+    </div>
+  </div>
+
+  <section id="vehicle" data-screen-label="Vehicle" style="padding: clamp(80px, 11vh, 170px) clamp(16px, 4vw, 56px); display: grid; gap: clamp(48px, 7vw, 110px);">
+    <div data-reveal="1" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(20px, 3vw, 56px); align-items: end;">
+      <h2 style="margin: 0; font-weight: 900; font-size: clamp(38px, 7vw, 108px); line-height: .88; letter-spacing: -.035em; text-transform: uppercase;">Built to<br />fly again</h2>
+      <p style="margin: 0; font-size: clamp(15px, 1.4vw, 19px); line-height: 1.6; color: #c0c0c0; max-width: 46ch; text-wrap: pretty;">Every stage returns. The booster lands on the pad it left, the ship lands on the surface it was built for, and both fly again inside a week. Reuse is not a feature of the vehicle. It is the vehicle.</p>
+    </div>
+
+    <div data-reveal="1" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(20px, 2.5vw, 40px);">
+      <figure style="margin: 0;">
+        <div style="aspect-ratio: 16 / 9; overflow: hidden; background: #0c0c0c;">
+          <img loading="lazy" decoding="async" src="https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260812_183055_712c03b1-b07a-47a4-9b68-edfece1269c7.png" alt="Engine cluster" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.1);" />
+        </div>
+        <figcaption style="margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #8c8c8c;">01 — Raptor-class cluster · 33 engines</figcaption>
+      </figure>
+      <figure style="margin: 0;">
+        <div style="aspect-ratio: 16 / 9; overflow: hidden; background: #0c0c0c;">
+          <img loading="lazy" decoding="async" src="https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260812_183055_e5207482-c9a0-4e02-b5df-4b1fa557a691.png" alt="Ship in orbit" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.1);" />
+        </div>
+        <figcaption style="margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #8c8c8c;">02 — Parking orbit · propellant transfer</figcaption>
+      </figure>
+    </div>
+
+    <div data-reveal="1" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: clamp(20px, 2.5vw, 40px); border-top: 1px solid rgba(242,242,242,.14); padding-top: clamp(28px, 4vw, 54px);">
+      <div style="display: grid; gap: 10px;">
+        <div style="font-weight: 900; font-size: clamp(40px, 5vw, 74px); line-height: 1; letter-spacing: -.03em;">121m</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #8c8c8c;">Stack height</div>
+      </div>
+      <div style="display: grid; gap: 10px;">
+        <div style="font-weight: 900; font-size: clamp(40px, 5vw, 74px); line-height: 1; letter-spacing: -.03em;">150t</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #8c8c8c;">Payload to orbit</div>
+      </div>
+      <div style="display: grid; gap: 10px;">
+        <div style="font-weight: 900; font-size: clamp(40px, 5vw, 74px); line-height: 1; letter-spacing: -.03em;">6</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #8c8c8c;">Crew per ship</div>
+      </div>
+      <div style="display: grid; gap: 10px;">
+        <div style="font-weight: 900; font-size: clamp(40px, 5vw, 74px); line-height: 1; letter-spacing: -.03em;">259d</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #8c8c8c;">Transit time</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="explode" data-screen-label="Exploded view" style="position: relative; height: 240vh; border-top: 1px solid rgba(242,242,242,.14);">
+    <div style="position: sticky; top: 0; height: 100vh; overflow: hidden; background: radial-gradient(120% 90% at 50% 40%, #131313 0%, #050505 62%);">
+
+      <div style="position: absolute; inset: 0; opacity: .5; background-image: linear-gradient(rgba(242,242,242,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(242,242,242,.05) 1px, transparent 1px); background-size: 74px 74px;"></div>
+
+      <div style="position: absolute; top: clamp(70px, 11vh, 120px); left: clamp(16px, 4vw, 56px); right: clamp(16px, 4vw, 56px); display: flex; flex-wrap: wrap; gap: 16px; align-items: baseline; justify-content: space-between;">
+        <div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .3em; text-transform: uppercase; color: #8c8c8c; margin-bottom: 12px;">Exploded view · stack 121m</div>
+          <h2 style="margin: 0; font-weight: 900; font-size: clamp(30px, 5.6vw, 84px); line-height: .88; letter-spacing: -.035em; text-transform: uppercase;">Six parts,<br />one vehicle</h2>
+        </div>
+        <div id="explodepct" style="font-family: 'JetBrains Mono', monospace; font-size: clamp(28px, 4vw, 56px); font-weight: 500; letter-spacing: -.02em; color: #f2f2f2;">000</div>
+      </div>
+
+      <video data-scrub="1" id="expvid" data-lazysrc="https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260812_191928_a2bb967b-b06f-4a48-a3ef-a42e21936bc4.mp4" preload="metadata" poster="https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260812_183055_712c03b1-b07a-47a4-9b68-edfece1269c7.png" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.14); will-change: transform;"></video>
+      <div style="position: absolute; inset: 0; background: radial-gradient(70% 60% at 50% 50%, rgba(5,5,5,0) 40%, rgba(5,5,5,.75) 100%);"></div>
+
+      <ul id="seglabels" style="position: absolute; bottom: clamp(28px, 5vh, 64px); left: clamp(16px, 4vw, 56px); right: clamp(16px, 4vw, 56px); margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); gap: 14px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .14em; text-transform: uppercase;">
+        <li data-lab="1" style="display: grid; gap: 7px; border-top: 1px solid rgba(242,242,242,.18); padding-top: 10px; color: #6a6a6a; transition: color .45s linear, border-color .45s linear;"><span>01 Nose fairing</span><span style="color: #4d4d4d;">Aeroshell</span></li>
+        <li data-lab="2" style="display: grid; gap: 7px; border-top: 1px solid rgba(242,242,242,.18); padding-top: 10px; color: #6a6a6a; transition: color .45s linear, border-color .45s linear;"><span>02 Crew cabin</span><span style="color: #4d4d4d;">1,000 m³</span></li>
+        <li data-lab="3" style="display: grid; gap: 7px; border-top: 1px solid rgba(242,242,242,.18); padding-top: 10px; color: #6a6a6a; transition: color .45s linear, border-color .45s linear;"><span>03 Upper tank</span><span style="color: #4d4d4d;">CH₄ / LOX</span></li>
+        <li data-lab="4" style="display: grid; gap: 7px; border-top: 1px solid rgba(242,242,242,.18); padding-top: 10px; color: #6a6a6a; transition: color .45s linear, border-color .45s linear;"><span>04 Interstage</span><span style="color: #4d4d4d;">Hot-stage ring</span></li>
+        <li data-lab="5" style="display: grid; gap: 7px; border-top: 1px solid rgba(242,242,242,.18); padding-top: 10px; color: #6a6a6a; transition: color .45s linear, border-color .45s linear;"><span>05 Booster</span><span style="color: #4d4d4d;">Reflight ×7</span></li>
+        <li data-lab="6" style="display: grid; gap: 7px; border-top: 1px solid rgba(242,242,242,.18); padding-top: 10px; color: #6a6a6a; transition: color .45s linear, border-color .45s linear;"><span>06 Engine bay</span><span style="color: #4d4d4d;">33 × Raptor</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="sep" data-screen-label="Separation" style="position: relative; height: 210vh; border-top: 1px solid rgba(242,242,242,.14);">
+    <div style="position: sticky; top: 0; height: 100vh; overflow: hidden; background: #050505;">
+      <video data-scrub="1" id="sepvid" data-lazysrc="https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260812_191930_bbe05d45-276e-4838-a20c-5701f3260684.mp4" preload="metadata" poster="https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260812_183055_e5207482-c9a0-4e02-b5df-4b1fa557a691.png" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.12);"></video>
+      <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,5,5,.7) 0%, rgba(5,5,5,.05) 45%, rgba(5,5,5,.85) 100%);"></div>
+      <div style="position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; gap: clamp(16px, 2.2vw, 26px); padding: clamp(40px, 7vw, 96px) clamp(16px, 4vw, 56px);">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .3em; text-transform: uppercase; color: #b4b4b4;">T+02:41 · Hot-stage separation · 68 km</div>
+        <h2 style="margin: 0; font-weight: 900; font-size: clamp(34px, 7.4vw, 118px); line-height: .86; letter-spacing: -.04em; text-transform: uppercase;">It comes<br />apart on cue</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; max-width: 900px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #8c8c8c;">
+          <div id="sepstat1" style="border-top: 1px solid rgba(242,242,242,.2); padding-top: 10px;">Velocity — 0 m/s</div>
+          <div id="sepstat2" style="border-top: 1px solid rgba(242,242,242,.2); padding-top: 10px;">Altitude — 0 km</div>
+          <div id="sepstat3" style="border-top: 1px solid rgba(242,242,242,.2); padding-top: 10px;">Separation — armed</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-reveal="1" data-screen-label="Return" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); align-items: stretch; border-top: 1px solid rgba(242,242,242,.14);">
+    <div style="min-height: 62vh; background: #0c0c0c;">
+      <img loading="lazy" decoding="async" src="https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260812_183055_eecd7c69-6129-4c46-b5df-38db33d14a52.png" alt="Booster return" style="width: 100%; height: 100%; min-height: 62vh; object-fit: cover; filter: grayscale(1) contrast(1.12);" />
+    </div>
+    <div style="display: flex; flex-direction: column; justify-content: center; gap: clamp(18px, 2.4vw, 30px); padding: clamp(40px, 7vw, 96px) clamp(16px, 4vw, 56px);">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .28em; text-transform: uppercase; color: #8c8c8c;">Return &amp; reflight</div>
+      <h2 style="margin: 0; font-weight: 900; font-size: clamp(34px, 5.4vw, 80px); line-height: .9; letter-spacing: -.035em; text-transform: uppercase;">Eight minutes<br />back home</h2>
+      <p style="margin: 0; font-size: clamp(15px, 1.4vw, 19px); line-height: 1.6; color: #c0c0c0; max-width: 44ch; text-wrap: pretty;">The booster separates at 68 km, flips, and burns back to the tower. It is caught, inspected, and stacked again. Fourteen vehicles have flown a combined ninety-one missions.</p>
+      <a href="#specs" style="justify-self: start; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; border-bottom: 1px solid rgba(242,242,242,.4); padding-bottom: 6px; width: fit-content;" style-hover="border-color: #f2f2f2;">Full specification →</a>
+    </div>
+  </section>
+
+  <section id="specs" data-screen-label="Specs" style="padding: clamp(80px, 11vh, 170px) clamp(16px, 4vw, 56px); border-top: 1px solid rgba(242,242,242,.14);">
+    <div data-reveal="1" style="display: grid; gap: clamp(30px, 5vw, 60px);">
+      <h2 style="margin: 0; font-weight: 900; font-size: clamp(34px, 5.4vw, 80px); line-height: .9; letter-spacing: -.035em; text-transform: uppercase;">Specification</h2>
+      <div style="display: grid; gap: 0;">
+        <div style="display: grid; grid-template-columns: minmax(150px, 1fr) minmax(150px, 1fr) minmax(120px, .6fr); gap: 16px; padding: 20px 0; border-top: 1px solid rgba(242,242,242,.14); font-family: 'JetBrains Mono', monospace; font-size: clamp(11px, 1.2vw, 14px); letter-spacing: .04em;">
+          <span style="color: #8c8c8c;">Thrust at liftoff</span><span>74,400 kN</span><span style="color: #8c8c8c; text-align: right;">Sea level</span>
+        </div>
+        <div style="display: grid; grid-template-columns: minmax(150px, 1fr) minmax(150px, 1fr) minmax(120px, .6fr); gap: 16px; padding: 20px 0; border-top: 1px solid rgba(242,242,242,.14); font-family: 'JetBrains Mono', monospace; font-size: clamp(11px, 1.2vw, 14px); letter-spacing: .04em;">
+          <span style="color: #8c8c8c;">Propellant</span><span>Liquid methane / LOX</span><span style="color: #8c8c8c; text-align: right;">Full-flow staged</span>
+        </div>
+        <div style="display: grid; grid-template-columns: minmax(150px, 1fr) minmax(150px, 1fr) minmax(120px, .6fr); gap: 16px; padding: 20px 0; border-top: 1px solid rgba(242,242,242,.14); font-family: 'JetBrains Mono', monospace; font-size: clamp(11px, 1.2vw, 14px); letter-spacing: .04em;">
+          <span style="color: #8c8c8c;">Pressurised volume</span><span>1,000 m³</span><span style="color: #8c8c8c; text-align: right;">Crew configuration</span>
+        </div>
+        <div style="display: grid; grid-template-columns: minmax(150px, 1fr) minmax(150px, 1fr) minmax(120px, .6fr); gap: 16px; padding: 20px 0; border-top: 1px solid rgba(242,242,242,.14); font-family: 'JetBrains Mono', monospace; font-size: clamp(11px, 1.2vw, 14px); letter-spacing: .04em;">
+          <span style="color: #8c8c8c;">Landing</span><span>Tower catch / surface legs</span><span style="color: #8c8c8c; text-align: right;">Propulsive</span>
+        </div>
+        <div style="display: grid; grid-template-columns: minmax(150px, 1fr) minmax(150px, 1fr) minmax(120px, .6fr); gap: 16px; padding: 20px 0; border-top: 1px solid rgba(242,242,242,.14); border-bottom: 1px solid rgba(242,242,242,.14); font-family: 'JetBrains Mono', monospace; font-size: clamp(11px, 1.2vw, 14px); letter-spacing: .04em;">
+          <span style="color: #8c8c8c;">Turnaround</span><span>6 days</span><span style="color: #8c8c8c; text-align: right;">Booster, measured</span>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(20px, 2.5vw, 40px);">
+        <figure style="margin: 0;">
+          <div data-scrubbox="1" style="aspect-ratio: 16 / 9; overflow: hidden; background: #0c0c0c;">
+            <video data-scrub="1" data-lazysrc="https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260812_191933_cc9ded5a-c006-4c6d-9e86-7391b8ba9252.mp4" preload="metadata" poster="https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260812_183055_712c03b1-b07a-47a4-9b68-edfece1269c7.png" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.15);"></video>
+          </div>
+          <figcaption style="margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #8c8c8c;">03 — Engine bay teardown · 33 × Raptor</figcaption>
+        </figure>
+        <div style="display: flex; flex-direction: column; justify-content: flex-end; gap: 18px;">
+          <p style="margin: 0; font-size: clamp(17px, 2vw, 26px); line-height: 1.4; color: #f2f2f2; max-width: 34ch; text-wrap: pretty;">Two crew per cabin, six per ship, five ships per window. The first fleet leaves together and lands within an hour of each other.</p>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #8c8c8c;">Fleet doctrine · rev 4</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="teardown" data-screen-label="Teardown" style="position: relative; height: 240vh; border-top: 1px solid rgba(242,242,242,.14);">
+    <div style="position: sticky; top: 0; height: 100vh; overflow: hidden; background: #050505;">
+      <video data-scrub="1" id="tdvid" data-lazysrc="https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260813_184639_fbeadd21-cfe2-4708-8dca-27cbde0a758a.mp4" preload="metadata" poster="https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260812_183055_712c03b1-b07a-47a4-9b68-edfece1269c7.png" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.16);"></video>
+      <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,5,5,.66) 0%, rgba(5,5,5,.04) 42%, rgba(5,5,5,.88) 100%);"></div>
+
+      <div style="position: absolute; top: clamp(66px, 10vh, 112px); left: clamp(16px, 4vw, 56px); right: clamp(16px, 4vw, 56px); display: flex; flex-wrap: wrap; gap: 16px; align-items: baseline; justify-content: space-between;">
+        <div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .3em; text-transform: uppercase; color: #8c8c8c; margin-bottom: 12px;">Orbit pass · full teardown</div>
+          <h2 style="margin: 0; font-weight: 900; font-size: clamp(30px, 5.6vw, 84px); line-height: .88; letter-spacing: -.035em; text-transform: uppercase;">Every part,<br />on its own</h2>
+        </div>
+        <div id="r3dpct" style="font-family: 'JetBrains Mono', monospace; font-size: clamp(28px, 4vw, 56px); font-weight: 500; letter-spacing: -.02em;">000</div>
+      </div>
+
+      <div style="position: absolute; bottom: clamp(26px, 5vh, 60px); left: clamp(16px, 4vw, 56px); right: clamp(16px, 4vw, 56px); display: flex; flex-wrap: wrap; gap: 18px 30px; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #7d7d7d;">
+        <span>6 assemblies · 33 nozzles · 121 m stacked</span>
+        <span id="r3dstage">Stacked</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="surface" data-screen-label="Surface" style="position: relative; min-height: 96vh; display: flex; align-items: flex-end; overflow: hidden; border-top: 1px solid rgba(242,242,242,.14);">
+    <img loading="lazy" decoding="async" src="https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260812_183055_e861e977-43ee-451b-b36d-37ccd217898f.png" alt="Martian surface" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.05) brightness(.8);" />
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,5,5,.55) 0%, rgba(5,5,5,.1) 40%, rgba(5,5,5,.9) 100%);"></div>
+    <div data-reveal="1" style="position: relative; padding: clamp(40px, 7vw, 96px) clamp(16px, 4vw, 56px); display: grid; gap: clamp(18px, 2.4vw, 28px); max-width: 1100px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .28em; text-transform: uppercase; color: #b4b4b4;">Landing site · Arcadia Planitia</div>
+      <h2 style="margin: 0; font-weight: 900; font-size: clamp(36px, 8vw, 130px); line-height: .86; letter-spacing: -.04em; text-transform: uppercase;">Somewhere<br />flat and cold</h2>
+      <p style="margin: 0; font-size: clamp(15px, 1.4vw, 20px); line-height: 1.6; color: #d0d0d0; max-width: 48ch; text-wrap: pretty;">Shallow ice under a metre of regolith, low elevation for aerobraking, and a horizon you can land on. The first two ships carry no crew. They carry power, water plant, and the propellant to come back.</p>
+    </div>
+  </section>
+
+  <section id="manifest" data-screen-label="Manifest CTA" style="padding: clamp(90px, 14vh, 200px) clamp(16px, 4vw, 56px); border-top: 1px solid rgba(242,242,242,.14); display: grid; gap: clamp(30px, 4vw, 56px); justify-items: center; text-align: center;">
+    <div data-reveal="1" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .3em; text-transform: uppercase; color: #8c8c8c;">Manifest · Window 2031</div>
+    <h2 data-reveal="1" style="margin: 0; font-weight: 900; font-size: clamp(42px, 11vw, 170px); line-height: .84; letter-spacing: -.045em; text-transform: uppercase;">Reserve<br />a seat</h2>
+    <p data-reveal="1" style="margin: 0; max-width: 44ch; font-size: clamp(15px, 1.5vw, 20px); line-height: 1.6; color: #c0c0c0; text-wrap: pretty;">Applications for the first crewed window close when the fleet is assigned. Deposit is refundable until stacking.</p>
+    <div data-reveal="1" style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;">
+      <a href="#manifest" style="padding: 19px 42px; background: #f2f2f2; color: #050505; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase;" style-hover="background: #050505; color: #f2f2f2; box-shadow: inset 0 0 0 1px #f2f2f2;">Apply now</a>
+      <a href="#specs" style="padding: 19px 42px; box-shadow: inset 0 0 0 1px rgba(242,242,242,.35); font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase;" style-hover="box-shadow: inset 0 0 0 1px #f2f2f2;">Download brief</a>
+    </div>
+  </section>
+
+  <footer style="padding: clamp(34px, 5vw, 64px) clamp(16px, 4vw, 56px) clamp(48px, 6vw, 80px); border-top: 1px solid rgba(242,242,242,.14); display: flex; flex-wrap: wrap; gap: 20px; align-items: baseline; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #8c8c8c;">
+    <span style="font-family: Archivo, Helvetica, sans-serif; font-weight: 900; font-size: 17px; letter-spacing: .3em; color: #f2f2f2;">Aphelion</span>
+    <div style="display: flex; flex-wrap: wrap; gap: clamp(16px, 3vw, 40px);">
+      <a href="#vehicle">Vehicle</a>
+      <a href="#specs">Specs</a>
+      <a href="#manifest">Manifest</a>
+      <a href="#top">Top</a>
+    </div>
+    <span>Launch site 41-B · Boca Chica</span>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {};
+
+  componentDidMount() {
+    this.vid = document.getElementById('scrub');
+    this.hdr = document.getElementById('hdr');
+    this.hero = document.getElementById('hero');
+    this.bar = document.getElementById('scrubbar');
+    this.hint = document.getElementById('hint');
+    this.herotext = document.getElementById('herotext');
+    this.hdrsub = document.getElementById('hdrsub');
+    this.target = 0;
+    this.cur = 0;
+
+    this.ready = false;
+    if (this.vid) {
+      const v = this.vid;
+      const mark = () => {
+        if (this.ready) return;
+        this.ready = true;
+        this.cur = 0;
+        try { v.currentTime = 0.001; } catch (e) {}
+      };
+      if (v.readyState >= 3) mark();
+      v.addEventListener('canplaythrough', mark);
+      v.addEventListener('loadeddata', () => { if (v.buffered.length && v.buffered.end(0) > 1.5) mark(); });
+      v.addEventListener('progress', () => { if (v.buffered.length && v.buffered.end(0) > 1.5) mark(); });
+      v.play().then(() => v.pause()).catch(() => {});
+    }
+    // Mark dirty on scroll/resize; the rAF loop does the single measure per frame.
+    // Measuring inside the scroll event thrashes layout when scroll fires twice a frame.
+    this.dirty = true;
+    this.onScroll = () => { this.dirty = true; };
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    window.addEventListener('resize', () => { this.dirty = true; this.cache = null; });
+
+    this.io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (en.isIntersecting) {
+          en.target.style.opacity = '1';
+          en.target.style.transform = 'none';
+          this.io.unobserve(en.target);
+          setTimeout(() => { en.target.style.willChange = 'auto'; }, 700);
+        }
+      });
+    }, { threshold: 0.16 });
+    document.querySelectorAll('[data-reveal]').forEach((el) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translate3d(0,26px,0)';
+      el.style.transition = 'opacity .62s cubic-bezier(.16,1,.3,1), transform .62s cubic-bezier(.16,1,.3,1)';
+      el.style.willChange = 'opacity, transform';
+      this.io.observe(el);
+    });
+
+    this.scrubs = Array.prototype.slice.call(document.querySelectorAll('video[data-scrub]')).map((v) => {
+      v.muted = true;
+      v.playsInline = true;
+      v.setAttribute('playsinline', '');
+      v.loop = false;
+      const o = { v: v, t: 0, c: 0, ready: false };
+      const mark = () => {
+        if (o.ready) return;
+        o.ready = true;
+        try { v.currentTime = 0.001; } catch (e) {}
+      };
+      if (v.readyState >= 3) mark();
+      v.addEventListener('canplaythrough', mark);
+      v.addEventListener('progress', () => { if (v.buffered.length && v.buffered.end(0) > 1.2) mark(); });
+      const lazy = v.dataset.lazysrc;
+      if (!lazy) {
+        v.play().then(() => v.pause()).catch(() => {});
+      } else {
+        o.load = () => {
+          if (o.loaded) return;
+          o.loaded = true;
+          v.preload = 'auto';
+          v.src = lazy;
+          v.load();
+          v.play().then(() => v.pause()).catch(() => {});
+        };
+      }
+      return o;
+    });
+
+    const heroVid = this.vid;
+    const startLazy = () => {
+      if (this.lazyIO) return;
+      this.lazyIO = new IntersectionObserver((ents) => {
+        ents.forEach((en) => {
+          if (!en.isIntersecting) return;
+          const o = this.scrubs.find((s) => s.v === en.target || s.v.closest('section') === en.target || (s.v.closest('[data-scrubbox]') === en.target));
+          if (o && o.load) o.load();
+          this.lazyIO.unobserve(en.target);
+        });
+      }, { rootMargin: '150% 0px' });
+      this.scrubs.filter((o) => o.load).forEach((o) => {
+        this.lazyIO.observe(o.v.closest('[data-scrubbox]') || o.v.closest('section') || o.v);
+      });
+    };
+    if (heroVid && heroVid.readyState >= 3) startLazy();
+    else if (heroVid) {
+      heroVid.addEventListener('canplaythrough', startLazy, { once: true });
+      setTimeout(startLazy, 5000);
+    } else startLazy();
+
+    this.measure();
+    this.tick = this.tick.bind(this);
+    this.raf = requestAnimationFrame(this.tick);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('resize', this.onScroll);
+    if (this.io) this.io.disconnect();
+    if (this.lazyIO) this.lazyIO.disconnect();
+    cancelAnimationFrame(this.raf);
+  }
+
+  vstate(v) {
+    if (!this._seek) this._seek = new WeakMap();
+    let st = this._seek.get(v);
+    if (!st) {
+      st = { busy: false, queued: null, playing: false, lastSeek: 0 };
+      this._seek.set(v, st);
+      const done = () => {
+        st.busy = false;
+        if (st.queued != null) {
+          const q = st.queued;
+          st.queued = null;
+          if (Math.abs(v.currentTime - q) > 0.05) { st.busy = true; st.lastSeek = performance.now(); v.currentTime = q; }
+        }
+      };
+      v.addEventListener('seeked', done);
+      v.addEventListener('error', () => { st.busy = false; });
+    }
+    return st;
+  }
+
+  // Smooth scrub: play forward with a modulated rate (no seeking) and only
+  // seek for backward motion or large jumps — seeking every frame is what jitters.
+  drive(v, t) {
+    const st = this.vstate(v);
+    const now = performance.now();
+    const d = t - v.currentTime;
+
+    if (d > 0.9 || d < -0.14) {
+      if (st.playing) { v.pause(); st.playing = false; }
+      if (st.busy) { st.queued = t; return; }
+      if (now - st.lastSeek < 70) return;
+      st.busy = true;
+      st.lastSeek = now;
+      v.currentTime = t;
+      return;
+    }
+
+    if (d > 0.012) {
+      v.playbackRate = Math.min(6, Math.max(0.25, d * 9));
+      if (!st.playing && !st.busy) {
+        st.playing = true;
+        const pr = v.play();
+        if (pr && pr.catch) pr.catch(() => { st.playing = false; });
+      }
+      return;
+    }
+
+    if (st.playing) { v.pause(); st.playing = false; }
+  }
+
+  clampToBuffer(v, t, atEnd) {
+    if (!v.buffered.length || atEnd) return t;
+    for (let i = 0; i < v.buffered.length; i++) {
+      if (t >= v.buffered.start(i) - 0.05 && t <= v.buffered.end(i)) return Math.min(t, v.buffered.end(i) - 0.08);
+    }
+    return Math.max(0, v.buffered.end(v.buffered.length - 1) - 0.08);
+  }
+
+  // Cached element lookups, re-resolved only if a node leaves the document
+  // (hot-reload / re-render), instead of querying on every scroll frame.
+  live(id) {
+    if (!this.cache) this.cache = {};
+    const hit = this.cache[id];
+    if (hit && hit.isConnected) return hit;
+    const els = document.querySelectorAll('#' + id);
+    for (let i = els.length - 1; i >= 0; i--) {
+      if (els[i].isConnected) { this.cache[id] = els[i]; return els[i]; }
+    }
+    return null;
+  }
+
+  sectionProgress(el) {
+    const span = Math.max(1, el.offsetHeight - window.innerHeight);
+    return Math.min(1, Math.max(0, -el.getBoundingClientRect().top / span));
+  }
+
+  measure() {
+    const y = window.scrollY || 0;
+    this.exp = this.live('explode');
+    this.tdEl = this.live('teardown');
+    this.tdPct = this.live('r3dpct');
+    this.tdStage = this.live('r3dstage');
+    this.sepEl = this.live('sep');
+    this.pct = this.live('explodepct');
+    if (!this.labs || !this.labs.length || !this.labs[0].isConnected) {
+      this.labs = Array.prototype.slice.call(document.querySelectorAll('[data-lab]'));
+    }
+    this.sepStats = [1, 2, 3].map((i) => this.live('sepstat' + i));
+
+    if (this.hero) {
+      const span = Math.max(1, this.hero.offsetHeight - window.innerHeight);
+      const p = Math.min(1, Math.max(0, y / span));
+      this.target = p;
+      if (this.bar) this.bar.style.width = (p * 100).toFixed(2) + '%';
+      if (this.hint) {
+        const room = window.innerHeight >= 660;
+        this.hint.style.opacity = room ? String(Math.max(0, 1 - p * 6)) : '0';
+        this.hint.style.visibility = room ? 'visible' : 'hidden';
+      }
+      if (this.herotext) {
+        const fade = Math.min(1, Math.max(0, (p - 0.42) / 0.32));
+        this.herotext.style.opacity = String(1 - fade);
+        this.herotext.style.transform = 'translate3d(0,' + (-p * 110).toFixed(1) + 'px,0) scale(' + (1 - p * 0.035).toFixed(4) + ')';
+      }
+    }
+    this.scrubs.forEach((o) => {
+      const inline = !!o.v.closest('[data-scrubbox]');
+      const box = o.v.closest('[data-scrubbox]') || o.v.parentElement;
+      const host = o.v.closest('section') || box;
+      let p;
+      if (!inline && host && host.offsetHeight > window.innerHeight * 1.4) {
+        const span = Math.max(1, host.offsetHeight - window.innerHeight);
+        p = -host.getBoundingClientRect().top / span;
+      } else {
+        const r = box.getBoundingClientRect();
+        p = (window.innerHeight - r.top) / (window.innerHeight + r.height);
+      }
+      o.t = Math.min(1, Math.max(0, p));
+      const vr = o.v.getBoundingClientRect();
+      o.visible = vr.bottom > -window.innerHeight * 0.5 && vr.top < window.innerHeight * 1.5;
+    });
+
+    if (this.exp) {
+      const span = Math.max(1, this.exp.offsetHeight - window.innerHeight);
+      const raw = Math.min(1, Math.max(0, -this.exp.getBoundingClientRect().top / span));
+      const e = raw < .5 ? 4 * raw * raw * raw : 1 - Math.pow(-2 * raw + 2, 3) / 2;
+      this.labs.forEach((l, i) => {
+        const on = e > (i + 0.3) / 7;
+        l.style.color = on ? '#f2f2f2' : '#6a6a6a';
+        l.style.borderTopColor = on ? '#f2f2f2' : 'rgba(242,242,242,.18)';
+      });
+      if (this.pct) this.pct.textContent = String(Math.round(e * 100)).padStart(3, '0');
+    }
+
+    if (this.tdEl) {
+      const p = this.sectionProgress(this.tdEl);
+      if (this.tdPct) this.tdPct.textContent = String(Math.round(p * 100)).padStart(3, '0');
+      if (this.tdStage) this.tdStage.textContent = p < .08 ? 'Stacked' : p < .34 ? 'Fairing away' : p < .62 ? 'Stages parting' : p < .88 ? 'Engine bay clear' : 'Fully separated';
+    }
+
+    if (this.sepEl && this.sepStats[0]) {
+      const span = Math.max(1, this.sepEl.offsetHeight - window.innerHeight);
+      const p = Math.min(1, Math.max(0, -this.sepEl.getBoundingClientRect().top / span));
+      this.sepStats[0].textContent = 'Velocity — ' + Math.round(1200 + p * 6300).toLocaleString() + ' m/s';
+      this.sepStats[1].textContent = 'Altitude — ' + Math.round(52 + p * 68) + ' km';
+      this.sepStats[2].textContent = 'Separation — ' + (p < .34 ? 'armed' : p < .62 ? 'in progress' : 'confirmed');
+    }
+    if (this.hdr) {
+      const on = y > 70;
+      this.hdr.style.backgroundColor = on ? 'rgba(5,5,5,.82)' : 'rgba(5,5,5,0)';
+      this.hdr.style.backdropFilter = on ? 'blur(14px)' : 'blur(0px)';
+      this.hdr.style.borderBottomColor = on ? 'rgba(242,242,242,.14)' : 'rgba(242,242,242,0)';
+      this.hdr.style.paddingTop = on ? '13px' : '26px';
+      this.hdr.style.paddingBottom = on ? '13px' : '26px';
+      if (this.hdrsub) this.hdrsub.style.opacity = on ? '0' : '1';
+    }
+  }
+
+  smooth(rate) {
+    return 1 - Math.exp(-rate * (this.dt || 1 / 60));
+  }
+
+  tick() {
+    const now = performance.now();
+    this.dt = this.prev ? Math.min(0.05, (now - this.prev) / 1000) : 1 / 60;
+    this.prev = now;
+    if (this.dirty) { this.dirty = false; this.measure(); }
+    const v = this.vid;
+    if (v && this.ready && isFinite(v.duration)) {
+      // frame-rate independent smoothing: same feel at 60 / 120 Hz
+      this.cur += (this.target - this.cur) * this.smooth(11);
+      if (Math.abs(this.target - this.cur) < 0.0004) this.cur = this.target;
+      const t = Math.min(v.duration - 0.05, Math.max(0, this.cur * v.duration));
+      this.drive(v, this.clampToBuffer(v, t, this.target > 0.98));
+    }
+    this.scrubs.forEach((o) => {
+      const v = o.v;
+      if (!o.ready || !isFinite(v.duration)) return;
+      if (o.visible === false) { const st = this.vstate(v); if (st.playing) { v.pause(); st.playing = false; } return; }
+      o.c += (o.t - o.c) * this.smooth(12);
+      if (Math.abs(o.t - o.c) < 0.0004) o.c = o.t;
+      const t = Math.min(v.duration - 0.05, Math.max(0, o.c * v.duration));
+      this.drive(v, this.clampToBuffer(v, t, o.t > 0.98));
+    });
+
+    this.raf = requestAnimationFrame(this.tick);
+  }
+
+  renderVals() {
+    return {};
+  }
+}
+</script>
+<script>
+/* The back-link is for visitors who opened the demo full screen. Embedded in
+   the Work page the studio header is already on screen, so showing it there
+   just doubles the wordmark. */
+(function () {
+  var el = document.querySelector('[data-back-to-studio]');
+  if (el && window.self === window.top) el.style.display = 'inline-flex';
+})();
+</script>
+</body>
+</html>
