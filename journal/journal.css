@@ -73,7 +73,11 @@ a:hover { color: var(--muted); }
   letter-spacing: .13em;
   text-transform: uppercase;
 }
-.masthead nav a[aria-current='page'] { color: var(--muted); }
+/* 'page' on the journal index, 'true' on an article (ancestor in the set).
+   Both read as "you are here", so both get the muted treatment — but the link
+   is still a link, so hover has to out-rank it or it reads as disabled. */
+.masthead nav a[aria-current] { color: var(--muted); }
+.masthead nav a[aria-current]:hover { color: var(--ink); }
 
 /* ---------- shared bits ---------- */
 

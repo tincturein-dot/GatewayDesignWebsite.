@@ -53,6 +53,12 @@ Vercel, repo root as the publish directory. No framework, no build command, no
 output directory — `vercel.json` only sets cache and security headers, and
 `.vercelignore` keeps `assets/source/` and the docs out of the deploy.
 
+`vercel.json` carries two Cache-Control rules for the same document: one for
+`/` and one for `/index.html`. That is deliberate, not duplication — a `source`
+of `/index.html` does not match the URL the homepage is actually served at, and
+`/(index.html)?` does not match `/` either. Two rules is the only spelling that
+covers both.
+
 **Production deploys from `main`.** Pushing to `main` updates the live site at
 www.thegatewaydesigns.com; any other branch gets a preview deployment. If a push
 does not appear on the live site, check that the Vercel project serving the

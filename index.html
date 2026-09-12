@@ -3,11 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
-</head>
-<body>
-<x-dc>
-<helmet>
+
+<!-- Crawler-critical metadata is served here in the static head. Social
+     scrapers and non-JS consumers never run the runtime, so anything the
+     runtime injects at render is invisible to them. -->
 <title>The Gateway Designs — Brand-Led Web Design Studio in Delhi</title>
 <meta name="description" content="A Delhi web design studio. We design and build brand-led websites, design systems and interfaces — considered, fast, and built for the people who have to edit them.">
 <meta name="author" content="The Gateway Designs">
@@ -55,6 +54,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- The Design Component runtime. -->
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
 <script src="mesh-gradient.js"></script>
@@ -83,7 +89,7 @@ a:hover{color:#6a6a64;}
 .animate-fade-rise-delay-2{animation:fade-rise .8s ease-out .5s both;}
 .scrollbar-hide::-webkit-scrollbar{display:none;}
 .scrollbar-hide{scrollbar-width:none;}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;}.animate-blur-fade-up,.animate-fade-rise,.animate-fade-rise-delay,.animate-fade-rise-delay-2{opacity:1!important;}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}.animate-blur-fade-up,.animate-fade-rise,.animate-fade-rise-delay,.animate-fade-rise-delay-2{opacity:1!important;}}
 @media(max-width:900px){
 [data-hero-sec]{min-height:auto!important;}
 [data-hero-pad]{padding:112px clamp(22px,5vw,44px) 56px!important;min-height:auto!important;justify-content:flex-start!important;flex:none!important;}
@@ -126,7 +132,7 @@ a:hover{color:#6a6a64;}
       <svg width="22" height="24" viewBox="0 0 24 26" fill="none" aria-hidden="true"><path d="M2,26 L2,10 C2,4.5 6,1.5 12,1.5 C18,1.5 22,4.5 22,10 L22,26" stroke="#e8b64c" stroke-width="2" stroke-linecap="round"/></svg>
       <span class="emerald-ink" style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:18px;letter-spacing:-.01em;text-transform:uppercase;">Gateway</span>
     </button>
-    <button onClick="{{ toggleMenu }}" data-magnetic style="display:flex;align-items:center;gap:14px;background:none;border:none;cursor:pointer;padding:8px 0;color:#e8b64c;font-family:'Spline Sans Mono',monospace;font-size:13px;letter-spacing:.14em;text-transform:uppercase;">
+    <button onClick="{{ toggleMenu }}" data-magnetic aria-expanded="{{ menuExpanded }}" aria-controls="site-menu" style="display:flex;align-items:center;gap:14px;background:none;border:none;cursor:pointer;padding:8px 0;color:#e8b64c;font-family:'Spline Sans Mono',monospace;font-size:13px;letter-spacing:.14em;text-transform:uppercase;">
       <span class="emerald-ink">{{ menuLabel }}</span>
       <span style="display:flex;flex-direction:column;gap:6px;width:24px;">
         <span style="height:1.5px;background:#e8b64c;width:100%;transition:transform .4s ease;transform:{{ barTop }};"></span>
@@ -137,7 +143,7 @@ a:hover{color:#6a6a64;}
   </div>
 </header>
 
-<div style="position:fixed;inset:0;z-index:65;background:#0c0c0c;color:#f2f1ec;display:flex;flex-direction:column;opacity:{{ menuOpacity }};transform:{{ menuTransform }};pointer-events:{{ menuPV }};transition:opacity .4s ease,transform .6s cubic-bezier(.76,0,.24,1);">
+<div id="site-menu" style="position:fixed;inset:0;z-index:65;background:#0c0c0c;color:#f2f1ec;display:flex;flex-direction:column;opacity:{{ menuOpacity }};transform:{{ menuTransform }};pointer-events:{{ menuPV }};visibility:{{ menuVis }};transition:opacity .4s ease,transform .6s cubic-bezier(.76,0,.24,1),visibility .6s;">
   <div style="max-width:1440px;width:100%;margin:0 auto;padding:96px clamp(22px,5vw,44px) 48px;flex:1;display:flex;flex-direction:column;justify-content:center;">
     <p style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#77766f;margin:0 0 32px;">Index · Where to?</p>
     <nav style="display:flex;flex-direction:column;">
@@ -254,11 +260,11 @@ a:hover{color:#6a6a64;}
       </div>
     </div>
 
-    <div data-parallax-dash style="position:absolute;top:96px;right:-8%;width:min(680px,66%);z-index:10;will-change:transform;">
+    <div data-parallax-dash aria-hidden="true" style="position:absolute;top:96px;right:-8%;width:min(680px,66%);z-index:10;will-change:transform;">
       <div class="liquid-glass" style="width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;padding:12px;">
         <div data-dash-grid style="display:grid;height:100%;grid-template-columns:1fr;gap:12px;">
           <div style="position:relative;min-height:0;width:100%;height:100%;overflow:hidden;border-radius:16px;background:hsl(201 30% 12%);">
-            <video autoplay loop muted playsinline preload="auto" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;filter:grayscale(1) contrast(1.05);">
+            <video loop muted playsinline preload="auto" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;filter:grayscale(1) contrast(1.05);">
               <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4" type="video/mp4" />
             </video>
             <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 18px;border-bottom:1px solid rgba(255,255,255,.14);">
@@ -274,7 +280,7 @@ a:hover{color:#6a6a64;}
             <div style="position:relative;z-index:10;display:grid;grid-template-columns:1fr auto;align-items:end;gap:18px;padding:30px 18px 20px;">
               <div style="min-width:0;">
                 <span class="animate-fade-rise" style="display:block;font-family:'Spline Sans Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:12px;">(01) — Spatial Identity</span>
-                <div class="animate-fade-rise" aria-hidden="true" style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;line-height:.86;letter-spacing:-.045em;text-transform:uppercase;font-size:clamp(21px,3.3vw,44px);margin:0;color:#fff;">Quiet<br/>Monuments</div>
+                <div class="animate-fade-rise" style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;line-height:.86;letter-spacing:-.045em;text-transform:uppercase;font-size:clamp(21px,3.3vw,44px);margin:0;color:#fff;">Quiet<br/>Monuments</div>
                 <p class="animate-fade-rise-delay" style="color:rgba(255,255,255,.6);font-size:clamp(8.5px,.95vw,11.5px);line-height:1.55;max-width:30ch;margin:13px 0 0;">Calm, deliberate spaces built for people who think in decades — not quarters.</p>
               </div>
               <div class="animate-fade-rise-delay-2" style="display:flex;flex-direction:column;align-items:center;gap:9px;flex:none;">
@@ -403,7 +409,7 @@ a:hover{color:#6a6a64;}
       <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
       <div style="border:1px solid rgba(12,12,12,.2);border-radius:6px;padding:52px clamp(22px,5vw,44px);">
         <svg width="28" height="30" viewBox="0 0 24 26" fill="none" aria-hidden="true" style="margin-bottom:20px;"><path d="M2,26 L2,10 C2,4.5 6,1.5 12,1.5 C18,1.5 22,4.5 22,10 L22,26" stroke="#0c0c0c" stroke-width="2" stroke-linecap="round"/></svg>
-        <h3 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:32px;letter-spacing:-.03em;margin:0 0 12px;text-transform:uppercase;">Thank you</h3>
+        <h2 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:32px;letter-spacing:-.03em;margin:0 0 12px;text-transform:uppercase;">Thank you</h2>
         <p style="margin:0;color:#4a4a45;font-size:17px;line-height:1.55;max-width:40ch;">The door's open. Your note is with us and you'll hear back within two working days. If you'd like a sense of how we think in the meantime, the journal is the honest version.</p>
         <a href="/journal/" style="display:inline-block;margin-top:24px;font-family:'Hanken Grotesk',system-ui,sans-serif;border:1px solid rgba(12,12,12,.3);font-size:15px;font-weight:600;padding:13px 26px;border-radius:100px;color:#0c0c0c;" style-hover="border-color:#0c0c0c;">Read the journal →</a>
       </div>
@@ -519,9 +525,13 @@ class Component extends DCLogic {
       window.addEventListener('mousemove', this._onMove, { passive: true });
     }
     this._playVideo = () => { document.querySelectorAll('video').forEach((v) => { v.muted = true; const p = v.play(); if (p && p.catch) p.catch(() => {}); }); };
-    this._playVideo();
-    setTimeout(this._playVideo, 400);
-    window.addEventListener('pointerdown', this._playVideo, { once: true });
+    if (this._reduce) {
+      document.querySelectorAll('video').forEach((v) => { try { v.pause(); } catch (e) {} });
+    } else {
+      this._playVideo();
+      setTimeout(this._playVideo, 400);
+      window.addEventListener('pointerdown', this._playVideo, { once: true });
+    }
     if (!this._reduce) {
       this._onScroll = () => { if (!this._sraf) this._sraf = requestAnimationFrame(() => { this._sraf = null; this.applyParallax(); }); };
       window.addEventListener('scroll', this._onScroll, { passive: true });
@@ -529,6 +539,13 @@ class Component extends DCLogic {
     }
     this._onResize = () => this.setLayout();
     window.addEventListener('resize', this._onResize, { passive: true });
+    this._onKey = (e) => {
+      if (e.key !== 'Escape' || !this.state.menuOpen) return;
+      this.setState({ menuOpen: false });
+      const t = document.querySelector('header [data-magnetic]');
+      if (t && t.focus) t.focus();
+    };
+    window.addEventListener('keydown', this._onKey);
     requestAnimationFrame(() => this.setLayout());
     this.initGradient();
     this._stops = [];
@@ -544,6 +561,7 @@ class Component extends DCLogic {
     if (this._onMove) window.removeEventListener('mousemove', this._onMove);
     if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
     if (this._onResize) window.removeEventListener('resize', this._onResize);
+    if (this._onKey) window.removeEventListener('keydown', this._onKey);
     if (this._poll) clearInterval(this._poll);
     if (this._gpoll) clearInterval(this._gpoll);
     if (this._grad && this._grad.destroy) { try { this._grad.destroy(); } catch (e) {} }
@@ -690,6 +708,8 @@ class Component extends DCLogic {
       menuOpacity: open ? '1' : '0',
       menuTransform: open ? 'translateY(0)' : 'translateY(-102%)',
       menuPV: open ? 'auto' : 'none',
+      menuVis: open ? 'visible' : 'hidden',
+      menuExpanded: open ? 'true' : 'false',
       barTop: open ? 'translateY(7.5px) rotate(45deg)' : 'none',
       barBot: open ? 'translateY(-7.5px) rotate(-45deg)' : 'none',
       barMidOpacity: open ? '0' : '1',
