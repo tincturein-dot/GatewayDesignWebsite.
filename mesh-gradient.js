@@ -145,12 +145,43 @@
     this._start = performance.now();
     this._running = true;
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+    // Hold the last frame while a scroll gesture is in flight. A full-screen
+    // fragment shader is the most expensive thing on the page, and during a
+    // scroll the visitor is watching the page move, not a 22-second ambient
+    // drift — the frame budget is better spent on the scroll itself. The clock
+    // is shifted by the held duration on resume so the drift continues from
+    // where it stopped rather than jumping.
+    this._scrolling = false;
+    this._onScrollHold = function () {
+      self._scrolling = true;
+      if (self._sto) clearTimeout(self._sto);
+      self._sto = setTimeout(function () { self._scrolling = false; }, 150);
+    };
+    window.addEventListener("scroll", this._onScrollHold, { passive: true });
+
+    // 30fps is indistinguishable for a drift this slow and halves the work.
+    var FRAME_MS = 1000 / 30, lastDraw = -1e9, holdFrom = 0;
     var loop = function () {
       if (!self._running) return;
-      var t = (performance.now() - self._start) / 1000;
-      gl.uniform1f(self.u_time, reduce ? 8.0 : t);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
-      if (reduce) { self._running = false; return; }
+      if (reduce) {
+        gl.uniform1f(self.u_time, 8.0);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+        self._running = false;
+        return;
+      }
+      var now = performance.now();
+      if (self._scrolling) {
+        if (!holdFrom) holdFrom = now;
+        self._raf = requestAnimationFrame(loop);
+        return;
+      }
+      if (holdFrom) { self._start += now - holdFrom; holdFrom = 0; }
+      if (now - lastDraw >= FRAME_MS) {
+        lastDraw = now;
+        gl.uniform1f(self.u_time, (now - self._start) / 1000);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+      }
       self._raf = requestAnimationFrame(loop);
     };
     loop();
@@ -185,6 +216,8 @@
   MeshGradient.prototype.destroy = function () {
     this._running = false;
     if (this._io) { this._io.disconnect(); this._io = null; }
+    if (this._onScrollHold) window.removeEventListener("scroll", this._onScrollHold);
+    if (this._sto) { clearTimeout(this._sto); this._sto = null; }
     if (this._raf) cancelAnimationFrame(this._raf);
     if (this._rt) { clearTimeout(this._rt); this._rt = null; }
     if (this._onWinResize) window.removeEventListener("resize", this._onWinResize);

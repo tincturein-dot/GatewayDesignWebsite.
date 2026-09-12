@@ -220,26 +220,6 @@ h1,h2{text-wrap:balance;}
   </section>
 
   <section style="max-width:1440px;margin:0 auto;padding:64px clamp(22px,5vw,44px) 40px;">
-    <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:16px;margin-bottom:42px;">
-      <div><h2 data-reveal style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(32px,5vw,62px);letter-spacing:-.03em;margin:0;text-transform:uppercase;">Concept studies</h2><p data-reveal style="margin:12px 0 0;color:#4a4a45;font-size:16px;max-width:52ch;">Self-initiated. No client attached — these are how we argue with ourselves about structure before it matters. One of them is built and running; you can scroll it.</p></div>
-      <button data-reveal onClick="{{ goWork }}" style="font-family:'Spline Sans Mono',monospace;background:none;border:none;cursor:pointer;color:#0c0c0c;font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid #0c0c0c;padding-bottom:3px;">All studies →</button>
-    </div>
-    <div data-m="c3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:36px 30px;">
-      <sc-for list="{{ projectsHome }}" as="p" hint-placeholder-count="3">
-        <button data-reveal onClick="{{ goWork }}" style="text-align:left;background:none;border:none;padding:0;cursor:pointer;display:flex;flex-direction:column;gap:16px;color:#0c0c0c;">
-          <div style="width:100%;aspect-ratio:3/4;clip-path:url(#archClip);background:{{ p.bg }};display:flex;align-items:flex-end;padding:16px;filter:grayscale(1);">
-            <span style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.06em;color:{{ p.fg }};">{{ p.label }}</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;border-top:1px solid rgba(12,12,12,.16);padding-top:12px;">
-            <div><h3 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:700;font-size:19px;margin:0;letter-spacing:-.01em;">{{ p.t }}</h3><span style="color:#6a6a64;font-size:14px;">{{ p.c }}</span></div>
-            <span style="font-family:'Spline Sans Mono',monospace;color:#6a6a64;font-size:11px;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;">Concept</span>
-          </div>
-        </button>
-      </sc-for>
-    </div>
-  </section>
-
-  <section style="max-width:1440px;margin:0 auto;padding:64px clamp(22px,5vw,44px) 40px;">
     <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:16px;margin-bottom:28px;">
       <h2 data-reveal style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(28px,3.6vw,46px);letter-spacing:-.03em;margin:0;text-transform:uppercase;">From the journal</h2>
       <a href="/journal/" style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid #0c0c0c;padding-bottom:3px;">All writing →</a>
@@ -313,7 +293,7 @@ h1,h2{text-wrap:balance;}
     <span style="display:block;overflow:hidden;padding-bottom:.03em;"><span data-hero style="display:block;">Doors we've</span></span>
     <span style="display:block;overflow:hidden;padding-bottom:.05em;"><span data-hero class="emerald-ink" style="display:block;">drawn ourselves</span></span>
   </h1>
-  <p data-hero-tag style="max-width:56ch;font-size:19px;color:#3a3a36;margin:32px 0 14px;">One site built end to end and running live, plus three studies that stayed on paper. No client, no brief, no launch date — we set ourselves a problem, take it as far as it needs to go, and keep what we learn for the work that follows.</p>
+  <p data-hero-tag style="max-width:56ch;font-size:19px;color:#3a3a36;margin:32px 0 14px;">One site, built end to end and running live. No client, no brief, no launch date — we set ourselves a problem, take it as far as it needs to go, and keep what we learn for the work that follows.</p>
   <p data-hero-tag style="font-family:'Spline Sans Mono',monospace;max-width:56ch;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6a6a64;margin:0 0 56px;">Self-initiated · Not commissioned</p>
 
   <section data-reveal style="margin:0 0 84px;">
@@ -346,21 +326,6 @@ h1,h2{text-wrap:balance;}
     </div>
   </section>
 
-  <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:16px;margin-bottom:8px;">
-    <h2 data-reveal style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(24px,3vw,34px);letter-spacing:-.03em;margin:0;text-transform:uppercase;">Concept studies</h2>
-    <span data-reveal style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#6a6a64;">Three · On paper</span>
-  </div>
-  <div style="border-top:1px solid rgba(12,12,12,.16);">
-    <sc-for list="{{ projects }}" as="p" hint-placeholder-count="3">
-      <div data-reveal data-m="wrow" style="border-bottom:1px solid rgba(12,12,12,.16);display:grid;grid-template-columns:64px 1.4fr 1fr 100px;gap:14px 28px;align-items:baseline;padding:34px 0;color:#0c0c0c;">
-        <span style="font-family:'Spline Sans Mono',monospace;font-size:13px;color:#6a6a64;">{{ p.no }}</span>
-        <h2 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,44px);margin:0;letter-spacing:-.025em;text-transform:uppercase;">{{ p.t }}</h2>
-        <span style="color:#4a4a45;font-size:16px;">{{ p.c }}</span>
-        <span style="font-family:'Spline Sans Mono',monospace;color:#6a6a64;font-size:11px;letter-spacing:.1em;text-transform:uppercase;text-align:right;">Concept</span>
-        <p style="grid-column:2/-1;margin:0;color:#4a4a45;font-size:17px;line-height:1.55;max-width:62ch;">{{ p.d }}</p>
-      </div>
-    </sc-for>
-  </div>
   <div data-reveal style="display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin-top:56px;">
     <p style="margin:0;font-size:17px;color:#3a3a36;max-width:44ch;">Client work is what we would rather be doing. If you have a project, it goes at the top of this page.</p>
     <button onClick="{{ goContact }}" data-magnetic style="font-family:'Hanken Grotesk',system-ui,sans-serif;background:#0c0c0c;color:#f2f1ec;border:none;cursor:pointer;font-size:15px;font-weight:600;padding:14px 28px;border-radius:100px;" style-hover="background:#2a2a26;">Start a project</button>
@@ -727,14 +692,6 @@ class Component extends DCLogic {
     const light = 'linear-gradient(155deg,#e2e1db,#c9c8c1)';
     const dark = 'linear-gradient(155deg,#2a2a26,#0c0c0c)';
     const mid = 'linear-gradient(155deg,#b6b5ad,#8f8e86)';
-    const projects = [
-      { no: '01', t: 'Torana', c: 'Product · Slow travel', bg: dark, fg: '#f2f1ec', label: 'TORANA · CONCEPT',
-        d: 'A booking flow for journeys nobody is in a hurry to take. The study was about resisting the urgency patterns the category runs on — no countdowns, no scarcity badges, no seventeen people are viewing this room. What is left has to earn the booking on the strength of the itinerary, so the interface spends its attention on photography, distances and what a day actually feels like.' },
-      { no: '02', t: 'Chowk', c: 'Commerce · Marketplace', bg: light, fg: '#0c0c0c', label: 'CHOWK · CONCEPT',
-        d: 'A storefront for a market of many sellers, where every seller has a different idea of what a product photo is. The interesting constraint is inconsistency: the grid has to stay composed when one vendor shoots on white and the next shoots on a bedsheet. We landed on a system that gives structure to the frame rather than the image inside it.' },
-      { no: '03', t: 'Ledger', c: 'Design system · Interface', bg: mid, fg: '#0c0c0c', label: 'LEDGER · CONCEPT',
-        d: 'A component set for dense financial tables, built to find out how far type and spacing alone can carry hierarchy before colour has to step in. Colour ends up reserved for state that changes — everything static is held by weight, rhythm and rule. It reads at a glance and survives being printed in black and white.' }
-    ];
     const services = [
       { n: '01', t: 'Brand-led web design', d: 'A site drawn around your brand rather than a layout it was poured into. Structure, art direction, type and copy shaped together, because they fail together.' },
       { n: '02', t: 'Design systems & UI', d: 'Components, tokens and the rules that hold them, documented well enough that a developer who has never met us can use them correctly.' },
@@ -775,7 +732,7 @@ class Component extends DCLogic {
       barTop: open ? 'translateY(7.5px) rotate(45deg)' : 'none',
       barBot: open ? 'translateY(-7.5px) rotate(-45deg)' : 'none',
       barMidOpacity: open ? '0' : '1',
-      projects, projectsHome: projects.slice(0, 3), services, steps, articles,
+      services, steps, articles,
       // The demo is a 13,000px scroll-cinema piece. Left interactive by default
       // it would swallow the page's own scroll the moment a cursor crossed it,
       // so it renders live but inert until someone asks for it.
