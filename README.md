@@ -17,6 +17,8 @@ no build step: `index.html` is the site, plus a set of plain static pages under
 | `og-image.jpg` | 1200×630 link-preview card — the hero shader plate with the headline set in Archivo. |
 | `vercel.json`, `.vercelignore` | Cache + security headers, and the list of files kept out of the deploy. |
 | `assets/source/` | Original design source material (After Effects project for the gradient, reference renders, hero mock). Not referenced by the site — kept for archive only. |
+| `github.md` | Sync log from the design tool: what changed after each export, and the list of edits to re-apply on a fresh export. Not deployed. |
+| `.gitignore` | Excludes `node_modules/`, OS cruft, `.vercel/` and `.env*`. |
 
 Content claims: everything on the site is either a statement about how the
 studio works or clearly-labelled concept work. There are no launch counts,

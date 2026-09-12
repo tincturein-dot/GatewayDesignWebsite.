@@ -1,4 +1,4 @@
-repo: LaBlueberryPie/Gateway
+repo: tincturein-dot/GatewayDesignWebsite.
 branch: main
 
 ## Last sync
