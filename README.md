@@ -71,10 +71,21 @@ Pages); there is nothing to build.
 
 ## Demos
 
-`demos/<slug>/index.html` holds a self-contained Claude Design export — the
-**recordable** build, which inlines its own runtime, so it needs no `support.js`
-next to it and cannot collide with the site's copy (they are different
-versions). Each demo is a normal page at `/demos/<slug>/`.
+`demos/<slug>/` holds a Claude Design export as `index.html` plus **its own**
+`support.js` beside it. The export's runtime version differs from the site's;
+keeping a copy per demo is what stops them colliding, since the page loads
+`./support.js` relatively. Each demo is a normal page at `/demos/<slug>/`.
+
+**Do not use the `-recordable-` build.** It inlines its own runtime and looks
+like the tidier option, but it is broken once React actually loads: it text-
+scans the document for the `<x-dc>` block and matches the literal string
+`<x-dc>` that appears inside its own inlined runtime source, then compiles that
+slice as the template — so the page renders about 1.3 KB of runtime source as
+text inside `#dc-root`. The pristine export fails the same way, at both
+`/demos/<slug>/` and `/demos/<slug>/index.html`, so it is the build's own bug
+and not something about how it is hosted. It only appears to work in the design
+tool's preview, where `window.__resources` routes loading down a different path.
+Build from the `.dc.html` instead.
 
 Live now: `demos/mars-program/` — *Aphelion, Mars Program*, a scroll-cinema
 product site. It is embedded in the Work page as a lazy-loaded `<iframe>` and
