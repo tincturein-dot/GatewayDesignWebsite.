@@ -73,7 +73,7 @@
 
   <section id="film" ref="{{ filmRef }}" style="position:relative; height:520vh; background:#0B7A3B;">
     <div style="position:sticky; top:0; height:100svh; overflow:hidden; background:#0B7A3B;">
-      <video ref="{{ filmVideoRef }}" src="media/zesto-film-20s.mp4" crossOrigin="anonymous" muted="{{ true }}" playsInline="{{ true }}" preload="auto" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transform:{{ filmScale }};"></video>
+      <video ref="{{ filmVideoRef }}" src="media/zesto-film-20s.mp4" poster="media/film-poster.webp" crossOrigin="anonymous" muted="{{ true }}" playsInline="{{ true }}" preload="auto" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transform:{{ filmScale }};"></video>
       <div style="position:absolute; inset:0; background:radial-gradient(circle at 50% 45%, rgba(11,122,59,0) 30%, rgba(11,122,59,.72) 100%);"></div>
       <div style="position:absolute; inset:0; background-image:radial-gradient(rgba(11,122,59,.5) 1.4px, transparent 1.5px); background-size:6px 6px; mix-blend-mode:multiply; opacity:.55;"></div>
 
@@ -135,7 +135,7 @@
       <div style="position:absolute; left:50%; top:50%; width:min(76vmin,720px); height:min(76vmin,720px); border-radius:50%; background:#FF4FA3; opacity:.85; transform:{{ discTransform }}; margin-left:calc(min(76vmin,720px) / -2); margin-top:calc(min(76vmin,720px) / -2);"></div>
 
       <div style="position:absolute; left:50%; top:50%; width:min(46vmin,420px); aspect-ratio:3/4; margin-left:calc(min(46vmin,420px) / -2); margin-top:calc(min(46vmin,420px) * -.666); transform:{{ jarTransform }}; z-index:2; border:5px solid #FFF3DA; border-radius:26px; overflow:hidden; box-shadow:14px 14px 0 rgba(11,122,59,.55);">
-        <video ref="{{ videoRef }}" src="media/zesto-pour-5s.mp4" muted="{{ true }}" playsInline="{{ true }}" preload="auto" crossOrigin="anonymous" style="width:100%; height:100%; object-fit:cover; border-radius:22px; display:{{ videoDisplay }};"></video>
+        <video ref="{{ videoRef }}" src="media/zesto-pour-5s.mp4" poster="media/pour-poster.webp" muted="{{ true }}" playsInline="{{ true }}" preload="auto" crossOrigin="anonymous" style="width:100%; height:100%; object-fit:cover; border-radius:22px; display:{{ videoDisplay }};"></video>
         <div style="width:100%; height:100%; display:{{ posterDisplay }};">
           <image-slot id="scrub-jar" src="media/02-pour-still.webp" shape="rounded" radius="22" placeholder="Drop the pour video still"></image-slot>
         </div>

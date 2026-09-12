@@ -18,6 +18,16 @@
    sits entirely off-screen. The subtitle goes first, then the section links;
    Reserve is the CTA and the footer still carries the full set. Footer and nav
    links are 10-11px tall, well under a thumb. */
+/* The four scroll-cinema stages are sized `height: 100vh`. On a phone vh is
+   the LARGE viewport — the height with the URL bar hidden — so while the bar
+   is showing each sticky stage is taller than the visible area and the bottom
+   of every frame is cut off. It also moves: the bar collapses and reappears
+   as you scroll, and the scrub maths divides by (offsetHeight - innerHeight),
+   so the progress fraction jumps each time. svh is the small viewport and
+   stays put. Zesto's stages already use it; this brings Mars in line. */
+@supports (height: 100svh) {
+  div[style*="position: sticky"] { height: 100svh !important; }
+}
 @media (max-width: 820px) {
   #hdr { gap: 10px !important; }
   #hdr nav { gap: 14px !important; }

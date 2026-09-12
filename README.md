@@ -140,6 +140,32 @@ path, so neither demo has an external dependency beyond React and the fonts.
 Being same-origin also removes the CORS requirement the exports' manifests warn
 about, which is what makes scrub-seeking fail silently in some browsers.
 
+**Every exported video must be re-encoded** before it ships. As they come out
+of the tool they have two faults that only show on a phone:
+
+- The `moov` atom sits at the *end* of the file (99.8% in), so a browser cannot
+  learn the duration or decode anything until the whole file is down. On mobile
+  data that is an 11 MB wait before the first frame, and iOS often never gets
+  there — which is what "images aren't loading on the hero" turns out to mean.
+- There are one or two keyframes in the whole clip. These are scroll-*scrubbed*
+  videos: every scroll frame sets `currentTime`, and each seek has to decode
+  from the top of a 240-frame GOP. Desktop just about copes; mobile stutters
+  and then stops updating.
+
+Both are fixed in the encode — `-movflags +faststart` and `-g 6` at 24fps, a
+keyframe every 0.25s, so a seek decodes at most six frames:
+
+    ffmpeg -i in.mp4 -vf scale=960:540 -c:v libx264 -profile:v main -level 4.0 \
+      -pix_fmt yuv420p -crf 27 -preset medium -g 6 -keyint_min 6 \
+      -sc_threshold 0 -an -movflags +faststart out.mp4
+
+Check the result with `grep -abo moov` (want a low byte offset) before shipping.
+Dropping the audio and the short GOP together came out *smaller* than the
+originals, not larger: both demos' media went from 35 MB to 18 MB.
+
+Give every video a `poster` too. Zesto shipped without one, so on a phone its
+520vh opening stage was four thousand pixels of flat green.
+
 Stills ship as WebP rather than the untouched PNGs — Mars 1.4 MB instead of
 9.9 MB, Zesto 2.3 MB instead of 13.2 MB. Watch for indirect references when
 rewriting: Zesto builds three of its eight URLs by concatenating hashes onto an
