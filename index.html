@@ -9,7 +9,7 @@
 <x-dc>
 <helmet>
 <title>The Gateway Designs — Brand-Led Web Design Studio in Delhi</title>
-<meta name="description" content="A Delhi web design studio. We design and build brand-led websites and design systems, and sell premium Framer website templates you can buy and edit yourself.">
+<meta name="description" content="A Delhi web design studio. We design and build brand-led websites, design systems and interfaces — considered, fast, and built for the people who have to edit them.">
 <meta name="author" content="The Gateway Designs">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://www.thegatewaydesigns.com/">
@@ -20,7 +20,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="The Gateway Designs">
 <meta property="og:title" content="The Gateway Designs — Brand-Led Web Design Studio in Delhi">
-<meta property="og:description" content="A Delhi studio designing and building brand-led websites and design systems, and selling premium Framer website templates.">
+<meta property="og:description" content="A Delhi studio designing and building brand-led websites, design systems and interfaces.">
 <meta property="og:url" content="https://www.thegatewaydesigns.com/">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://www.thegatewaydesigns.com/og-image.jpg">
@@ -30,7 +30,7 @@
 <meta property="og:image:alt" content="The Gateway Designs — every brand deserves a grand entrance.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The Gateway Designs — Brand-Led Web Design Studio in Delhi">
-<meta name="twitter:description" content="A Delhi studio designing and building brand-led websites and design systems, and selling premium Framer website templates.">
+<meta name="twitter:description" content="A Delhi studio designing and building brand-led websites, design systems and interfaces.">
 <meta name="twitter:image" content="https://www.thegatewaydesigns.com/og-image.jpg">
 <meta name="twitter:image:alt" content="The Gateway Designs — every brand deserves a grand entrance.">
 <script type="application/ld+json">
@@ -48,27 +48,8 @@
     { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Brand-Led Web Design" } },
     { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Design Systems & UI" } },
     { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Framer & Webflow Development" } },
-    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Art Direction & Motion" } },
-    { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Premium Framer Website Templates" } }
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Art Direction & Motion" } }
   ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Product",
-  "name": "Chowk House — Awadhi Fine-Dining Framer Template",
-  "description": "A premium Framer website template for an Awadhi fine-dining restaurant. Full menu with prices, gallery, private dining, press and reservation sections. Fully responsive and editable in Framer without a developer.",
-  "category": "Website Template",
-  "brand": { "@type": "Brand", "name": "The Gateway Designs" },
-  "url": "https://www.thegatewaydesigns.com/#templates",
-  "offers": {
-    "@type": "Offer",
-    "price": "59.00",
-    "priceCurrency": "USD",
-    "availability": "https://schema.org/InStock",
-    "seller": { "@type": "Organization", "name": "The Gateway Designs" }
-  }
 }
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -125,13 +106,9 @@ a:hover{color:#6a6a64;}
 [data-m="wrow"]{grid-template-columns:auto 1fr!important;gap:4px 14px!important;}
 [data-m="wrow"] > :nth-child(4){grid-column:2!important;text-align:left!important;}
 [data-m="wrow"] > :nth-child(5){grid-column:1/-1!important;}
-[data-m="tpl"]{grid-template-columns:1fr!important;gap:30px!important;}
-[data-m="tpl-hero"]{grid-template-columns:1fr!important;gap:32px!important;}
 }
 @media(max-width:520px){
 [data-m="c3"]{grid-template-columns:1fr!important;}
-[data-tpl-cta]{flex-direction:column!important;align-items:stretch!important;}
-[data-tpl-cta] > *{width:100%!important;justify-content:center!important;}
 [data-m="ig"]{grid-template-columns:repeat(3,1fr)!important;}
 [data-m="foot"]{grid-template-columns:1fr!important;}
 }
@@ -160,16 +137,15 @@ a:hover{color:#6a6a64;}
   </div>
 </header>
 
-<div style="position:fixed;inset:0;z-index:65;background:#0c0c0c;color:#f2f1ec;display:flex;flex-direction:column;opacity:{{ menuOpacity }};transform:{{ menuTransform }};pointer-events:{{ menuPV }};overflow-y:auto;overscroll-behavior:contain;transition:opacity .4s ease,transform .6s cubic-bezier(.76,0,.24,1);">
-  <div style="max-width:1440px;width:100%;margin:auto;padding:96px clamp(22px,5vw,44px) 48px;display:flex;flex-direction:column;">
+<div style="position:fixed;inset:0;z-index:65;background:#0c0c0c;color:#f2f1ec;display:flex;flex-direction:column;opacity:{{ menuOpacity }};transform:{{ menuTransform }};pointer-events:{{ menuPV }};transition:opacity .4s ease,transform .6s cubic-bezier(.76,0,.24,1);">
+  <div style="max-width:1440px;width:100%;margin:0 auto;padding:96px clamp(22px,5vw,44px) 48px;flex:1;display:flex;flex-direction:column;justify-content:center;">
     <p style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#77766f;margin:0 0 32px;">Index · Where to?</p>
     <nav style="display:flex;flex-direction:column;">
-      <button data-menu-item onClick="{{ goHome }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:9px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(34px,6.6vw,86px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">01</span>Home</button>
-      <button data-menu-item onClick="{{ goWork }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:9px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(34px,6.6vw,86px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">02</span>Work</button>
-      <button data-menu-item onClick="{{ goTemplates }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:9px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(34px,6.6vw,86px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">03</span>Templates</button>
-      <button data-menu-item onClick="{{ goAbout }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:9px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(34px,6.6vw,86px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">04</span>Studio</button>
-      <button data-menu-item onClick="{{ goContact }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:9px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(34px,6.6vw,86px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">05</span>Contact</button>
-      <a data-menu-item href="/journal/" style="text-align:left;background:none;border:none;cursor:pointer;padding:9px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(34px,6.6vw,86px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;text-decoration:none;" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">06</span>Journal</a>
+      <button data-menu-item onClick="{{ goHome }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">01</span>Home</button>
+      <button data-menu-item onClick="{{ goWork }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">02</span>Work</button>
+      <button data-menu-item onClick="{{ goAbout }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">03</span>Studio</button>
+      <button data-menu-item onClick="{{ goContact }}" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;border-bottom:1px solid rgba(242,241,236,.14);" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">04</span>Contact</button>
+      <a data-menu-item href="/journal/" style="text-align:left;background:none;border:none;cursor:pointer;padding:10px 0;color:#f2f1ec;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(42px,8vw,104px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;display:flex;align-items:baseline;gap:22px;text-decoration:none;" style-hover="color:#8a8a82;"><span style="font-family:'Spline Sans Mono',monospace;font-size:13px;font-weight:400;color:#77766f;">05</span>Journal</a>
     </nav>
     <div data-menu-item style="display:flex;flex-wrap:wrap;gap:48px;margin-top:45px;padding-top:30px;border-top:1px solid rgba(242,241,236,.14);">
       <div><p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#77766f;margin:0 0 8px;">Say hello</p><a href="mailto:hello@thegatewaydesigns.com" style="color:#f2f1ec;font-size:17px;" style-hover="color:#8a8a82;">hello@thegatewaydesigns.com</a></div>
@@ -193,10 +169,9 @@ a:hover{color:#6a6a64;}
           <span style="display:inline-flex;align-items:center;gap:9px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fdf3ee" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c3 3 3 16 0 19M12 2.5c-3 3-3 16 0 19"/></svg>Delhi → Worldwide</span>
         </div>
         <h1 class="animate-blur-fade-up" style="animation-delay:350ms;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(46px,9.6vw,150px);line-height:.9;letter-spacing:-.045em;margin:0;text-transform:uppercase;">Every brand deserves a <span style="color:#ffffff;">grand entrance</span></h1>
-        <p data-hero-sub class="animate-blur-fade-up" style="animation-delay:500ms;max-width:46ch;font-size:clamp(16px,1.4vw,20px);line-height:1.5;color:rgba(255,255,255,.82);margin:28px 0 0;">We design and build the website a brand arrives through — the first room anyone walks into, drawn for your brand or bought ready-made as a Framer template.</p>
+        <p data-hero-sub class="animate-blur-fade-up" style="animation-delay:500ms;max-width:46ch;font-size:clamp(16px,1.4vw,20px);line-height:1.5;color:rgba(255,255,255,.82);margin:28px 0 0;">We design and build the website a brand arrives through — the first room anyone walks into, and the one that has to do the introducing.</p>
         <div data-hero-cta class="animate-blur-fade-up" style="animation-delay:650ms;display:flex;flex-wrap:wrap;gap:14px;margin-top:36px;">
           <button onClick="{{ goWork }}" style="display:inline-flex;align-items:center;gap:10px;font-family:'Hanken Grotesk',system-ui,sans-serif;background:#f2f7ff;color:#040a1a;border:none;cursor:pointer;font-size:15px;font-weight:600;padding:14px 26px;border-radius:100px;" style-hover="background:#47c3ff;"><svg width="15" height="15" viewBox="0 0 24 24" fill="#040a1a" aria-hidden="true"><path d="M6 4l14 8-14 8z"/></svg>See what we make</button>
-          <button onClick="{{ goTemplates }}" style="font-family:'Hanken Grotesk',system-ui,sans-serif;background:rgba(255,255,255,.08);color:#fdf3ee;border:1px solid rgba(253,243,238,.35);cursor:pointer;font-size:15px;font-weight:600;padding:14px 28px;border-radius:100px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);" style-hover="border-color:#fdf3ee;">Templates — from $59</button>
           <button onClick="{{ goContact }}" style="font-family:'Hanken Grotesk',system-ui,sans-serif;background:rgba(255,255,255,.08);color:#fdf3ee;border:1px solid rgba(253,243,238,.35);cursor:pointer;font-size:15px;font-weight:600;padding:14px 28px;border-radius:100px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);" style-hover="border-color:#fdf3ee;">Start a project</button>
         </div>
       </div>
@@ -209,8 +184,8 @@ a:hover{color:#6a6a64;}
 
   <section aria-hidden="true" style="overflow:hidden;padding:24px 0;border-top:1px solid rgba(12,12,12,.16);border-bottom:1px solid rgba(12,12,12,.16);">
     <div style="display:flex;width:max-content;gap:52px;white-space:nowrap;font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(22px,3vw,38px);letter-spacing:-.02em;text-transform:uppercase;color:#0c0c0c;animation:marquee 28s linear infinite;">
-      <span>Brand-led web design</span><span style="color:#c3c2ba;">—</span><span>Design systems</span><span style="color:#c3c2ba;">—</span><span>Framer &amp; Webflow</span><span style="color:#c3c2ba;">—</span><span>Art direction</span><span style="color:#c3c2ba;">—</span><span>Framer templates</span><span style="color:#c3c2ba;">—</span>
-      <span>Brand-led web design</span><span style="color:#c3c2ba;">—</span><span>Design systems</span><span style="color:#c3c2ba;">—</span><span>Framer &amp; Webflow</span><span style="color:#c3c2ba;">—</span><span>Art direction</span><span style="color:#c3c2ba;">—</span><span>Framer templates</span><span style="color:#c3c2ba;">—</span>
+      <span>Brand-led web design</span><span style="color:#c3c2ba;">—</span><span>Design systems</span><span style="color:#c3c2ba;">—</span><span>Framer &amp; Webflow</span><span style="color:#c3c2ba;">—</span><span>Art direction</span><span style="color:#c3c2ba;">—</span>
+      <span>Brand-led web design</span><span style="color:#c3c2ba;">—</span><span>Design systems</span><span style="color:#c3c2ba;">—</span><span>Framer &amp; Webflow</span><span style="color:#c3c2ba;">—</span><span>Art direction</span><span style="color:#c3c2ba;">—</span>
     </div>
   </section>
 
@@ -227,30 +202,6 @@ a:hover{color:#6a6a64;}
           <p style="margin:0;color:#4a4a45;font-size:17px;line-height:1.5;max-width:52ch;">{{ s.d }}</p>
         </div>
       </sc-for>
-    </div>
-  </section>
-
-  <section style="max-width:1440px;margin:0 auto;padding:64px clamp(22px,5vw,44px) 40px;">
-    <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:16px;margin-bottom:42px;">
-      <div>
-        <h2 data-reveal style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(32px,5vw,62px);letter-spacing:-.03em;margin:0;text-transform:uppercase;">Templates for sale</h2>
-        <p data-reveal style="margin:12px 0 0;color:#4a4a45;font-size:16px;max-width:52ch;">Finished sites we sell outright, drawn and built in Framer. Buy one for $59, put your own words in it, and publish it the same week.</p>
-      </div>
-      <button data-reveal onClick="{{ goTemplates }}" style="font-family:'Spline Sans Mono',monospace;background:none;border:none;cursor:pointer;color:#0c0c0c;font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid #0c0c0c;padding-bottom:3px;">All templates &#8594;</button>
-    </div>
-    <div data-reveal data-m="tpl" style="display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:38px;align-items:center;border-top:1px solid rgba(12,12,12,.16);padding-top:34px;">
-      <div style="width:100%;aspect-ratio:4/5;clip-path:url(#archClip);background:linear-gradient(158deg,#4a2c14 0%,#2a1809 46%,#0c0c0c 100%);display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;padding:clamp(26px,3vw,38px) clamp(18px,2vw,26px) clamp(18px,2vw,24px);"><span style="font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(232,182,76,.75);">Framer template</span><span class="emerald-ink" style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(26px,3.4vw,44px);line-height:.95;letter-spacing:-.03em;text-transform:uppercase;">Chowk<br>House</span><span style="font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(242,241,236,.55);">Awadhi fine dining</span></div>
-      <div>
-        <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 16px;">
-          <h3 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:700;font-size:clamp(26px,3.4vw,42px);margin:0;letter-spacing:-.025em;text-transform:uppercase;">Chowk House</h3>
-          <span style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6a6a64;">Awadhi fine dining</span>
-        </div>
-        <p style="margin:14px 0 0;color:#4a4a45;font-size:17px;line-height:1.55;max-width:58ch;">A complete restaurant site &#8212; menu with prices, gallery, private dining, press and reservations &#8212; drawn as one piece and ready to fill with your own words. $59, yours to edit in Framer.</p>
-        <div data-tpl-cta style="display:flex;flex-wrap:wrap;gap:12px;margin-top:24px;">
-          <button onClick="{{ goTemplates }}" data-magnetic style="font-family:'Hanken Grotesk',system-ui,sans-serif;background:#0c0c0c;color:#f2f1ec;border:none;cursor:pointer;font-size:15px;font-weight:600;padding:13px 26px;border-radius:100px;" style-hover="background:#2a2a26;">See the template</button>
-          <a href="https://exquisite-operator-855127.framer.app" target="_blank" rel="noopener noreferrer" style="font-family:'Hanken Grotesk',system-ui,sans-serif;display:inline-flex;align-items:center;gap:9px;background:none;color:#0c0c0c;border:1px solid rgba(12,12,12,.28);cursor:pointer;font-size:15px;font-weight:600;padding:13px 24px;border-radius:100px;" style-hover="border-color:#0c0c0c;">View live demo<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -368,57 +319,10 @@ a:hover{color:#6a6a64;}
 </main>
 </sc-if>
 
-<sc-if value="{{ isTemplates }}" hint-placeholder-val="{{ false }}">
-<main style="max-width:1440px;margin:0 auto;padding:128px clamp(22px,5vw,44px) 40px;">
-  <p data-hero-tag style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#6a6a64;margin:0 0 26px;">(03) &#8212; Templates</p>
-  <h1 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(52px,10vw,150px);line-height:.9;letter-spacing:-.045em;margin:0;text-transform:uppercase;">
-    <span style="display:block;overflow:hidden;padding-bottom:.03em;"><span data-hero style="display:block;">Buy the site</span></span>
-    <span style="display:block;overflow:hidden;padding-bottom:.05em;"><span data-hero class="emerald-ink" style="display:block;">not the project</span></span>
-  </h1>
-  <p data-hero-tag style="max-width:56ch;font-size:19px;color:#3a3a36;margin:32px 0 14px;">The Gateway Designs sells premium Framer website templates. You buy one, duplicate it into your own Framer account, swap our words and photographs for yours, and publish &#8212; no developer, no build phase, no six-week wait. One is available now; others follow as we finish them.</p>
-  <p data-hero-tag style="font-family:'Spline Sans Mono',monospace;max-width:56ch;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6a6a64;margin:0 0 56px;">One template available &#183; $59 &#183; Built in Framer</p>
-
-  <div data-reveal data-m="tpl-hero" style="display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:clamp(32px,4vw,56px);align-items:start;border-top:1px solid rgba(12,12,12,.16);padding-top:44px;">
-    <div style="width:100%;aspect-ratio:3/4;clip-path:url(#archClip);background:linear-gradient(158deg,#4a2c14 0%,#2a1809 46%,#0c0c0c 100%);display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;padding:clamp(30px,3.4vw,46px) clamp(18px,2vw,26px) clamp(20px,2.2vw,28px);"><span style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(232,182,76,.75);">Framer template</span><span class="emerald-ink" style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(30px,4vw,54px);line-height:.95;letter-spacing:-.03em;text-transform:uppercase;">Chowk<br>House</span><span style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(242,241,236,.55);">Awadhi fine dining</span></div>
-    <div>
-      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:12px 24px;">
-        <h2 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:700;font-size:clamp(30px,4.4vw,54px);margin:0;letter-spacing:-.03em;text-transform:uppercase;">Chowk House</h2>
-        <div style="text-align:right;">
-          <span style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.02em;">$59</span>
-          <span style="font-family:'Spline Sans Mono',monospace;display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6a6a64;margin-top:2px;">One-time</span>
-        </div>
-      </div>
-      <p style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#6a6a64;margin:8px 0 0;">Awadhi fine dining &#183; Restaurant template</p>
-      <p style="margin:22px 0 0;color:#4a4a45;font-size:17px;line-height:1.6;max-width:60ch;">Chowk House is a template for an Awadhi fine-dining restaurant &#8212; the kind with a tasting menu, a private room upstairs, and a press folder it is proud of. Every section a restaurant actually needs is already drawn. Change the dishes, the photographs and the phone number, and it is your restaurant.</p>
-
-      <div style="border-top:1px solid rgba(12,12,12,.16);margin-top:30px;">
-        <sc-for list="{{ templateFeatures }}" as="f" hint-placeholder-count="7">
-          <div style="display:grid;grid-template-columns:26px 1fr;gap:14px;align-items:baseline;padding:13px 0;border-bottom:1px solid rgba(12,12,12,.1);">
-            <svg width="13" height="14" viewBox="0 0 24 26" fill="none" aria-hidden="true" style="align-self:center;"><path d="M2,26 L2,10 C2,4.5 6,1.5 12,1.5 C18,1.5 22,4.5 22,10 L22,26" stroke="#c9922e" stroke-width="2.4" stroke-linecap="round"/></svg>
-            <span style="color:#3a3a36;font-size:16.5px;line-height:1.45;">{{ f }}</span>
-          </div>
-        </sc-for>
-      </div>
-
-      <div data-tpl-cta style="display:flex;flex-wrap:wrap;gap:14px;margin-top:32px;">
-        <a href="{{ buyHref }}" data-magnetic style="font-family:'Hanken Grotesk',system-ui,sans-serif;display:inline-flex;align-items:center;gap:10px;background:#0c0c0c;color:#f2f1ec;border:none;cursor:pointer;font-size:16px;font-weight:600;padding:15px 30px;border-radius:100px;" style-hover="background:#2a2a26;color:#f2f1ec;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2.5h12l2 6H4z"/><path d="M5.5 8.5V20a1.5 1.5 0 0 0 1.5 1.5h10a1.5 1.5 0 0 0 1.5-1.5V8.5"/><path d="M9.5 12.5h5"/></svg>Buy &#8212; $59</a>
-        <a href="https://exquisite-operator-855127.framer.app" target="_blank" rel="noopener noreferrer" style="font-family:'Hanken Grotesk',system-ui,sans-serif;display:inline-flex;align-items:center;gap:9px;background:none;color:#0c0c0c;border:1px solid rgba(12,12,12,.28);cursor:pointer;font-size:16px;font-weight:600;padding:15px 28px;border-radius:100px;" style-hover="border-color:#0c0c0c;">View live demo<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
-      </div>
-      <p style="font-family:'Spline Sans Mono',monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:#6a6a64;margin:18px 0 0;">{{ buyNote }}</p>
-    </div>
-  </div>
-
-  <div data-reveal style="display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin-top:64px;padding-top:34px;border-top:1px solid rgba(12,12,12,.16);">
-    <p style="margin:0;font-size:17px;color:#3a3a36;max-width:46ch;">Want one drawn around your own brand instead of adapted from ours? That is the studio work, and it starts with a conversation.</p>
-    <button onClick="{{ goContact }}" data-magnetic style="font-family:'Hanken Grotesk',system-ui,sans-serif;background:none;color:#0c0c0c;border:1px solid rgba(12,12,12,.28);cursor:pointer;font-size:15px;font-weight:600;padding:14px 28px;border-radius:100px;" style-hover="border-color:#0c0c0c;">Start a project</button>
-  </div>
-</main>
-</sc-if>
-
 <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ false }}">
 <main>
   <section style="max-width:1440px;margin:0 auto;padding:128px clamp(22px,5vw,44px) 30px;">
-    <p data-hero-tag style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#6a6a64;margin:0 0 26px;">(04) — The studio</p>
+    <p data-hero-tag style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#6a6a64;margin:0 0 26px;">(03) — The studio</p>
     <h1 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(52px,10vw,150px);line-height:.9;letter-spacing:-.045em;margin:0;text-transform:uppercase;">
       <span style="display:block;overflow:hidden;padding-bottom:.03em;"><span data-hero style="display:block;">A small studio</span></span>
       <span style="display:block;overflow:hidden;padding-bottom:.05em;"><span data-hero class="emerald-ink" style="display:block;">a wide doorway</span></span>
@@ -469,7 +373,7 @@ a:hover{color:#6a6a64;}
 
 <sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
 <main style="max-width:1440px;margin:0 auto;padding:128px clamp(22px,5vw,44px) 40px;">
-  <p data-hero-tag style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#6a6a64;margin:0 0 26px;">(05) — Contact</p>
+  <p data-hero-tag style="font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#6a6a64;margin:0 0 26px;">(04) — Contact</p>
   <h1 style="font-family:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-size:clamp(52px,10vw,150px);line-height:.9;letter-spacing:-.045em;margin:0;text-transform:uppercase;">
     <span style="display:block;overflow:hidden;padding-bottom:.05em;"><span data-hero style="display:block;">Start a <span class="emerald-ink">project</span></span></span>
   </h1>
@@ -528,7 +432,6 @@ a:hover{color:#6a6a64;}
       <p style="font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#9a9a92;margin:0 0 4px;">Menu</p>
       <button onClick="{{ goHome }}" style="text-align:left;font-family:inherit;background:none;border:none;cursor:pointer;color:#3a3a36;font-size:15px;padding:0;" style-hover="color:#0c0c0c;">Home</button>
       <button onClick="{{ goWork }}" style="text-align:left;font-family:inherit;background:none;border:none;cursor:pointer;color:#3a3a36;font-size:15px;padding:0;" style-hover="color:#0c0c0c;">Work</button>
-      <button onClick="{{ goTemplates }}" style="text-align:left;font-family:inherit;background:none;border:none;cursor:pointer;color:#3a3a36;font-size:15px;padding:0;" style-hover="color:#0c0c0c;">Templates</button>
       <button onClick="{{ goAbout }}" style="text-align:left;font-family:inherit;background:none;border:none;cursor:pointer;color:#3a3a36;font-size:15px;padding:0;" style-hover="color:#0c0c0c;">Studio</button>
       <button onClick="{{ goContact }}" style="text-align:left;font-family:inherit;background:none;border:none;cursor:pointer;color:#3a3a36;font-size:15px;padding:0;" style-hover="color:#0c0c0c;">Contact</button>
       <a href="/journal/" style="color:#3a3a36;font-size:15px;" style-hover="color:#0c0c0c;">Journal</a>
@@ -561,49 +464,15 @@ a:hover{color:#6a6a64;}
 const FORM_ENDPOINT = '';
 const CONTACT_EMAIL = 'hello@thegatewaydesigns.com';
 
-/* Checkout link for the Chowk House template. Paste the URL your payment
-   processor gives you between the quotes and the "Buy — $59" button points
-   straight at it. While this is empty the button falls back to a prefilled
-   mailto: so a buyer can still reach the studio and nothing looks broken. */
-const CHECKOUT_URL = '';
-const TEMPLATE_PRICE = '$59';
-
-/* Hash routing. Every "page" is component state, so these two tables are the
-   only mapping between a state name and the fragment that appears in the URL.
-   Home is deliberately the bare path with no fragment. Note the Studio page is
-   called 'about' internally but reads better as #studio in a URL. */
-const SLUG_TO_PAGE = { work: 'work', templates: 'templates', studio: 'about', contact: 'contact' };
-const PAGE_TO_SLUG = { work: 'work', templates: 'templates', about: 'studio', contact: 'contact' };
-
-function pageFromHash() {
-  var h = '';
-  try { h = String(window.location.hash || '').replace(/^#\/?/, '').toLowerCase(); } catch (e) {}
-  return SLUG_TO_PAGE[h] || 'home';
-}
-
 class Component extends DCLogic {
-  state = { page: pageFromHash(), menuOpen: false, status: 'idle', form: null };
+  state = { page: 'home', menuOpen: false, status: 'idle', form: null };
 
   go(p) {
     return () => {
       const keep = p === 'contact' && this.state.status === 'sent';
       this.setState({ page: p, menuOpen: false, status: keep ? 'sent' : 'idle' });
-      this.syncUrl(p);
       try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) { window.scrollTo(0, 0); }
     };
-  }
-
-  /* pushState rather than assigning location.hash, because assigning fires a
-     hashchange we would then have to ignore. This fires neither event, so the
-     popstate/hashchange listener only ever hears the back button and hand-typed
-     URLs — never our own navigation. */
-  syncUrl(p) {
-    const slug = PAGE_TO_SLUG[p] || '';
-    try {
-      const target = window.location.pathname + window.location.search + (slug ? '#' + slug : '');
-      if (window.history && window.history.pushState) window.history.pushState({ page: p }, '', target);
-      else window.location.hash = slug;
-    } catch (e) {}
   }
 
   sendInquiry(e) {
@@ -622,13 +491,6 @@ class Component extends DCLogic {
       .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r; })
       .then(() => this.setState({ status: 'sent' }))
       .catch(() => this.setState({ status: 'error' }));
-  }
-
-  buyHref() {
-    if (CHECKOUT_URL) return CHECKOUT_URL;
-    const subject = 'Chowk House template — purchase (' + TEMPLATE_PRICE + ')';
-    const body = "I'd like to buy the Chowk House Framer template. Please send me a payment link.";
-    return 'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
   }
 
   mailtoHref() {
@@ -667,12 +529,6 @@ class Component extends DCLogic {
     }
     this._onResize = () => this.setLayout();
     window.addEventListener('resize', this._onResize, { passive: true });
-    this._onRoute = () => {
-      const p = pageFromHash();
-      if (p !== this.state.page) this.setState({ page: p, menuOpen: false, status: 'idle' });
-    };
-    window.addEventListener('popstate', this._onRoute);
-    window.addEventListener('hashchange', this._onRoute);
     requestAnimationFrame(() => this.setLayout());
     this.initGradient();
     this._stops = [];
@@ -688,7 +544,6 @@ class Component extends DCLogic {
     if (this._onMove) window.removeEventListener('mousemove', this._onMove);
     if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
     if (this._onResize) window.removeEventListener('resize', this._onResize);
-    if (this._onRoute) { window.removeEventListener('popstate', this._onRoute); window.removeEventListener('hashchange', this._onRoute); }
     if (this._poll) clearInterval(this._poll);
     if (this._gpoll) clearInterval(this._gpoll);
     if (this._grad && this._grad.destroy) { try { this._grad.destroy(); } catch (e) {} }
@@ -819,15 +674,6 @@ class Component extends DCLogic {
       { n: 'Step 03', t: 'Build it', d: 'Semantic markup, a performance budget agreed up front, and motion that respects reduced-motion settings.' },
       { n: 'Step 04', t: 'Hand it over', d: 'You get the keys and a walkthrough. If you need us afterwards it should be because you want us, not because you are stuck.' }
     ];
-    const templateFeatures = [
-      'Full menu with prices, section by section',
-      'Gallery sized for the photographs a kitchen actually has',
-      'Private dining, given its own section rather than a paragraph',
-      'Press section for the notices worth keeping',
-      'Reservations, where a guest looks for them',
-      'Responsive from a wide desktop down to a phone',
-      'Editable in Framer, without a developer'
-    ];
     const articles = [
       { t: 'The threshold problem', kicker: 'Craft', read: '6 min read', href: '/journal/the-threshold-problem.html',
         d: 'Most homepages are built as walls to scroll past. What changes when you design the first four seconds as a doorway instead.' },
@@ -838,9 +684,7 @@ class Component extends DCLogic {
     ];
     return {
       isHome: page === 'home', isWork: page === 'work', isAbout: page === 'about', isContact: page === 'contact',
-      isTemplates: page === 'templates',
       goHome: this.go('home'), goWork: this.go('work'), goAbout: this.go('about'), goContact: this.go('contact'),
-      goTemplates: this.go('templates'),
       toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
       menuLabel: open ? 'Close' : 'Menu',
       menuOpacity: open ? '1' : '0',
@@ -849,11 +693,7 @@ class Component extends DCLogic {
       barTop: open ? 'translateY(7.5px) rotate(45deg)' : 'none',
       barBot: open ? 'translateY(-7.5px) rotate(-45deg)' : 'none',
       barMidOpacity: open ? '0' : '1',
-      projects, projectsHome: projects.slice(0, 3), services, steps, articles, templateFeatures,
-      buyHref: this.buyHref(),
-      buyNote: CHECKOUT_URL
-        ? 'Digital product · a Framer template link to duplicate into your own account'
-        : 'Checkout opens shortly · the button emails the studio for a payment link',
+      projects, projectsHome: projects.slice(0, 3), services, steps, articles,
       sent: this.state.status === 'sent',
       notSent: this.state.status !== 'sent',
       failed: this.state.status === 'error',

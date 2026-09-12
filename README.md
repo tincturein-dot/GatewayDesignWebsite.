@@ -75,66 +75,6 @@ if the request fails, the form shows a fallback panel with a **prefilled
 `mailto:`** to `CONTACT_EMAIL` — so inquiries still reach the studio and the
 site never claims to have sent something it didn't.
 
-## Templates
-
-The studio sells premium Framer website templates alongside client work. The
-Templates page lives in `index.html` behind the `isTemplates` page state and is
-reachable from the nav overlay (03), the footer menu, the hero CTA, and the
-teaser section on the home page.
-
-One constant controls checkout:
-
-```js
-const CHECKOUT_URL = '';                           // paste your checkout link here
-const TEMPLATE_PRICE = '$59';
-```
-
-Set `CHECKOUT_URL` to the payment link your processor gives you and the
-**Buy — $59** button points straight at it. While it is empty the button falls
-back to a **prefilled `mailto:`** to `CONTACT_EMAIL` asking for a payment link
-— the same pattern the contact form uses, so the button is never dead and the
-page never advertises a checkout that doesn't exist. The small line under the
-buttons switches wording to match.
-
-Product copy lives in two places: the `templateFeatures` array in
-`renderVals()` (the seven-item feature list) and the markup of the Templates
-page itself (name, price, blurb). The live-demo URL is a plain `href` in the
-markup on both the Templates page and the home teaser.
-
-**Adding a second template** means turning the single hard-coded product block
-into an `sc-for` over a `templates` array, the way `projects` and `services`
-already work — the page was written so that is a contained change.
-
-The Templates page has a direct URL: **`/#templates`**. See Routing below.
-
-## Routing
-
-Every page is component state, not a path, so the site uses hash routing to
-give each one a linkable URL:
-
-| URL | Page |
-|---|---|
-| `/` | Home |
-| `/#work` | Work |
-| `/#templates` | Templates |
-| `/#studio` | Studio |
-| `/#contact` | Contact |
-
-Two tables at the top of the logic script are the whole mapping — `SLUG_TO_PAGE`
-and `PAGE_TO_SLUG`. Home is deliberately the bare path with no fragment, and an
-unrecognised fragment falls back to Home rather than rendering nothing.
-
-Navigation uses `history.pushState` rather than assigning `location.hash`,
-because assigning fires a `hashchange` the app would then have to ignore.
-pushState fires neither event, so the `popstate`/`hashchange` listener only ever
-hears the back button and hand-typed URLs — never the app's own navigation.
-
-Two consequences worth knowing. A fragment is **never sent to the server**, so
-every URL above is one request for `index.html` and no Vercel rewrite is needed.
-And search engines generally treat `/#templates` as the same document as `/`, so
-these are good links to give a person and are not separate entries for
-`sitemap.xml`.
-
 ## Adding a journal article
 
 Copy any file in `journal/`, then update, in order: `<title>`, the description,
