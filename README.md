@@ -37,6 +37,23 @@ fine as `index.html`.
 > layout and the scroll animations after a page change. Re-apply this after any
 > fresh export.
 
+## Clone it
+
+The repository name ends in a literal full stop — `GatewayDesignWebsite.` — so
+`git clone` with no target would create a directory ending in one. That is legal
+on macOS and Linux, illegal on Windows, and awkward for enough tooling in
+between that it is worth naming the directory yourself:
+
+```sh
+git clone https://github.com/tincturein-dot/GatewayDesignWebsite. gateway-website
+cd gateway-website
+```
+
+Anything that has to recognise the checkout as a clone of this repo — the
+desktop app's worktree tasks among them — needs the real `.git` that this gives
+you. A downloaded zip of the working tree has the same files but no history, and
+those tools will refuse it.
+
 ## Run locally
 
 Any static file server works; it must be served over HTTP (the runtime fetches
