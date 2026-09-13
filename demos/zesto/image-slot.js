@@ -171,6 +171,13 @@
 
   function load() {
     if (loadP) return loadP;
+    // Gateway Designs: the deployed demo never has a sidecar (every slot is
+    // filled from its src attribute), so outside the design tool the fetch
+    // is a guaranteed 404 on every page load. Skip it there.
+    if (!window.omelette) {
+      loadP = Promise.resolve().then(() => { loaded = true; subs.forEach((fn) => fn()); });
+      return loadP;
+    }
     loadP = fetch(STATE_FILE)
       .then((r) => (r.ok ? r.json() : null))
       .then((j) => {
@@ -1095,7 +1102,12 @@
       // (Claude wrote it into the HTML) so it passes through unchanged.
       let stored = this.id ? getSlot(this.id) : this._local;
       if (stored && stored.u && !/^data:image\//i.test(stored.u)) stored = null;
-      const srcAttr = this.getAttribute('src') || '';
+      // Gateway Designs: the element upgrades while the page's template is
+      // still raw, so a bound src first reads as the literal "{{ jar.img }}"
+      // and was requested as a URL (a 404 per load). Treat it as empty until
+      // the runtime writes the real value.
+      const rawSrc = this.getAttribute('src') || '';
+      const srcAttr = rawSrc.includes('{{') ? '' : rawSrc;
       this._userUrl = (stored && stored.u) || null;
       const url = this._userUrl || srcAttr;
       // Don't clobber an in-flight reframe with a store-triggered re-render.
