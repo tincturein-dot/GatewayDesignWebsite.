@@ -99,6 +99,15 @@ openable full screen:
 - `demos/zesto/` — *Zesto, Mango Pickle*, a brand and shop page. This one also
   ships `image-slot.js` beside `support.js`; both are referenced relatively from
   the export's `<helmet>` and neither needed changing.
+- `demos/vaayu/` — *Vaayu, Electric Motorcycle*. **Not a Claude Design export**
+  and none of the notes below apply to it: it is one hand-written HTML file with
+  no runtime, no framework and no JavaScript at all. Every piece of motion is a
+  native CSS scroll timeline (`animation-timeline: view()` / `scroll()`), and the
+  wordmark compresses along Archivo's variable `wdth` axis rather than being
+  transformed. All of it sits inside `@supports`, so a browser without scroll
+  timelines gets the finished page with no motion — the same page a visitor
+  asking for reduced motion gets. Its hero loop was rendered by
+  `assets/source/vaayu/render_hero.py`; see `demos/vaayu/MEDIA-TODO.md`.
 
 **Three edits are applied to every export** and must be re-applied after a
 fresh one:
