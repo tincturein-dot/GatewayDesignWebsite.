@@ -451,6 +451,12 @@ main:focus{outline:none;}
     <div data-reveal>
       <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
       <form onSubmit="{{ submit }}" style="display:flex;flex-direction:column;gap:24px;">
+        <sc-if value="{{ handoff }}" hint-placeholder-val="{{ false }}">
+        <div role="status" style="border:1px solid rgba(12,12,12,.28);border-radius:6px;padding:20px 22px;display:flex;flex-direction:column;gap:14px;align-items:flex-start;">
+          <p style="margin:0;font-size:16px;line-height:1.55;color:#3a3a36;max-width:46ch;">That should have opened in your mail app with everything you typed already in it. If nothing happened, use the button — or write to us directly at hello@thegatewaydesigns.com.</p>
+          <a href="{{ mailtoHref }}" style="font-family:'Hanken Grotesk',system-ui,sans-serif;background:#0c0c0c;color:#f2f1ec;font-size:14px;font-weight:600;padding:12px 24px;border-radius:100px;" style-hover="background:#2a2a26;">Open it again →</a>
+        </div>
+        </sc-if>
         <sc-if value="{{ failed }}" hint-placeholder-val="{{ false }}">
         <div role="alert" style="border:1px solid rgba(12,12,12,.28);border-radius:6px;padding:20px 22px;display:flex;flex-direction:column;gap:14px;align-items:flex-start;">
           <p style="margin:0;font-size:16px;line-height:1.55;color:#3a3a36;max-width:46ch;">We couldn't send that from the site. Nothing's lost — the button below opens your mail app with everything you typed already filled in.</p>
@@ -531,6 +537,10 @@ main:focus{outline:none;}
    a JSON body works (Formspree, Basin, Netlify/Vercel function, your own API).
    While this is empty — or if the request fails — the form falls back to a
    prefilled mailto: so inquiries still reach the studio. */
+// Set this to a POST endpoint (Formspree, Web3Forms, a Vercel function) and the
+// form submits over fetch. Left empty, the form hands the message to the
+// visitor's mail client instead — see sendInquiry. Both paths are real; what is
+// not acceptable is a Send button with nothing behind it.
 const FORM_ENDPOINT = '';
 const CONTACT_EMAIL = 'hello@thegatewaydesigns.com';
 
@@ -551,7 +561,15 @@ class Component extends DCLogic {
     const data = new FormData(e.target);
     const str = (k) => (data.get(k) == null ? '' : String(data.get(k)).trim());
     const form = { name: str('name'), email: str('email'), need: str('need'), message: str('message') };
-    if (!FORM_ENDPOINT) { this.setState({ status: 'error', form: form }); return; }
+    // No endpoint is configured, and that is a deliberate state rather than a
+    // fault: hand the message to the visitor's mail client with everything
+    // already filled in. Reporting it as a failed send made every single
+    // visitor watch the primary call to action appear to break.
+    if (!FORM_ENDPOINT) {
+      this.setState({ status: 'mailto', form: form });
+      try { window.location.href = this.mailtoHref(form); } catch (e) {}
+      return;
+    }
     this.setState({ status: 'sending', form: form });
     fetch(FORM_ENDPOINT, {
       method: 'POST',
@@ -563,8 +581,8 @@ class Component extends DCLogic {
       .catch(() => this.setState({ status: 'error' }));
   }
 
-  mailtoHref() {
-    const f = this.state.form || {};
+  mailtoHref(override) {
+    const f = override || this.state.form || {};
     const subject = 'Project inquiry' + (f.need ? ' — ' + f.need : '');
     const body = [
       'Name: ' + (f.name || ''),
@@ -856,7 +874,10 @@ class Component extends DCLogic {
       sent: this.state.status === 'sent',
       notSent: this.state.status !== 'sent',
       failed: this.state.status === 'error',
-      submitLabel: this.state.status === 'sending' ? 'Sending…' : 'Send inquiry →',
+      handoff: this.state.status === 'mailto',
+      // Don't label a button "Send" when nothing is wired up to send it.
+      submitLabel: this.state.status === 'sending' ? 'Sending…'
+        : (FORM_ENDPOINT ? 'Send inquiry →' : 'Compose the email →'),
       mailtoHref: this.mailtoHref(),
       submit: (e) => this.sendInquiry(e)
     };

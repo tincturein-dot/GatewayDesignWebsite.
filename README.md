@@ -87,6 +87,11 @@ and not something about how it is hosted. It only appears to work in the design
 tool's preview, where `window.__resources` routes loading down a different path.
 Build from the `.dc.html` instead.
 
+Each export is archived under `assets/source/<slug>/` with a MEDIA-MANIFEST
+naming every asset and what it is used for. The exported filenames carry no
+meaning, so without the manifest a re-export cannot be matched back to the
+shipped media.
+
 Live now, both embedded in the Work page as lazy-loaded `<iframe>`s and both
 openable full screen:
 
@@ -199,10 +204,22 @@ Vercel function, your own API. Submissions POST as:
 { "name": "…", "email": "…", "need": "…", "message": "…" }
 ```
 
-A 2xx response shows the "Thank you" panel. While `FORM_ENDPOINT` is empty, or
-if the request fails, the form shows a fallback panel with a **prefilled
-`mailto:`** to `CONTACT_EMAIL` — so inquiries still reach the studio and the
-site never claims to have sent something it didn't.
+A 2xx response shows the "Thank you" panel. A failed request shows an error
+panel with a **prefilled `mailto:`** to `CONTACT_EMAIL`, so nothing the visitor
+typed is lost.
+
+**While `FORM_ENDPOINT` is empty the form does not pretend to send.** The submit
+button reads "Compose the email", and submitting hands the message straight to
+the visitor's mail client, prefilled, with a plain receipt panel underneath in
+case no mail client opened. It used to route this case through the *failure*
+path, which meant every single visitor watched the site's primary call to
+action appear to break — the copy was gracious about it, but the reader has no
+way to tell a designed fallback from a bug.
+
+This is a working arrangement, not a placeholder, and a studio can ship it
+indefinitely. It does cost conversions: a mail client is a bigger step than a
+button, and some visitors have none configured. Setting `FORM_ENDPOINT` is the
+only change needed to close that gap — everything else is already wired.
 
 ## Adding a journal article
 

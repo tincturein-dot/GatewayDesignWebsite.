@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { margin:0; background:#0B7A3B; }
+  a { color:#FF4FA3; text-decoration:none; }
+  a:hover { color:#FFF3DA; }
+  ::selection { background:#FF4FA3; color:#FFF3DA; }
+  @keyframes shruti-ticker { from { transform:translate3d(0,0,0);} to { transform:translate3d(-50%,0,0);} }
+  @keyframes shruti-spin { from { transform:rotate(0deg);} to { transform:rotate(360deg);} }
+  @keyframes shruti-bob { 0%,100% { transform:translateY(0);} 50% { transform:translateY(-14px);} }
+</style>
+</helmet>
+
+<div style="font-family:'Space Grotesk',system-ui,sans-serif; background:#0B7A3B; color:#FFF3DA; overflow-x:clip; -webkit-font-smoothing:antialiased;">
+
+  <header style="position:fixed; top:0; left:0; right:0; z-index:60; transition:background .35s ease, box-shadow .35s ease, padding .35s ease; background:{{ headerBg }}; box-shadow:{{ headerShadow }}; padding:{{ headerPad }} clamp(16px,4vw,48px); display:flex; align-items:center; justify-content:space-between; gap:16px; backdrop-filter:blur(6px);">
+    <a href="#top" style="display:flex; align-items:center; gap:10px; color:#FFF3DA;">
+      <span style="display:inline-block; width:26px; height:26px; border-radius:50%; background:#FF4FA3; border:3px solid #FFF3DA; flex:none;"></span>
+      <span style="font-family:'Archivo Black',sans-serif; font-size:{{ logoSize }}; letter-spacing:.02em; line-height:1; transition:font-size .35s ease;">ZESTO</span>
+    </a>
+    <nav style="display:flex; align-items:center; gap:clamp(14px,2.4vw,34px);">
+      <a href="#jars" style="font-size:13px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#FFF3DA;" style-hover="color:#FF4FA3">Jars</a>
+      <a href="#made" style="font-size:13px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#FFF3DA;" style-hover="color:#FF4FA3">Made</a>
+      <a href="#talk" style="font-size:13px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#FFF3DA;" style-hover="color:#FF4FA3">Talk</a>
+      <a href="#buy" style="background:#FF4FA3; color:#FFF3DA; font-size:13px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; padding:12px 20px; border-radius:999px; border:2px solid #FFF3DA; white-space:nowrap;" style-hover="background:#FFF3DA; color:#0B7A3B; border-color:#FF4FA3">Get a jar</a>
+    </nav>
+  </header>
+
+  <section id="film" ref="{{ filmRef }}" style="position:relative; height:520vh; background:#0B7A3B;">
+    <div style="position:sticky; top:0; height:100svh; overflow:hidden; background:#0B7A3B;">
+      <video ref="{{ filmVideoRef }}" src="https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260811_194519_2f6665ab-88e6-4230-9b06-3a938123ba7a.mp4" crossOrigin="anonymous" muted="{{ true }}" playsInline="{{ true }}" preload="auto" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transform:{{ filmScale }};"></video>
+      <div style="position:absolute; inset:0; background:radial-gradient(circle at 50% 45%, rgba(11,122,59,0) 30%, rgba(11,122,59,.72) 100%);"></div>
+      <div style="position:absolute; inset:0; background-image:radial-gradient(rgba(11,122,59,.5) 1.4px, transparent 1.5px); background-size:6px 6px; mix-blend-mode:multiply; opacity:.55;"></div>
+
+      <div style="position:absolute; inset:0; display:grid; place-items:center; padding:0 5vw; pointer-events:none;">
+        <h1 style="font-family:'Archivo Black',sans-serif; color:#FFF3DA; text-transform:uppercase; font-size:clamp(64px,17vw,300px); line-height:.8; letter-spacing:-.04em; margin:0; text-align:center; opacity:{{ markOpacity }}; transform:{{ markTransform }}; text-shadow:0 10px 0 rgba(11,122,59,.5);">Zesto</h1>
+      </div>
+
+      <div style="position:absolute; left:0; right:0; bottom:clamp(74px,13vh,140px); text-align:center; padding:0 6vw; pointer-events:none;">
+        <p style="font-family:'Archivo Black',sans-serif; color:#FFF3DA; text-transform:uppercase; font-size:clamp(22px,4.4vw,60px); line-height:.95; letter-spacing:-.02em; margin:0; opacity:{{ filmWordOpacity }}; transform:{{ filmWordTransform }}; text-shadow:0 4px 0 rgba(11,122,59,.6);">{{ filmWord }}</p>
+      </div>
+
+      <div style="position:absolute; left:0; right:0; bottom:clamp(28px,5vh,54px); display:flex; justify-content:center; gap:10px; pointer-events:none;">
+        <sc-for list="{{ filmDots }}" as="dot" hint-placeholder-count="5">
+          <span style="width:10px; height:10px; border-radius:50%; border:2px solid #FFF3DA; background:{{ dot.fill }};"></span>
+        </sc-for>
+      </div>
+
+      <div style="position:absolute; left:50%; bottom:clamp(96px,16vh,170px); transform:translateX(-50%); display:flex; align-items:center; gap:10px; opacity:{{ cueOpacity }}; pointer-events:none;">
+        <span style="font-size:11px; font-weight:700; letter-spacing:.24em; text-transform:uppercase; color:#FFF3DA;">Scroll</span>
+        <span style="width:34px; height:2px; background:#FF4FA3; display:block;"></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="top" style="position:relative; min-height:100svh; display:grid; grid-template-columns:repeat(auto-fit,minmax(520px,1fr)); gap:clamp(30px,5vw,60px); align-items:center; padding:clamp(110px,14vh,180px) clamp(16px,4vw,48px) clamp(40px,8vh,90px); background:#0B7A3B; overflow:hidden;">
+    <div style="position:absolute; inset:0; background-image:radial-gradient(#0A6A34 1.6px, transparent 1.7px); background-size:16px 16px; opacity:.75; pointer-events:none;"></div>
+    <div style="position:absolute; top:-14vw; right:-10vw; width:52vw; height:52vw; border-radius:50%; background:#FF4FA3; opacity:.92; pointer-events:none;"></div>
+    <div style="position:absolute; top:-14vw; right:-10vw; width:52vw; height:52vw; border-radius:50%; border:3px solid #FFF3DA; opacity:.55; pointer-events:none;"></div>
+
+    <div style="position:relative; z-index:2; min-width:0; container-type:inline-size;">
+      <div style="display:inline-flex; align-items:center; gap:10px; border:2px solid #FFF3DA; border-radius:999px; padding:8px 16px; margin-bottom:clamp(18px,3vh,30px);">
+        <span style="width:8px; height:8px; border-radius:50%; background:#FF4FA3; flex:none;"></span>
+        <span style="font-size:12px; font-weight:700; letter-spacing:.2em; text-transform:uppercase;">Est. 1974 · Small batch · Sun-cured</span>
+      </div>
+      <h1 style="font-family:'Archivo Black',sans-serif; color:#FFF3DA; font-size:clamp(56px,21cqw,220px); line-height:.82; letter-spacing:-.03em; margin:0; text-transform:uppercase; text-wrap:balance;">Mango<br>pickle<br><span style="color:#FF4FA3; -webkit-text-stroke:3px #FFF3DA;">loud</span> enough<br>to hear.</h1>
+      <div style="display:flex; flex-wrap:wrap; align-items:center; gap:18px; margin-top:clamp(24px,4vh,44px);">
+        <a href="#buy" style="background:#FF4FA3; color:#FFF3DA; font-family:'Archivo Black',sans-serif; font-size:clamp(16px,2vw,22px); letter-spacing:.02em; text-transform:uppercase; padding:20px 40px; border-radius:999px; border:3px solid #FFF3DA;" style-hover="background:#FFF3DA; color:#0B7A3B">Grab a jar →</a>
+        <a href="#scrub" style="color:#FFF3DA; font-size:14px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; border-bottom:2px solid #FF4FA3; padding-bottom:4px;">Watch it pour</a>
+      </div>
+      <p style="max-width:46ch; margin:clamp(26px,4vh,44px) 0 0; font-size:clamp(16px,1.5vw,20px); line-height:1.55; color:#E4F5E9;">Raw Ratnagiri mangoes, mustard oil pressed cold, chilli that argues back. Cut, salted and left in the sun until the jar starts talking.</p>
+    </div>
+
+    <div style="position:relative; z-index:2; justify-self:center; width:min(380px,80%); aspect-ratio:3/4; animation:shruti-bob 6s ease-in-out infinite;">
+      <image-slot id="hero-jar" src="https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260811_192743_dbc13448-97a0-4154-a164-35a85dae3c5a.png" shape="rounded" radius="26" placeholder="Drop the hero jar shot"></image-slot>
+    </div>
+  </section>
+
+  <div style="background:#FF4FA3; border-top:4px solid #FFF3DA; border-bottom:4px solid #FFF3DA; overflow:hidden; padding:16px 0;">
+    <div style="display:flex; width:max-content; animation:shruti-ticker 26s linear infinite; will-change:transform;">
+      <span style="font-family:'Archivo Black',sans-serif; font-size:clamp(26px,4vw,52px); text-transform:uppercase; color:#FFF3DA; letter-spacing:.01em; padding-right:40px;">Hot ✱ Sour ✱ Sunned ✱ Salted ✱ Zesto ✱ Hot ✱ Sour ✱ Sunned ✱ Salted ✱ Zesto ✱ </span>
+      <span style="font-family:'Archivo Black',sans-serif; font-size:clamp(26px,4vw,52px); text-transform:uppercase; color:#FFF3DA; letter-spacing:.01em; padding-right:40px;">Hot ✱ Sour ✱ Sunned ✱ Salted ✱ Zesto ✱ Hot ✱ Sour ✱ Sunned ✱ Salted ✱ Zesto ✱ </span>
+    </div>
+  </div>
+
+  <section id="scrub" ref="{{ scrubRef }}" style="position:relative; height:260vh; background:#FFF3DA;">
+    <div style="position:sticky; top:0; height:100svh; overflow:hidden; display:grid; place-items:center;">
+      <div style="position:absolute; inset:0; background:#0B7A3B;"></div>
+      <div style="position:absolute; inset:0; background-image:radial-gradient(#0A6A34 1.6px, transparent 1.7px); background-size:18px 18px; opacity:.7;"></div>
+      <div style="position:absolute; left:50%; top:50%; width:min(76vmin,720px); height:min(76vmin,720px); border-radius:50%; background:#FF4FA3; opacity:.85; transform:{{ discTransform }}; margin-left:calc(min(76vmin,720px) / -2); margin-top:calc(min(76vmin,720px) / -2);"></div>
+
+      <div style="position:absolute; left:50%; top:50%; width:min(46vmin,420px); aspect-ratio:3/4; margin-left:calc(min(46vmin,420px) / -2); margin-top:calc(min(46vmin,420px) * -.666); transform:{{ jarTransform }}; z-index:2; border:5px solid #FFF3DA; border-radius:26px; overflow:hidden; box-shadow:14px 14px 0 rgba(11,122,59,.55);">
+        <video ref="{{ videoRef }}" src="https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260811_192935_0b03bc0b-1317-419c-8868-f080ee05287e.mp4" muted="{{ true }}" playsInline="{{ true }}" preload="auto" crossOrigin="anonymous" style="width:100%; height:100%; object-fit:cover; border-radius:22px; display:{{ videoDisplay }};"></video>
+        <div style="width:100%; height:100%; display:{{ posterDisplay }};">
+          <image-slot id="scrub-jar" src="https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260811_192743_8c1c3c54-9760-4cbc-92a6-3d6b48cc129e.png" shape="rounded" radius="22" placeholder="Drop the pour video still"></image-slot>
+        </div>
+      </div>
+
+      <div style="position:absolute; top:clamp(70px,11vh,120px); left:0; right:0; z-index:3; pointer-events:none; text-align:center; padding:0 5vw;">
+        <p style="font-family:'Archivo Black',sans-serif; color:#FFF3DA; text-transform:uppercase; font-size:clamp(38px,8.5vw,120px); line-height:.86; letter-spacing:-.03em; margin:0; opacity:{{ wordOpacity }}; transform:{{ wordTransform }}; text-shadow:0 6px 0 rgba(11,122,59,.55);">{{ scrubWord }}</p>
+      </div>
+      <div style="position:absolute; bottom:clamp(56px,11vh,108px); left:0; right:0; z-index:3; pointer-events:none; text-align:center; padding:0 6vw;">
+        <p style="margin:0 auto; max-width:34ch; font-size:clamp(14px,1.4vw,19px); font-weight:700; letter-spacing:.06em; color:#FFF3DA; opacity:{{ subOpacity }}; text-shadow:0 2px 8px rgba(11,122,59,.7);">{{ scrubSub }}</p>
+      </div>
+
+      <div style="position:absolute; left:50%; bottom:clamp(20px,5vh,48px); transform:translateX(-50%); width:min(58vw,520px); height:8px; border:2px solid #FFF3DA; border-radius:999px; overflow:hidden; z-index:4;">
+        <div style="height:100%; background:#FF4FA3; width:{{ progressWidth }};"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="jars" style="background:#FFF3DA; color:#0B7A3B; padding:clamp(70px,11vh,140px) clamp(16px,4vw,48px);">
+    <div style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:20px; border-bottom:4px solid #0B7A3B; padding-bottom:22px;">
+      <h2 style="font-family:'Archivo Black',sans-serif; font-size:clamp(40px,7vw,110px); line-height:.88; letter-spacing:-.03em; text-transform:uppercase; margin:0;">Three jars.<br>No mercy.</h2>
+      <span style="font-size:12px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:#0B7A3B;">01 — 03</span>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:clamp(20px,3vw,36px); margin-top:clamp(30px,5vh,56px);">
+      <sc-for list="{{ jars }}" as="jar" hint-placeholder-count="3">
+        <article style="background:#0B7A3B; border:4px solid #0B7A3B; border-radius:28px; overflow:hidden; display:flex; flex-direction:column; transition:transform .3s ease;" style-hover="transform:translateY(-8px)">
+          <div style="position:relative; aspect-ratio:4/5; background:#FF4FA3;">
+            <image-slot id="{{ jar.slotId }}" src="{{ jar.img }}" shape="rect" placeholder="Drop jar photo"></image-slot>
+            <span style="position:absolute; top:14px; left:14px; z-index:2; background:#FFF3DA; color:#0B7A3B; font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; padding:7px 12px; border-radius:999px; pointer-events:none;">{{ jar.heat }}</span>
+          </div>
+          <div style="padding:24px; display:flex; flex-direction:column; gap:12px; flex:1;">
+            <h3 style="font-family:'Archivo Black',sans-serif; color:#FFF3DA; font-size:clamp(26px,2.6vw,36px); line-height:.95; text-transform:uppercase; margin:0;">{{ jar.name }}</h3>
+            <p style="margin:0; color:#E4F5E9; font-size:16px; line-height:1.5; flex:1;">{{ jar.copy }}</p>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding-top:12px; border-top:2px solid rgba(255,243,218,.28);">
+              <span style="font-family:'Archivo Black',sans-serif; color:#FFF3DA; font-size:22px;">{{ jar.price }}</span>
+              <a href="#buy" style="background:#FF4FA3; color:#FFF3DA; font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; padding:12px 18px; border-radius:999px;" style-hover="background:#FFF3DA; color:#0B7A3B">Add</a>
+            </div>
+          </div>
+        </article>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="made" style="background:#FF4FA3; color:#FFF3DA; padding:clamp(70px,11vh,140px) clamp(16px,4vw,48px); position:relative; overflow:hidden;">
+    <div style="position:absolute; inset:0; background-image:radial-gradient(rgba(255,243,218,.22) 2px, transparent 2.2px); background-size:22px 22px; pointer-events:none;"></div>
+    <div style="position:relative; display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:clamp(28px,5vw,72px); align-items:center;">
+      <div>
+        <span style="display:inline-block; font-size:12px; font-weight:700; letter-spacing:.24em; text-transform:uppercase; border:2px solid #FFF3DA; border-radius:999px; padding:8px 16px;">How it's made</span>
+        <h2 style="font-family:'Archivo Black',sans-serif; font-size:clamp(38px,6vw,92px); line-height:.9; letter-spacing:-.03em; text-transform:uppercase; margin:22px 0 0;">Six weeks<br>in the sun.</h2>
+        <div style="display:flex; flex-direction:column; gap:0; margin-top:clamp(26px,4vh,42px);">
+          <sc-for list="{{ steps }}" as="step" hint-placeholder-count="4">
+            <div style="display:flex; gap:20px; align-items:baseline; padding:20px 0; border-top:2px solid rgba(255,243,218,.4);">
+              <span style="font-family:'Archivo Black',sans-serif; font-size:20px; opacity:.7; flex:none; width:44px;">{{ step.n }}</span>
+              <div>
+                <h4 style="font-family:'Archivo Black',sans-serif; font-size:clamp(19px,2vw,26px); text-transform:uppercase; margin:0 0 6px;">{{ step.t }}</h4>
+                <p style="margin:0; font-size:16px; line-height:1.5; max-width:44ch; color:#FFEAF4;">{{ step.d }}</p>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="position:relative; aspect-ratio:4/5; border:4px solid #FFF3DA; border-radius:28px; overflow:hidden;">
+        <image-slot id="process-shot" src="https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260811_192743_6549c6fb-7d80-475f-967b-597f2b75627a.png" shape="rect" placeholder="Drop a sun-curing shot"></image-slot>
+      </div>
+    </div>
+  </section>
+
+  <section id="talk" style="background:#0B7A3B; color:#FFF3DA; padding:clamp(70px,11vh,140px) clamp(16px,4vw,48px);">
+    <div style="max-width:1100px; margin:0 auto; text-align:center;">
+      <span style="font-size:12px; font-weight:700; letter-spacing:.24em; text-transform:uppercase; color:#FF4FA3;">The jar talks back</span>
+      <blockquote style="font-family:'Archivo Black',sans-serif; font-size:clamp(30px,5.4vw,80px); line-height:.94; letter-spacing:-.02em; text-transform:uppercase; margin:26px 0 0; text-wrap:balance;">“I opened it on a Tuesday and my whole street knew.”</blockquote>
+      <p style="margin:24px 0 0; font-size:14px; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:#E4F5E9;">Meera J. — Pune</p>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:20px; margin-top:clamp(46px,7vh,84px); max-width:1100px; margin-left:auto; margin-right:auto;">
+      <sc-for list="{{ stats }}" as="stat" hint-placeholder-count="4">
+        <div style="border:3px solid #FFF3DA; border-radius:22px; padding:26px 20px; text-align:center;">
+          <div style="font-family:'Archivo Black',sans-serif; font-size:clamp(30px,3.4vw,46px); color:#FF4FA3; line-height:1;">{{ stat.v }}</div>
+          <div style="margin-top:10px; font-size:12px; font-weight:700; letter-spacing:.16em; text-transform:uppercase;">{{ stat.l }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="buy" style="background:#FFF3DA; color:#0B7A3B; padding:clamp(80px,13vh,170px) clamp(16px,4vw,48px); text-align:center; position:relative; overflow:hidden;">
+    <div style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:min(90vw,900px); height:min(90vw,900px); border-radius:50%; background:#FF4FA3; opacity:.16;"></div>
+    <div style="position:relative;">
+      <h2 style="font-family:'Archivo Black',sans-serif; font-size:clamp(46px,11vw,180px); line-height:.84; letter-spacing:-.04em; text-transform:uppercase; margin:0;">Eat<br>it<br>loud.</h2>
+      <p style="margin:clamp(22px,4vh,38px) auto 0; max-width:40ch; font-size:clamp(16px,1.6vw,20px); line-height:1.5;">Free shipping across India on two jars or more. Batch 47 ships Friday and it will not last the weekend.</p>
+      <div style="display:flex; flex-wrap:wrap; gap:16px; justify-content:center; margin-top:clamp(26px,4vh,44px);">
+        <a href="#jars" style="background:#0B7A3B; color:#FFF3DA; font-family:'Archivo Black',sans-serif; font-size:clamp(16px,2vw,22px); text-transform:uppercase; padding:22px 44px; border-radius:999px; border:3px solid #0B7A3B;" style-hover="background:#FF4FA3; border-color:#FF4FA3">Shop all jars</a>
+        <a href="#made" style="color:#0B7A3B; font-family:'Archivo Black',sans-serif; font-size:clamp(16px,2vw,22px); text-transform:uppercase; padding:22px 44px; border-radius:999px; border:3px solid #0B7A3B;" style-hover="background:#0B7A3B; color:#FFF3DA">Read the method</a>
+      </div>
+    </div>
+  </section>
+
+  <footer style="background:#0B7A3B; color:#FFF3DA; padding:clamp(40px,7vh,80px) clamp(16px,4vw,48px) 40px; border-top:4px solid #FF4FA3;">
+    <div style="display:flex; flex-wrap:wrap; gap:24px; align-items:flex-end; justify-content:space-between;">
+      <div style="font-family:'Archivo Black',sans-serif; font-size:clamp(48px,12vw,150px); line-height:.8; letter-spacing:-.04em; text-transform:uppercase;">Zesto</div>
+      <div style="display:flex; flex-direction:column; gap:8px; font-size:13px; letter-spacing:.1em; text-transform:uppercase; font-weight:700;">
+        <a href="#jars" style="color:#FFF3DA;">Jars</a>
+        <a href="#made" style="color:#FFF3DA;">Method</a>
+        <a href="#talk" style="color:#FFF3DA;">Stockists</a>
+        <a href="#buy" style="color:#FFF3DA;">Wholesale</a>
+      </div>
+    </div>
+    <div style="margin-top:36px; padding-top:20px; border-top:2px solid rgba(255,243,218,.3); display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:#E4F5E9;">
+      <span>Zesto Foods · Ratnagiri &amp; Pune</span>
+      <span>Batch 47 · Sunned, salted, sealed</span>
+    </div>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+const IMG = 'https://d8j0ntlcm91z4.cloudfront.net/user_3HmSnuni6n6rAaPZw41wetwAObx/hf_20260811_192743_';
+
+class Component extends DCLogic {
+  state = { p: 0, f: 0, scrolled: false, ready: false };
+
+  constructor(props) {
+    super(props);
+    this.scrubRef = React.createRef();
+    this.videoRef = React.createRef();
+    this.filmRef = React.createRef();
+    this.filmVideoRef = React.createRef();
+    this._raf = 0;
+  }
+
+  componentDidMount() {
+    this.onScroll = () => {
+      if (this._raf) return;
+      this._raf = requestAnimationFrame(() => {
+        this._raf = 0;
+        const y = window.scrollY || 0;
+        const el = this.scrubRef.current;
+        let p = 0;
+        if (el) {
+          const r = el.getBoundingClientRect();
+          const span = el.offsetHeight - window.innerHeight;
+          p = span > 0 ? Math.min(1, Math.max(0, -r.top / span)) : 0;
+        }
+        const v = this.videoRef.current;
+        if (v && v.readyState >= 1 && isFinite(v.duration)) v.currentTime = v.duration * p;
+
+        const fe = this.filmRef.current;
+        let f = 0;
+        if (fe) {
+          const fr = fe.getBoundingClientRect();
+          const fspan = fe.offsetHeight - window.innerHeight;
+          f = fspan > 0 ? Math.min(1, Math.max(0, -fr.top / fspan)) : 0;
+        }
+        const fv = this.filmVideoRef.current;
+        if (fv && fv.readyState >= 1 && isFinite(fv.duration)) fv.currentTime = fv.duration * f;
+
+        const scrolled = y > 40;
+        if (p !== this.state.p || f !== this.state.f || scrolled !== this.state.scrolled) this.setState({ p, f, scrolled });
+      });
+    };
+    this.onMeta = () => { this.setState({ ready: true }); this.onScroll(); };
+    [this.videoRef.current, this.filmVideoRef.current].forEach((v) => {
+      if (!v) return;
+      v.addEventListener('loadedmetadata', this.onMeta);
+      if (v.readyState >= 1) this.onMeta();
+    });
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    window.addEventListener('resize', this.onScroll);
+    this.onScroll();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('resize', this.onScroll);
+  }
+
+  renderVals() {
+    const p = this.state.p;
+    const sc = this.state.scrolled;
+    const beats = [
+      { w: 'CUT', s: 'Raw mangoes, quartered with the stone still in.' },
+      { w: 'SALT', s: 'Rock salt, turmeric, and a week of waiting.' },
+      { w: 'SUN', s: 'Six weeks on the terrace, turned every morning.' },
+      { w: 'POUR', s: 'Cold-pressed mustard oil, right to the rim.' },
+      { w: 'EAT', s: 'Open loudly. Share reluctantly.' }
+    ];
+    const i = Math.min(beats.length - 1, Math.floor(p * beats.length));
+    const local = (p * beats.length) - i;
+    const fade = Math.min(1, Math.min(local, 1 - local) * 5 + 0.15);
+    const hasVideo = this.state.ready;
+
+    const f = this.state.f;
+    const fBeats = ['One raw mango', 'Salt and turmeric', 'Six weeks of sun', 'Mustard oil to the rim', 'Sealed. Dated. Loud.'];
+    const fi = Math.min(fBeats.length - 1, Math.floor(f * fBeats.length));
+    const fLocal = (f * fBeats.length) - fi;
+    const fFade = Math.min(1, Math.min(fLocal, 1 - fLocal) * 6 + 0.1);
+
+    return {
+      scrubRef: this.scrubRef,
+      videoRef: this.videoRef,
+      filmRef: this.filmRef,
+      filmVideoRef: this.filmVideoRef,
+      filmScale: 'scale(' + (1.14 - f * 0.14).toFixed(3) + ')',
+      markOpacity: Math.max(0, 1 - f * 2.4).toFixed(3),
+      markTransform: 'scale(' + (1 - f * 0.5).toFixed(3) + ') translateY(' + (f * -60).toFixed(1) + 'px)',
+      filmWord: fBeats[fi],
+      filmWordOpacity: (f < 0.04 ? 0 : fFade).toFixed(3),
+      filmWordTransform: 'translateY(' + ((0.5 - fLocal) * 22).toFixed(1) + 'px)',
+      cueOpacity: Math.max(0, 1 - f * 12).toFixed(3),
+      filmDots: fBeats.map((_, i) => ({ fill: i === fi ? '#FF4FA3' : 'transparent' })),
+      headerBg: sc ? '#0B7A3B' : 'transparent',
+      headerShadow: sc ? '0 2px 0 #FF4FA3' : 'none',
+      headerPad: sc ? '12px' : '22px',
+      logoSize: sc ? '22px' : '30px',
+      discTransform: 'translate(-50%,-50%) scale(' + (0.55 + p * 0.85).toFixed(3) + ') rotate(' + (p * 180).toFixed(1) + 'deg)',
+      jarTransform: 'rotate(' + (-8 + p * 22).toFixed(1) + 'deg) scale(' + (0.92 + p * 0.22).toFixed(3) + ')',
+      wordOpacity: fade.toFixed(3),
+      wordTransform: 'translateY(' + ((0.5 - local) * 34).toFixed(1) + 'px)',
+      subOpacity: (fade * 0.9).toFixed(3),
+      scrubWord: beats[i].w,
+      scrubSub: beats[i].s,
+      progressWidth: (p * 100).toFixed(1) + '%',
+      videoDisplay: hasVideo ? 'block' : 'none',
+      posterDisplay: hasVideo ? 'none' : 'block',
+      jars: [
+        { slotId: 'jar-1', img: IMG + 'f855e072-0bdd-4902-8fd2-9d2c72917214.png', name: 'Original Aam', heat: 'Heat 2/5', price: '₹420', copy: 'The one the grandmothers argue about. Turmeric, fenugreek, mustard oil, and patience.' },
+        { slotId: 'jar-2', img: IMG + '740ac014-79ed-4afb-b2c7-6735a69ae497.png', name: 'Chilli Riot', heat: 'Heat 5/5', price: '₹460', copy: 'Guntur chilli, doubled. A quarter teaspoon rewrites the rest of your plate.' },
+        { slotId: 'jar-3', img: IMG + '97c9a8ea-e979-4f55-9455-66b9e6270060.png', name: 'Sweet & Sour', heat: 'Heat 1/5', price: '₹440', copy: 'Jaggery-set, slow and sticky. The jar people finish first and deny finishing.' }
+      ],
+      steps: [
+        { n: '01', t: 'Pick green', d: 'Raw Ratnagiri mangoes, picked hard and sour in the last week of May.' },
+        { n: '02', t: 'Cut & salt', d: 'Hand-cut with the stone left in, packed in rock salt and turmeric.' },
+        { n: '03', t: 'Sun-cure', d: 'Six weeks on an open terrace, turned every morning by the same two hands.' },
+        { n: '04', t: 'Seal', d: 'Cold-pressed mustard oil poured to the rim, then sealed and dated by batch.' }
+      ],
+      stats: [
+        { v: '47', l: 'Batches since 1974' },
+        { v: '6 wks', l: 'In the sun' },
+        { v: '3', l: 'Ingredients you can\u2019t pronounce: zero' },
+        { v: '18k', l: 'Jars a year' }
+      ]
+    };
+  }
+}
+
+</script>
+</body>
+</html>
