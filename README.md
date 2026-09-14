@@ -129,7 +129,8 @@ openable full screen:
   map: the bike holds still while the plate behind it drifts, the wet road
   shimmers and the rain falls, all periodic across 6s so it loops without a
   seam. The inputs and the grade and depth scripts are in
-  `assets/source/vaayu/plate/`. The earlier procedural loop's renderer,
+  `assets/source/vaayu/plate/`, and `build_media.py` there writes every shipped
+  file under a content-hashed name, because this folder is cached immutable. The earlier procedural loop's renderer,
   `render_hero.py`, is kept beside it.
 
 **Three edits are applied to every export** and must be re-applied after a
