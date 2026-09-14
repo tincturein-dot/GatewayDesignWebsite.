@@ -96,14 +96,14 @@ header nav a:hover{color:var(--bone);}
     radial-gradient(120% 100% at 12% 92%, rgba(237,234,227,.07) 0%, transparent 60%);
   transform:skewY(-4deg);
 }
-/* The hero clip sits between the field and the type, screen-blended: the clip
-   is black everywhere except its streaks, glows and the gust, and black
-   contributes nothing under screen — so it adds light to the CSS field rather
-   than covering it. Luminosity was the wrong choice here; it throws the colour
-   away, which for a clip whose whole point is the lime is most of the picture. */
+/* The hero clip is a photographic plate of the bike in rain, so it sits
+   between the field and the type luminosity-blended at low opacity: it lends
+   the field its light and shape without laying a second picture over the
+   wordmark. Screen suited the old rendered loop, which was black except for
+   its streaks; on a photograph it lifts every shadow and washes the plate out. */
 #herovid{position:absolute;inset:0;z-index:1;width:100%;height:100%;
-  object-fit:cover;background:transparent;opacity:.9;
-  mix-blend-mode:screen;pointer-events:none;}
+  object-fit:cover;background:transparent;opacity:.45;
+  mix-blend-mode:luminosity;pointer-events:none;}
 .vignette{position:absolute;inset:0;z-index:2;pointer-events:none;
   background:linear-gradient(to bottom, rgba(11,11,11,.72) 0%, rgba(11,11,11,.18) 34%, rgba(11,11,11,.86) 100%);}
 
@@ -291,8 +291,9 @@ footer{border-top:1px solid var(--rule-ink);padding-block:clamp(38px,6vh,72px) 3
 <!-- ═══ hero ═══ -->
 <section id="top">
   <div class="field" aria-hidden="true"></div>
-  <!-- Seamless 6s loop, rendered for this page rather than filmed or prompted.
-       Drifts complete a whole number of periods across the clip, so it wraps
+  <!-- Seamless 6s loop built from one generated still and its depth map: the
+       bike never moves; the plate behind it drifts on a closed path, the wet
+       road shimmers and the rain falls whole tile-heights per loop, so it wraps
        without a seam. The CSS field underneath is still the real background —
        if this fails to decode, nothing is missing. -->
   <video id="herovid" src="media/hero.mp4" poster="media/hero-poster.webp"

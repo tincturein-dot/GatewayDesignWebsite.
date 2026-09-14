@@ -123,8 +123,14 @@ openable full screen:
   wordmark compresses along Archivo's variable `wdth` axis rather than being
   transformed. All of it sits inside `@supports`, so a browser without scroll
   timelines gets the finished page with no motion — the same page a visitor
-  asking for reduced motion gets. Its hero loop was rendered by
-  `assets/source/vaayu/render_hero.py`; see `demos/vaayu/MEDIA-TODO.md`.
+  asking for reduced motion gets. Its hero plate is a FLUX.1-schnell still of
+  the bike, graded so the lime is the only colour, animated locally by
+  `assets/source/vaayu/render_plate.py` with a Depth Anything V2 Small depth
+  map: the bike holds still while the plate behind it drifts, the wet road
+  shimmers and the rain falls, all periodic across 6s so it loops without a
+  seam. The inputs and the grade and depth scripts are in
+  `assets/source/vaayu/plate/`. The earlier procedural loop's renderer,
+  `render_hero.py`, is kept beside it.
 
 **Three edits are applied to every export** and must be re-applied after a
 fresh one:
