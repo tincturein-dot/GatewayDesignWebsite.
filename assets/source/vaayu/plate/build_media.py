@@ -13,10 +13,13 @@ Inputs
 Outputs in demos/vaayu/media/
   plate-<h>.mp4           hero loop
   plate-poster-<h>.webp   graded still, the video's poster
-  model-street-<h>.webp   whole bike            (Vaayu Street card)
-  model-long-<h>.webp     the lime-outlined pack (Vaayu Long card: "larger pack")
-  model-zero-<h>.webp     rear hub and swingarm  (Vaayu Zero card)
-All three cards are crops of the one still, so the range reads as one machine.
+  fig-pack-<h>.webp       4:5, the lime-outlined structural pack   (03 The machine, Fig. 01)
+  fig-hub-<h>.webp        3:2, rear hub and swingarm              (03 The machine, Fig. 02)
+  model-street-<h>.webp   3:2, the whole bike                     (04 Street card)
+  model-long-<h>.webp     3:2, the front end                      (04 Long card)
+  model-zero-<h>.webp     3:2, seat, tail and tank line           (04 Zero card)
+Every image is a crop of the one still, so the page reads as one machine, and
+no crop is enlarged more than about 2x at its largest display size on a 2x screen.
 """
 import hashlib, shutil, sys
 from pathlib import Path
@@ -26,11 +29,12 @@ from grade import grade
 
 HERE = Path(__file__).resolve().parent
 MEDIA = HERE.parents[3] / "demos" / "vaayu" / "media"   # plate -> vaayu -> source -> assets -> repo
-CARD = (960, 640)
-CROPS = {  # 3:2 boxes in the 1280x720 graded still
-    "model-street": (250, 90, 1070, 637),
-    "model-long": (520, 140, 970, 440),
-    "model-zero": (300, 330, 690, 590),
+CROPS = {  # name: (box in the 1280x720 graded still, output size)
+    "fig-pack": ((560, 110, 940, 585), (760, 950)),
+    "fig-hub": ((300, 330, 690, 590), (780, 520)),
+    "model-street": ((250, 90, 1070, 637), (1200, 800)),
+    "model-long": ((640, 150, 1100, 457), (920, 614)),
+    "model-zero": ((380, 150, 800, 430), (840, 560)),
 }
 
 
@@ -51,9 +55,9 @@ def main():
     poster = tmp / "poster.webp"
     graded.save(poster, "WEBP", quality=62, method=6)
     names["poster"] = ship(poster, "plate-poster", "webp")
-    for stem, box in CROPS.items():
+    for stem, (box, size) in CROPS.items():
         out = tmp / f"{stem}.webp"
-        card = graded.crop(box).resize(CARD, Image.LANCZOS)
+        card = graded.crop(box).resize(size, Image.LANCZOS)
         card = card.filter(ImageFilter.UnsharpMask(radius=1.2, percent=45, threshold=2))
         card.save(out, "WEBP", quality=74, method=6)
         names[stem] = ship(out, stem, "webp")

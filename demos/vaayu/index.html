@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VAAYU — Electric Motorcycle · a Gateway Designs demo</title>
-<meta name="description" content="A concept site for an Indian electric motorcycle brand. Editorial brutalism, viewport-scale kinetic type, and every piece of motion driven by native CSS scroll timelines. Built by The Gateway Designs as a demonstration piece.">
+<meta name="description" content="A concept launch site for an electric motorcycle from Chennai: night photography, viewport-scale type moving along a variable font's width axis, and every piece of motion a native CSS scroll timeline, with no JavaScript. Built by The Gateway Designs as a demonstration piece.">
 <meta name="robots" content="noindex, follow">
 <meta name="theme-color" content="#0B0B0B">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -12,19 +12,28 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="media/plate-poster-707d094a.webp" fetchpriority="high">
 <style>
 /* ═══════════════════════════════════════════════════════════════════════
    VAAYU — zero JavaScript.
 
    Every piece of motion on this page is a CSS scroll timeline. No GSAP, no
-   ScrollTrigger, no IntersectionObserver, no framework, no runtime. The whole
-   site is this one file plus two fonts, which is the argument it is making.
+   ScrollTrigger, no IntersectionObserver, no framework, no runtime.
 
-   Everything animated is inside @supports (animation-timeline: view()). A
-   browser without scroll timelines ignores those blocks entirely and gets the
-   finished page with no motion — which is the same page a visitor asking for
-   reduced motion gets. The animation is the layer on top, never a prerequisite.
+   Everything animated sits inside @supports (animation-timeline: view()) and
+   prefers-reduced-motion: no-preference. A browser without scroll timelines,
+   or a visitor who asks for less motion, gets the finished page standing
+   still. The animation is the layer on top, never a prerequisite.
+
+   The type system lives at the two ends of Archivo's width axis: wdth 62,
+   tall and narrow, for statements and figures; wdth 125, wide and flat, for
+   names and the colour section. Nothing display-sized sits in between.
    ═══════════════════════════════════════════════════════════════════════ */
+
+/* Registered so they interpolate: the wordmark's base width and each
+   letter's gust are added together into font-stretch. */
+@property --w{syntax:'<number>';inherits:true;initial-value:118}
+@property --g{syntax:'<number>';inherits:false;initial-value:0}
 
 :root{
   --ink:#0B0B0B;
@@ -32,12 +41,18 @@
   --lime:#CCFF00;
   --ash-on-ink:#8C8C85;   /* 5.7:1 on ink  */
   --ash-on-bone:#62625A;  /* 4.9:1 on bone */
-  --rule-ink:rgba(237,234,227,.18);
-  --rule-bone:rgba(11,11,11,.18);
+  --rule-ink:rgba(237,234,227,.16);
+  --rule-bone:rgba(11,11,11,.16);
   --gut:clamp(18px,4vw,56px);
+  --hdr:69px;
+  --s1:clamp(10px,.9vw,14px);
+  --s2:clamp(20px,2vw,32px);
+  --s3:clamp(36px,4vw,64px);
+  --s4:clamp(96px,11vw,176px);
+  --ease:cubic-bezier(.2,.8,.2,1);
 }
 *{box-sizing:border-box;}
-html{background:var(--ink);}
+html{background:var(--ink);scroll-padding-top:var(--hdr);}
 body{
   margin:0;background:var(--ink);color:var(--bone);
   font-family:Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;
@@ -46,48 +61,61 @@ body{
   overflow-x:clip;
 }
 a{color:inherit;text-decoration:none;}
+:focus-visible{outline:2px solid var(--lime);outline-offset:3px;}
 ::selection{background:var(--lime);color:var(--ink);}
 h1,h2,h3{margin:0;text-wrap:balance;}
 p{text-wrap:pretty;}
+img{display:block;max-width:100%;height:auto;}
+figure{margin:0;}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;}
 
 .mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
   font-size:11px;letter-spacing:.18em;text-transform:uppercase;}
 .wrap{max-width:1560px;margin:0 auto;padding-inline:var(--gut);}
+/* <body> is .ink too, so every bone band is also inside an .ink ancestor.
+   Both selectors match with equal weight; the .bone rules must come last. */
+.ink  .mono{color:var(--ash-on-ink);}
 .bone{background:var(--bone);color:var(--ink);}
 .bone .mono{color:var(--ash-on-bone);}
-.ink  .mono{color:var(--ash-on-ink);}
 
 /* ── header ──────────────────────────────────────────────────────────── */
+/* Solid ink, not frosted: a translucent header over the bone bands reads as
+   a grey slab and drops the nav below contrast. 12 + 44 + 12 + 1 = --hdr. */
 header{
   position:fixed;inset:0 0 auto 0;z-index:80;
   display:flex;align-items:center;justify-content:space-between;gap:14px;
-  padding:16px var(--gut);
-  background:color-mix(in srgb, var(--ink) 72%, transparent);
-  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  padding:12px var(--gut);background:var(--ink);
   border-bottom:1px solid var(--rule-ink);
 }
+header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;
+  background:var(--lime);transform-origin:left;transform:scaleX(0);}
 header .mark{font-variation-settings:'wdth' 62,'wght' 800;
   font-size:19px;letter-spacing:.22em;text-transform:uppercase;}
 header nav{display:flex;align-items:center;gap:clamp(14px,2vw,30px);}
 header nav a{font-family:'JetBrains Mono',ui-monospace,monospace;
-  font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ash-on-ink);}
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ash-on-ink);
+  transition:color .2s ease;}
 header nav a:hover{color:var(--bone);}
 .pill{
+  display:inline-flex;align-items:center;min-height:44px;padding:0 20px;
   background:var(--lime);color:var(--ink);
-  font-family:'JetBrains Mono',ui-monospace,monospace;
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-weight:500;
   font-size:11px;letter-spacing:.14em;text-transform:uppercase;
-  padding:11px 18px;border-radius:999px;white-space:nowrap;
-  font-weight:500;
+  border-radius:999px;white-space:nowrap;transition:background .2s ease;
 }
+header nav a.pill{color:var(--ink);}
 .pill:hover{background:var(--bone);}
 
 /* ── hero ────────────────────────────────────────────────────────────── */
-#top{position:relative;min-height:100svh;display:flex;flex-direction:column;
-  justify-content:flex-end;overflow:hidden;padding-bottom:0;}
+/* #top is the scroll track and .stage the frame. At rest (and without scroll
+   timelines) the stage is simply a full-height hero. With them, #top grows
+   and the stage pins while the gust crosses it. */
+#top{position:relative;background:var(--ink);}
+.stage{position:relative;min-height:100svh;display:flex;flex-direction:column;
+  justify-content:flex-end;overflow:clip;}
 
-/* The wind field: the hero's real background, drawn in CSS. If the video
-   below it is missing or cannot decode, this is what shows, and it is meant
-   to. Two skewed repeating gradients drifting at different rates. */
+/* The wind field: drawn in CSS and the hero's real background. If the plate
+   below is missing or cannot decode, this is what shows, and it is meant to. */
 .field{position:absolute;inset:-20% -10%;z-index:0;pointer-events:none;
   background:
     repeating-linear-gradient(102deg, transparent 0 38px, rgba(204,255,0,.09) 38px 39px),
@@ -96,198 +124,321 @@ header nav a:hover{color:var(--bone);}
     radial-gradient(120% 100% at 12% 92%, rgba(237,234,227,.07) 0%, transparent 60%);
   transform:skewY(-4deg);
 }
-/* The hero clip is a photographic plate of the bike in rain, so it sits
-   between the field and the type luminosity-blended at low opacity: it lends
-   the field its light and shape without laying a second picture over the
-   wordmark. Screen suited the old rendered loop, which was black except for
-   its streaks; on a photograph it lifts every shadow and washes the plate out. */
+/* The plate: one generated still of the bike, animated from its depth map
+   into a seamless 6s loop of rain. Luminosity at low opacity lends the field
+   its light and shape without laying a second picture over the wordmark. */
 #herovid{position:absolute;inset:0;z-index:1;width:100%;height:100%;
-  object-fit:cover;background:transparent;opacity:.45;
-  mix-blend-mode:luminosity;pointer-events:none;}
+  object-fit:cover;object-position:52% 50%;background:transparent;opacity:.45;
+  mix-blend-mode:luminosity;pointer-events:none;transform-origin:56% 52%;}
 /* iOS will not autoplay any video in Low Power Mode, muted or not, and draws
    its own play button over the frame instead. The plate is decoration with
-   no controls, so hide that button: the poster (the same still, dimmed the
-   same way) stands in. */
+   no controls, so hide that button: the poster stands in. */
 #herovid::-webkit-media-controls,
 #herovid::-webkit-media-controls-start-playback-button,
 #herovid::-webkit-media-controls-overlay-play-button{display:none !important;-webkit-appearance:none;}
-.vignette{position:absolute;inset:0;z-index:2;pointer-events:none;
-  background:linear-gradient(to bottom, rgba(11,11,11,.72) 0%, rgba(11,11,11,.18) 34%, rgba(11,11,11,.86) 100%);}
+/* The gust: a band of light leaning 12°, with a lime leading edge. Only the
+   pinned stage shows it; at rest it is invisible. */
+.gust{position:absolute;z-index:2;top:-12%;bottom:-12%;left:0;width:34vw;
+  pointer-events:none;opacity:0;mix-blend-mode:screen;
+  background:linear-gradient(90deg,transparent 0%,rgba(237,234,227,.05) 35%,rgba(237,234,227,.13) 72%,rgba(237,234,227,.22) 100%);
+  transform:translateX(-42vw) skewX(-12deg);}
+.gust::after{content:"";position:absolute;top:0;bottom:0;right:0;width:2px;
+  background:var(--lime);box-shadow:0 0 22px 2px rgba(204,255,0,.55);}
+.vignette{position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:linear-gradient(to bottom, rgba(11,11,11,.7) 0%, rgba(11,11,11,.14) 32%, rgba(11,11,11,.3) 58%, rgba(11,11,11,.9) 100%);}
 
-.hero-inner{position:relative;z-index:3;width:100%;}
-.hero-meta{display:flex;flex-wrap:wrap;gap:10px 26px;color:var(--ash-on-ink);
-  padding-block:0 clamp(14px,2vh,24px);}
+.hero-inner{position:relative;z-index:4;width:100%;padding-block:clamp(84px,14svh,112px) 0;}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px 0;color:var(--ash-on-ink);
+  margin:0;padding-block:0 clamp(14px,2vh,24px);}
+.hero-meta span+span::before{content:"/";margin-inline:18px;color:rgba(237,234,227,.3);}
 .hero-meta b{color:var(--lime);font-weight:500;}
+.pass-cap{position:absolute;z-index:4;right:var(--gut);top:calc(var(--hdr) + clamp(22px,4vh,40px));
+  margin:0;text-align:right;color:var(--ash-on-ink);max-width:24ch;line-height:1.7;}
+.pass-cap b{display:block;color:var(--bone);font-weight:500;}
 
-/* Kinetic wordmark. The width axis runs 125 → 62 across the first screen of
-   scroll, so the word physically compresses as the page moves. Archivo's
-   variable wdth axis does the work; nothing is being scaled or transformed. */
+/* Kinetic wordmark. Each letter's font-stretch is the word's width (--w)
+   plus its own gust (--g). font-variation-settings is reset to normal here,
+   because the body's explicit wdth would otherwise override font-stretch. */
 h1.wordmark{
-  font-size:clamp(76px,22.5vw,340px);
-  line-height:.78;
-  letter-spacing:-.035em;
-  font-variation-settings:'wdth' 118,'wght' 800;
-  text-transform:uppercase;
-  margin-bottom:clamp(8px,1.6vh,18px);
+  font-size:min(20.5vw,330px);line-height:.78;white-space:nowrap;
+  text-transform:uppercase;font-variation-settings:normal;font-weight:800;
+  letter-spacing:-.03em;margin:0 0 clamp(8px,1.6vh,18px) -.04em;
 }
+.wm i{font-style:normal;font-stretch:calc((var(--w) + var(--g)) * 1%);}
+.wm i:nth-child(2),.wm i:nth-child(4){margin-left:-.02em;}
 .hero-sub{max-width:30ch;font-size:clamp(15px,1.5vw,19px);line-height:1.5;
-  color:var(--bone);opacity:.88;margin:0 0 clamp(22px,3.4vh,40px);}
+  color:var(--bone);opacity:.9;margin:0 0 clamp(22px,3.4vh,40px);}
 
-/* spec ticker */
-.ticker{position:relative;z-index:3;border-block:1px solid var(--rule-ink);
+/* spec ticker: the separator is the gust's 12° lean */
+.ticker{position:relative;z-index:4;border-block:1px solid var(--rule-ink);
   overflow:hidden;padding-block:13px;}
-.ticker-run{display:flex;width:max-content;gap:0;}
+.ticker-run{display:flex;align-items:center;width:max-content;}
 .ticker-run span{padding-inline:26px;color:var(--ash-on-ink);white-space:nowrap;}
-.ticker-run span em{color:var(--lime);font-style:normal;}
+.ticker-run .tick{padding:0;width:14px;height:7px;background:var(--lime);
+  clip-path:polygon(24% 0,100% 0,76% 100%,0 100%);}
 
-/* ── generic section furniture ───────────────────────────────────────── */
+/* ── section furniture ───────────────────────────────────────────────── */
 section{position:relative;}
-.band{padding-block:clamp(72px,12vh,170px);}
-.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:clamp(22px,3vh,40px);}
+.band{padding-block:var(--s4);}
+.eyebrow{display:flex;align-items:center;gap:12px;margin:0 0 var(--s2);}
 .eyebrow::after{content:"";flex:1;height:1px;background:currentColor;opacity:.25;}
-.statement{font-variation-settings:'wdth' 92,'wght' 800;
-  font-size:clamp(38px,6.6vw,116px);line-height:.92;letter-spacing:-.035em;
+.eyebrow--c{justify-content:center;}
+.eyebrow--c::before{content:"";flex:1;height:1px;background:currentColor;opacity:.25;}
+
+.statement{font-variation-settings:'wdth' 62,'wght' 800;
+  font-size:clamp(56px,11vw,190px);line-height:.84;letter-spacing:-.005em;
   text-transform:uppercase;}
 .statement .lime{color:var(--lime);}
-.lede{max-width:52ch;font-size:clamp(16px,1.45vw,20px);line-height:1.58;
-  margin:clamp(24px,3.4vh,44px) 0 0;}
+/* On bone, lime text fails contrast; keep the brand hex as an underbar. */
+.bone .statement .lime{color:var(--ink);
+  background:linear-gradient(var(--lime),var(--lime)) 0 90% / 100% .15em no-repeat;
+  padding-inline:.02em;}
+/* A statement line rises from behind its own baseline, so a paused reveal
+   shows whole lines, never glyphs cut in half. overflow:clip is not a scroll
+   container, so view() still tracks the page. */
+.ln{display:block;overflow:clip;overflow-clip-margin:.08em;white-space:nowrap;
+  padding-block:.03em .09em;margin-block:-.03em -.09em;}
+.ln>span{display:block;}
+
+.lede{max-width:52ch;font-size:clamp(16px,1.45vw,20px);line-height:1.6;margin:var(--s3) 0 0;}
+.ink .lede{color:rgba(237,234,227,.86);}
 .bone .lede{color:#2A2A26;}
 
+/* Statement left, copy right, bottom-aligned; the statement column is sized
+   to its own content so no line ever clips. */
+.head{display:grid;gap:var(--s2);}
+@media(min-width:1024px){
+  .head{grid-template-columns:max-content minmax(28ch,1fr);column-gap:clamp(40px,6vw,110px);align-items:end;}
+  .head .statement{font-size:min(10.5vw,150px);}
+  .head .lede{margin-top:0;}
+  .head .lede+.lede{margin-top:1em;}
+}
+
 /* ── numbers ─────────────────────────────────────────────────────────── */
-.figures{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
-  background:var(--rule-ink);border:1px solid var(--rule-ink);margin-top:clamp(30px,5vh,60px);}
-.fig{background:var(--ink);padding:clamp(22px,3.4vw,44px);}
-.fig .n{display:flex;align-items:baseline;gap:.06em;
-  font-variation-settings:'wdth' 78,'wght' 800;
-  font-size:clamp(48px,8.4vw,132px);line-height:.86;letter-spacing:-.04em;}
-.fig .n .unit{font-size:.26em;letter-spacing:.02em;color:var(--lime);
-  font-variation-settings:'wdth' 100,'wght' 600;}
-.fig .l{margin-top:14px;color:var(--ash-on-ink);}
+.figures{display:grid;grid-template-columns:repeat(3,1fr);
+  border:1px solid var(--rule-ink);margin-top:var(--s3);}
+.fig{padding:clamp(22px,3.4vw,48px);view-timeline:--fig block;}
+.fig+.fig{border-left:1px solid var(--rule-ink);}
+.fig .n{display:flex;align-items:baseline;gap:.08em;
+  font-variation-settings:'wdth' 62,'wght' 800;
+  font-size:clamp(88px,11vw,170px);line-height:1;letter-spacing:-.01em;}
+.fig .n .num{display:inline-flex;align-items:flex-start;height:1em;line-height:1;}
+.fig .n .unit{font-size:.2em;letter-spacing:.02em;color:var(--lime);
+  font-variation-settings:'wdth' 125,'wght' 600;}
+/* A digit that rolls 0→9 on scroll and lands on its real value (--d). The
+   mask is overflow:clip, not hidden: hidden would make .odo a scroll
+   container and freeze its timeline. */
+.odo{display:block;height:1em;overflow:clip;}
+.odo i{display:block;font-style:normal;line-height:1;transform:translateY(calc(var(--d) * -10%));}
+.fig .l{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--rule-ink);}
 
-/* A digit that rolls 0→9 on scroll. The column is ten glyphs tall and gets
-   translated by a scroll timeline; the mask is plain overflow. */
-.odo{display:inline-block;height:1em;line-height:1;overflow:hidden;vertical-align:baseline;}
-.odo i{display:block;font-style:normal;line-height:1;}
-
-/* ── schematic ───────────────────────────────────────────────────────── */
-.schema{display:grid;grid-template-columns:1fr;gap:clamp(26px,4vw,56px);
-  align-items:center;margin-top:clamp(28px,4vh,52px);}
-@media(min-width:900px){.schema{grid-template-columns:1.35fr .85fr;}}
-.schema svg{width:100%;height:auto;display:block;}
+/* ── machine ─────────────────────────────────────────────────────────── */
+.machine{display:grid;gap:var(--s3);margin-top:var(--s3);}
+@media(min-width:900px){
+  .machine{grid-template-columns:minmax(0,5fr) minmax(0,6fr);align-items:start;}
+}
+.plate{margin:0;}
+.plate .frame{position:relative;overflow:clip;background:var(--ink);}
+.plate img{width:100%;height:100%;object-fit:cover;}
+.plate--tall .frame{aspect-ratio:4/5;}
+.plate--wide .frame{aspect-ratio:3/2;}
+.plate figcaption{display:flex;gap:14px;align-items:baseline;margin-top:14px;
+  padding-top:12px;border-top:1px solid var(--rule-bone);line-height:1.6;}
+.plate figcaption b{color:var(--ink);font-weight:500;white-space:nowrap;}
+.machine-side{display:grid;gap:var(--s3);}
 .specs{display:flex;flex-direction:column;}
 .spec-row{display:grid;grid-template-columns:1fr auto;gap:6px 18px;
-  padding-block:15px;border-top:1px solid var(--rule-bone);align-items:baseline;}
+  padding-block:16px;border-top:1px solid var(--rule-bone);align-items:baseline;}
 .spec-row:last-child{border-bottom:1px solid var(--rule-bone);}
 .spec-row .k{color:var(--ash-on-bone);}
-.spec-row .v{font-variation-settings:'wdth' 88,'wght' 700;font-size:clamp(17px,1.9vw,24px);}
+.spec-row .v{font-variation-settings:'wdth' 125,'wght' 600;font-size:clamp(16px,1.6vw,21px);
+  text-transform:uppercase;letter-spacing:-.01em;}
 
 /* ── models ──────────────────────────────────────────────────────────── */
-.models{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));
-  gap:1px;background:var(--rule-ink);border:1px solid var(--rule-ink);
-  margin-top:clamp(30px,5vh,60px);}
-.model{background:var(--ink);padding:clamp(22px,2.6vw,38px);
-  display:flex;flex-direction:column;gap:16px;container-type:inline-size;
-  transition:background .3s ease;}
-.model:hover{background:#131311;}
-.model .tag{color:var(--lime);}
-.model h3{font-variation-settings:'wdth' 74,'wght' 800;
-  font-size:clamp(30px,7cqw,56px);line-height:.9;letter-spacing:-.03em;text-transform:uppercase;}
-.model p{margin:0;color:var(--ash-on-ink);font-size:15px;line-height:1.55;flex:1;}
+.models{display:grid;grid-template-columns:repeat(3,1fr);
+  border:1px solid var(--rule-ink);margin-top:var(--s3);}
+.model{position:relative;display:flex;flex-direction:column;container-type:inline-size;
+  background:var(--ink);transition:background .35s ease;}
+.model+.model{border-left:1px solid var(--rule-ink);}
+.model:hover{background:#121210;}
+.shot{position:relative;aspect-ratio:3/2;overflow:clip;background:var(--ink);
+  border-bottom:1px solid var(--rule-ink);}
+.shot img{width:100%;height:100%;object-fit:cover;transition:scale .9s var(--ease);}
+.model:hover .shot img{scale:1.04;}
+.model .cell{flex:1;display:flex;flex-direction:column;gap:14px;padding:clamp(22px,2.6vw,38px);}
+.model .tag{display:flex;justify-content:space-between;gap:12px;margin:0;color:var(--lime);}
+.model .tag span+span{color:var(--ash-on-ink);}
+.model h3{font-variation-settings:'wdth' 62,'wght' 800;
+  font-size:clamp(56px,26cqi,112px);line-height:.82;letter-spacing:0;text-transform:uppercase;}
+.model .desc{margin:0;color:var(--ash-on-ink);font-size:15px;line-height:1.6;flex:1;}
 .model .foot{display:flex;align-items:baseline;justify-content:space-between;
-  gap:12px;padding-top:14px;border-top:1px solid var(--rule-ink);}
-.model .price{font-variation-settings:'wdth' 88,'wght' 700;font-size:20px;}
+  gap:12px;padding-top:16px;border-top:1px solid var(--rule-ink);}
+.model .price{font-variation-settings:'wdth' 125,'wght' 600;font-size:19px;}
+.model .go{color:var(--lime);padding-block:14px;margin-block:-14px;}
+.model .go::after{content:"";position:absolute;inset:0;}   /* the whole card is the link */
+.model:focus-within{outline:2px solid var(--lime);outline-offset:-2px;}
+.model .go:focus-visible{outline:none;}
 
-/* ── colourway strip ─────────────────────────────────────────────────── */
-.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-  gap:12px;margin-top:clamp(28px,4vh,50px);}
-.sw{aspect-ratio:4/5;border-radius:3px;display:flex;align-items:flex-end;
-  padding:16px;position:relative;overflow:hidden;}
-.sw span{position:relative;z-index:2;mix-blend-mode:difference;color:#fff;}
+/* ── colours ─────────────────────────────────────────────────────────── */
+#colours .statement{font-variation-settings:'wdth' 125,'wght' 700;
+  font-size:clamp(40px,7.4vw,130px);line-height:.9;letter-spacing:-.02em;}
+/* Die-cut chips on the gust's lean: parallel slanted edges, constant gutters. */
+.swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+  margin-top:var(--s3);view-timeline:--sw block;}
+.sw{aspect-ratio:1/1;background:var(--bg);color:var(--fg);
+  clip-path:polygon(21% 0,100% 0,79% 100%,0 100%);
+  display:flex;flex-direction:column;justify-content:flex-end;gap:6px;
+  padding:16px 26% 18px 8%;}
+.sw-name{font-variation-settings:'wdth' 125,'wght' 700;font-size:clamp(17px,1.7vw,26px);
+  line-height:1;text-transform:uppercase;letter-spacing:-.01em;}
+.bone .sw .sw-code{color:var(--fg);letter-spacing:.12em;}
+.sw-note{margin:var(--s3) 0 0;padding-top:14px;border-top:1px solid var(--rule-bone);}
 
 /* ── reserve ─────────────────────────────────────────────────────────── */
 .reserve{text-align:center;}
-.reserve .statement{font-size:clamp(44px,10vw,180px);}
-.big-pill{display:inline-block;margin-top:clamp(26px,4vh,46px);
-  background:var(--lime);color:var(--ink);
+.reserve .statement{font-size:clamp(72px,16vw,280px);line-height:.82;}
+.reserve .lede{margin-inline:auto;}
+.big-pill{display:inline-flex;align-items:center;min-height:58px;margin-top:var(--s3);
+  background:var(--lime);color:var(--ink);padding:0 42px;border-radius:999px;
   font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13px;font-weight:500;
-  letter-spacing:.14em;text-transform:uppercase;padding:20px 40px;border-radius:999px;}
+  letter-spacing:.14em;text-transform:uppercase;transition:background .2s ease;}
 .big-pill:hover{background:var(--bone);}
+.concept{margin:26px 0 0;line-height:2.2;}
+.concept a{color:var(--lime);padding-block:12px;}
+.concept a:hover{color:var(--bone);}
 
 /* ── footer ──────────────────────────────────────────────────────────── */
-footer{border-top:1px solid var(--rule-ink);padding-block:clamp(38px,6vh,72px) 34px;}
-.foot-mark{font-variation-settings:'wdth' 62,'wght' 800;
-  font-size:clamp(64px,19vw,290px);line-height:.74;letter-spacing:-.04em;
-  text-transform:uppercase;color:var(--bone);opacity:.14;
-  margin-bottom:clamp(20px,3vh,40px);}
-.foot-rows{display:flex;flex-wrap:wrap;gap:14px 30px;justify-content:space-between;
-  color:var(--ash-on-ink);border-top:1px solid var(--rule-ink);padding-top:22px;}
+footer{border-top:1px solid var(--rule-ink);padding-block:clamp(38px,6vh,72px) 30px;}
+.foot-mark{font-variation-settings:normal;font-weight:800;font-stretch:125%;
+  font-size:min(20vw,320px);line-height:.78;letter-spacing:-.02em;white-space:nowrap;
+  text-transform:uppercase;color:#1E1E1B;margin-bottom:clamp(20px,3vh,40px);}
+.foot-nav{display:flex;flex-wrap:wrap;gap:0 24px;margin-bottom:6px;}
+.foot-nav a{display:inline-flex;align-items:center;min-height:44px;color:var(--ash-on-ink);transition:color .2s ease;}
+.foot-rows{display:flex;flex-wrap:wrap;gap:12px 30px;justify-content:space-between;align-items:center;
+  color:var(--ash-on-ink);border-top:1px solid var(--rule-ink);padding-top:18px;}
+.foot-rows .credit{color:var(--bone);display:inline-flex;align-items:center;min-height:44px;transition:color .2s ease;}
+.foot-nav a:hover,.foot-rows .credit:hover{color:var(--lime);}
 
 /* ═══ motion ══════════════════════════════════════════════════════════ */
-@keyframes rise{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:none;}}
-@keyframes wipe{from{clip-path:inset(0 100% 0 0);}to{clip-path:inset(0 0 0 0);}}
-@keyframes squeeze{
-  from{font-variation-settings:'wdth' 125,'wght' 800;letter-spacing:-.045em;}
-  to  {font-variation-settings:'wdth' 64,'wght' 800;letter-spacing:.055em;}
-}
+@keyframes rise{from{opacity:0;transform:translateY(28px);}}
+@keyframes lineup{from{transform:translateY(118%);}}
+@keyframes squeeze{from{--w:118;letter-spacing:-.03em;}to{--w:62;letter-spacing:.04em;}}
+@keyframes gust{0%,100%{--g:0;color:var(--bone);}46%,54%{--g:30;color:var(--lime);}}
+@keyframes sweep{from{transform:translateX(-42vw) skewX(-12deg);}to{transform:translateX(112vw) skewX(-12deg);}}
+@keyframes lift{to{opacity:0;transform:translateY(-36px);}}
+@keyframes dolly{from{transform:scale(1);}to{transform:scale(1.08);}}
 @keyframes drift{from{transform:skewY(-4deg) translate3d(0,0,0);}
                  to  {transform:skewY(-4deg) translate3d(-140px,-60px,0);}}
-@keyframes roll{from{transform:translateY(0);}to{transform:translateY(-90%);}}
+@keyframes roll{from{transform:translateY(0);}}
 @keyframes marquee{from{transform:translate3d(0,0,0);}to{transform:translate3d(-50%,0,0);}}
 @keyframes growline{from{transform:scaleX(0);}to{transform:scaleX(1);}}
-
-.ticker-run{transform-origin:left;}
-[data-line]{display:block;height:1px;background:currentColor;opacity:.25;
-  transform-origin:left;}
+@keyframes settle{from{transform:scale(1.14);}}
+@keyframes curtain{from{transform:scaleY(1);}to{transform:scaleY(0);}}
+@keyframes pour{from{clip-path:polygon(21% 0,21% 0,0 100%,0 100%);}}
+@keyframes unsqueeze{from{font-stretch:62%;letter-spacing:.06em;}}
 
 @media (prefers-reduced-motion: no-preference){
-  .ticker-run{animation:marquee 34s linear infinite;}
+  .ticker-run{animation:marquee 38s linear infinite;}
 
-  @supports (animation-timeline: view()){
-    /* Reveals. Elements are visible by default; this only adds the entrance. */
-    [data-rise]{animation:rise linear both;animation-timeline:view();
-      animation-range:entry 4% cover 26%;}
-    [data-wipe]{animation:wipe linear both;animation-timeline:view();
-      animation-range:entry 8% cover 34%;}
-    [data-line]{animation:growline linear both;animation-timeline:view();
-      animation-range:entry 10% cover 30%;}
-    .odo i{animation:roll linear both;animation-timeline:view();
-      animation-range:entry 0% cover 46%;}
+  @supports (animation-timeline: view()) and (view-timeline-name: --a){
+    header::after{animation:growline linear both;animation-timeline:scroll(root);}
+
+    /* Entrances finish while an element is still low on screen. */
+    [data-rise]{animation:rise var(--ease) both;animation-timeline:view();
+      animation-range:entry 0% entry 80%;}
+    .ln>span{animation:lineup cubic-bezier(.2,.85,.25,1) both;animation-timeline:view();
+      animation-range:entry 10% entry 100%;}
+
+    /* Figures arrive left to right and each odometer lands on its digit. */
+    .figures{view-timeline:--figs block;}
+    .fig{animation:rise var(--ease) both;animation-timeline:--figs;}
+    .fig:nth-child(1){animation-range:entry 0% entry 55%;}
+    .fig:nth-child(2){animation-range:entry 12% entry 67%;}
+    .fig:nth-child(3){animation-range:entry 24% entry 79%;}
+    .odo i{animation:roll cubic-bezier(.15,.6,.2,1) both;animation-timeline:--fig;
+      animation-range:entry 100% cover 50%;}
+    .fig:nth-child(2) .odo i{animation-range:entry 100% cover 56%;}
+    .fig:nth-child(3) .odo i{animation-range:entry 100% cover 62%;}
+
+    /* Photographs settle inside their frames as an ink curtain lifts. */
+    .shot img,.plate img{animation:settle var(--ease) both;animation-timeline:view();
+      animation-range:entry 0% cover 55%;}
+    .shot::after,.plate .frame::after{content:"";position:absolute;inset:0;background:var(--ink);
+      transform-origin:bottom;animation:curtain var(--ease) both;animation-timeline:view();
+      animation-range:entry 0% entry 90%;}
+
+    /* Model cards arrive with a cadence on wide screens. */
+    @media(min-width:821px){
+      .models{view-timeline:--models block;}
+      .model{animation:rise var(--ease) both;animation-timeline:--models;}
+      .model:nth-child(1){animation-range:entry 0% entry 55%;}
+      .model:nth-child(2){animation-range:entry 12% entry 67%;}
+      .model:nth-child(3){animation-range:entry 24% entry 79%;}
+    }
+    @media(max-width:820px){
+      .model{animation:rise var(--ease) both;animation-timeline:view();animation-range:entry 0% entry 60%;}
+    }
+
+    /* Colour chips pour in one after another along the lean. */
+    .sw{animation:pour cubic-bezier(.3,.7,.1,1) both;animation-timeline:--sw;}
+    .sw:nth-child(1){animation-range:entry 0% entry 55%;}
+    .sw:nth-child(2){animation-range:entry 12% entry 67%;}
+    .sw:nth-child(3){animation-range:entry 24% entry 79%;}
+    .sw:nth-child(4){animation-range:entry 36% entry 91%;}
+
+    /* The footer wordmark widens back out: the hero's squeeze, reversed. */
+    .foot-mark{animation:unsqueeze var(--ease) both;animation-timeline:view();
+      animation-range:entry 0% entry 100%;}
   }
-  @supports (animation-timeline: scroll()){
-    /* Kinetic wordmark and the drifting field, both tied to page scroll. */
-    h1.wordmark{animation:squeeze linear both;animation-timeline:scroll(root);
-      animation-range:0 72svh;}
-    .field{animation:drift linear both;animation-timeline:scroll(root);
-      animation-range:0 100svh;}
+}
+
+/* The gust. Pinned only where there is room for it: short landscape screens
+   keep the plain hero rather than a stage the header would crowd. */
+@media (prefers-reduced-motion: no-preference) and (min-height: 521px){
+  @supports (animation-timeline: view()) and (view-timeline-name: --a){
+    #top{height:250svh;view-timeline:--pass block;}
+    .stage{position:sticky;top:0;height:100svh;min-height:0;}
+    #herovid{animation:dolly linear both;animation-timeline:--pass;animation-range:contain 0% contain 100%;}
+    .field{animation:drift linear both;animation-timeline:--pass;animation-range:contain 0% contain 100%;}
+    .hero-meta,.hero-sub{animation:lift linear both;animation-timeline:--pass;animation-range:contain 2% contain 16%;}
+    h1.wordmark{animation:squeeze linear both;animation-timeline:--pass;animation-range:contain 0% contain 62%;}
+    .gust{opacity:1;animation:sweep linear both;animation-timeline:--pass;animation-range:contain 8% contain 66%;}
+    /* Each letter peaks as the band's leading edge passes behind it. */
+    .wm i{animation:gust linear both;animation-timeline:--pass;}
+    .wm i:nth-child(1){animation-range:contain 7% contain 23%;}
+    .wm i:nth-child(2){animation-range:contain 13% contain 29%;}
+    .wm i:nth-child(3){animation-range:contain 18% contain 34%;}
+    .wm i:nth-child(4){animation-range:contain 23% contain 39%;}
+    .wm i:nth-child(5){animation-range:contain 27.5% contain 43.5%;}
+    .pass-cap{animation:rise var(--ease) both;animation-timeline:--pass;animation-range:contain 62% contain 82%;}
   }
 }
 
 /* ── mobile ──────────────────────────────────────────────────────────── */
 @media(max-width:820px){
   header nav a:not(.pill){display:none;}
+  .band{padding-block:76px;}
   .figures{grid-template-columns:1fr;}
-  .schema{grid-template-columns:1fr;}
-  h1.wordmark{font-size:clamp(64px,23vw,140px);}
+  .fig+.fig{border-left:0;border-top:1px solid var(--rule-ink);}
+  .fig .n{font-size:32vw;}
+  .models{grid-template-columns:1fr;}
+  .model+.model{border-left:0;border-top:1px solid var(--rule-ink);}
+  .swatches{grid-template-columns:repeat(2,1fr);}
+  .statement{font-size:17vw;}
+  #colours .statement{font-size:12.5vw;}
+  .reserve .statement{font-size:19vw;}
+  .pass-cap{display:none;}
+  /* Stacked, so a wrapped line never opens with a separator. */
+  .hero-meta{flex-direction:column;gap:7px;}
+  .hero-meta span+span::before{content:none;}
 }
-
-/* studio chrome — only when the demo is the top-level document, never in the
-   Work-page embed. :has() means this needs no script either. */
-.back{position:fixed;bottom:16px;left:16px;z-index:99;display:none;
-  align-items:center;gap:8px;padding:9px 15px 10px;
-  background:rgba(5,5,5,.78);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
-  border:1px solid rgba(237,234,227,.16);border-radius:999px;color:var(--ash-on-ink);
-  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;
-  letter-spacing:.18em;text-transform:uppercase;}
-.back:hover{color:var(--bone);}
 </style>
 </head>
 <body class="ink">
 
-<a class="back" href="/" id="back"><svg width="11" height="12" viewBox="0 0 24 26" fill="none" aria-hidden="true"><path d="M2,26 L2,10 C2,4.5 6,1.5 12,1.5 C18,1.5 22,4.5 22,10 L22,26" stroke="#e8b64c" stroke-width="2.4" stroke-linecap="round"/></svg>Gateway Designs</a>
-
 <header>
   <a href="#top" class="mark">Vaayu</a>
-  <nav>
+  <nav aria-label="Primary">
     <a href="#machine">Machine</a>
     <a href="#models">Models</a>
     <a href="#colours">Colours</a>
@@ -295,28 +446,34 @@ footer{border-top:1px solid var(--rule-ink);padding-block:clamp(38px,6vh,72px) 3
   </nav>
 </header>
 
+<main>
 <!-- ═══ hero ═══ -->
 <section id="top">
-  <div class="field" aria-hidden="true"></div>
-  <!-- Seamless 6s loop built from one generated still and its depth map: the
-       bike never moves; the plate behind it drifts on a closed path, the wet
-       road shimmers and the rain falls whole tile-heights per loop, so it wraps
-       without a seam. The CSS field underneath is still the real background —
-       if this fails to decode, nothing is missing. -->
-  <video id="herovid" src="media/plate-1201b865.mp4" poster="media/plate-poster-707d094a.webp"
-         autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
-  <div class="vignette" aria-hidden="true"></div>
+  <div class="stage">
+    <div class="field" aria-hidden="true"></div>
+    <!-- Seamless 6s loop built from one generated still and its depth map: the
+         bike never moves; the plate behind it drifts on a closed path, the wet
+         road shimmers and the rain falls whole tile-heights per loop. The CSS
+         field underneath is still the real background — if this fails to
+         decode, nothing is missing. -->
+    <video id="herovid" src="media/plate-1201b865.mp4" poster="media/plate-poster-707d094a.webp"
+           autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
+    <div class="gust" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
 
-  <div class="hero-inner wrap" style="padding-block:112px 0;">
-    <p class="mono hero-meta"><span>Chennai · India</span><span>Type 04 · Naked</span><span><b>Deliveries from March</b></span></p>
-    <h1 class="wordmark">Vaayu</h1>
-    <p class="hero-sub">An electric motorcycle with nothing in the middle. No engine, no gearbox, no noise you did not ask for.</p>
-  </div>
+    <p class="mono pass-cap" aria-hidden="true"><b>Vaayu Street</b>21.5 kWh structural pack<br>Motor in the rear hub<br>Nothing in the middle</p>
 
-  <div class="ticker" aria-hidden="true">
-    <div class="ticker-run mono">
-      <span>218 km range</span><span><em>✳</em></span><span>0–60 in 2.9s</span><span><em>✳</em></span><span>Zero gears</span><span><em>✳</em></span><span>Built in Chennai</span><span><em>✳</em></span><span>218 km range</span><span><em>✳</em></span><span>0–60 in 2.9s</span><span><em>✳</em></span><span>Zero gears</span><span><em>✳</em></span><span>Built in Chennai</span><span><em>✳</em></span>
-      <span>218 km range</span><span><em>✳</em></span><span>0–60 in 2.9s</span><span><em>✳</em></span><span>Zero gears</span><span><em>✳</em></span><span>Built in Chennai</span><span><em>✳</em></span><span>218 km range</span><span><em>✳</em></span><span>0–60 in 2.9s</span><span><em>✳</em></span><span>Zero gears</span><span><em>✳</em></span><span>Built in Chennai</span><span><em>✳</em></span>
+    <div class="hero-inner wrap">
+      <p class="mono hero-meta"><span>Chennai · India</span><span>Type 04 · Naked</span><span><b>Deliveries from March</b></span></p>
+      <h1 class="wordmark"><span class="vh">Vaayu</span><span class="wm" aria-hidden="true"><i>V</i><i>A</i><i>A</i><i>Y</i><i>U</i></span></h1>
+      <p class="hero-sub">An electric motorcycle with nothing in the middle. No engine, no gearbox, no noise you did not ask for.</p>
+    </div>
+
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-run mono">
+        <span>218 km range</span><span class="tick"></span><span>0–60 in 2.9s</span><span class="tick"></span><span>Zero gears</span><span class="tick"></span><span>Built in Chennai</span><span class="tick"></span><span>218 km range</span><span class="tick"></span><span>0–60 in 2.9s</span><span class="tick"></span><span>Zero gears</span><span class="tick"></span><span>Built in Chennai</span><span class="tick"></span>
+        <span>218 km range</span><span class="tick"></span><span>0–60 in 2.9s</span><span class="tick"></span><span>Zero gears</span><span class="tick"></span><span>Built in Chennai</span><span class="tick"></span><span>218 km range</span><span class="tick"></span><span>0–60 in 2.9s</span><span class="tick"></span><span>Zero gears</span><span class="tick"></span><span>Built in Chennai</span><span class="tick"></span>
+      </div>
     </div>
   </div>
 </section>
@@ -325,9 +482,13 @@ footer{border-top:1px solid var(--rule-ink);padding-block:clamp(38px,6vh,72px) 3
 <section class="band bone" id="thesis">
   <div class="wrap">
     <p class="mono eyebrow">01 — The argument</p>
-    <h2 class="statement" data-wipe>Wind has<br>no <span class="lime" style="color:#5F7A00">engine</span>.</h2>
-    <p class="lede" data-rise>Every motorcycle sold in this country is an apology for its engine. Fairings to hide it, chrome to forgive it, a exhaust note engineered to make you want it. Take the engine out and there is nothing left to style around — which is either a problem or the whole point.</p>
-    <p class="lede" data-rise>We built the frame first. The battery is structural, the motor sits in the hub, and the space where a cylinder would have been is simply air.</p>
+    <div class="head">
+      <h2 class="statement"><span class="ln"><span>Wind has</span></span><span class="ln"><span>no <span class="lime">engine</span>.</span></span></h2>
+      <div>
+        <p class="lede" data-rise>Every motorcycle sold in this country is an apology for its engine. Fairings to hide it, chrome to forgive it, an exhaust note engineered to make you want it. Take the engine out and there is nothing left to style around — which is either a problem or the whole point.</p>
+        <p class="lede" data-rise>We built the frame first. The battery is structural, the motor sits in the hub, and the space where a cylinder would have been is simply air.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -336,17 +497,17 @@ footer{border-top:1px solid var(--rule-ink);padding-block:clamp(38px,6vh,72px) 3
   <div class="wrap">
     <p class="mono eyebrow">02 — Measured, not claimed</p>
     <div class="figures">
-      <div class="fig" data-rise>
-        <div class="n">21<span class="odo"><i>0<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</i></span><span class="unit">km</span></div>
-        <p class="l mono">Range, IDC cycle, 21.5 kWh pack</p>
+      <div class="fig">
+        <div class="n" role="img" aria-label="218 kilometres"><span class="num" aria-hidden="true">21<span class="odo" style="--d:8"><i>0<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</i></span></span><span class="unit" aria-hidden="true">km</span></div>
+        <p class="l mono">Range · IDC cycle · 21.5 kWh pack</p>
       </div>
-      <div class="fig" data-rise>
-        <div class="n">2.<span class="odo"><i>0<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</i></span><span class="unit">sec</span></div>
-        <p class="l mono">Nought to sixty, one rider, no launch mode</p>
+      <div class="fig">
+        <div class="n" role="img" aria-label="2.9 seconds"><span class="num" aria-hidden="true">2.<span class="odo" style="--d:9"><i>0<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</i></span></span><span class="unit" aria-hidden="true">sec</span></div>
+        <p class="l mono">Nought to sixty · one rider · no launch mode</p>
       </div>
-      <div class="fig" data-rise>
-        <div class="n">4<span class="odo"><i>0<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</i></span><span class="unit">min</span></div>
-        <p class="l mono">Ten to eighty per cent on a 50 kW charger</p>
+      <div class="fig">
+        <div class="n" role="img" aria-label="42 minutes"><span class="num" aria-hidden="true">4<span class="odo" style="--d:2"><i>0<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</i></span></span><span class="unit" aria-hidden="true">min</span></div>
+        <p class="l mono">Ten to eighty per cent · 50 kW charger</p>
       </div>
     </div>
   </div>
@@ -356,49 +517,28 @@ footer{border-top:1px solid var(--rule-ink);padding-block:clamp(38px,6vh,72px) 3
 <section class="band bone" id="machine">
   <div class="wrap">
     <p class="mono eyebrow">03 — The machine</p>
-    <h2 class="statement" data-wipe>Nothing in<br>the middle.</h2>
-    <div class="schema">
-      <div data-rise>
-        <svg viewBox="0 0 760 360" role="img" aria-label="Schematic side elevation: two wheels, a structural battery block where an engine would sit, and a hub motor in the rear wheel.">
-          <g fill="none" stroke="#0B0B0B" stroke-width="1.4" opacity=".28">
-            <path d="M0 300h760M0 60h760M120 0v360M640 0v360"/>
-          </g>
-          <!-- wheels -->
-          <circle cx="180" cy="240" r="94" fill="none" stroke="#0B0B0B" stroke-width="2.6"/>
-          <circle cx="180" cy="240" r="46" fill="none" stroke="#0B0B0B" stroke-width="1.4" opacity=".5"/>
-          <circle cx="580" cy="240" r="94" fill="none" stroke="#0B0B0B" stroke-width="2.6"/>
-          <circle cx="580" cy="240" r="46" fill="#CCFF00" stroke="#0B0B0B" stroke-width="2.6"/>
-          <!-- structural battery block: the part that replaces an engine -->
-          <path d="M296 208 L452 208 L474 150 L318 150 Z" fill="#0B0B0B"/>
-          <!-- frame -->
-          <g fill="none" stroke="#0B0B0B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M180 240 L318 150 L474 150 L580 240"/>
-            <path d="M318 150 L296 208 L452 208 L474 150"/>
-            <path d="M452 208 L580 240"/>
-            <path d="M296 208 L180 240"/>
-            <path d="M318 150 L300 104 L246 96"/>
-            <path d="M474 150 L520 128 L556 138"/>
-          </g>
-          <!-- annotation leaders -->
-          <g fill="none" stroke="#0B0B0B" stroke-width="1" opacity=".55">
-            <path d="M385 179 L385 62 L470 62"/>
-            <path d="M580 240 L700 240 L700 316"/>
-            <path d="M180 240 L96 240 L96 316"/>
-          </g>
-          <g font-family="'JetBrains Mono',monospace" font-size="11" letter-spacing="1.6" fill="#0B0B0B">
-            <text x="478" y="66">STRUCTURAL PACK — 21.5 kWh</text>
-            <text x="628" y="334">HUB MOTOR</text>
-            <text x="24" y="334">NO FORK BRACE</text>
-          </g>
-        </svg>
-      </div>
-      <div class="specs">
-        <div class="spec-row" data-rise><span class="k mono">Motor</span><span class="v">Rear hub, 28 kW</span></div>
-        <div class="spec-row" data-rise><span class="k mono">Torque</span><span class="v">182 Nm at zero</span></div>
-        <div class="spec-row" data-rise><span class="k mono">Pack</span><span class="v">21.5 kWh structural</span></div>
-        <div class="spec-row" data-rise><span class="k mono">Kerb weight</span><span class="v">168 kg</span></div>
-        <div class="spec-row" data-rise><span class="k mono">Gears</span><span class="v">None</span></div>
-        <div class="spec-row" data-rise><span class="k mono">Warranty</span><span class="v">8 years on the pack</span></div>
+    <div class="head">
+      <h2 class="statement"><span class="ln"><span>Nothing in</span></span><span class="ln"><span>the middle.</span></span></h2>
+      <p class="lede" data-rise>A frame, a battery that is part of the frame, and a motor inside the rear wheel. That is the whole drivetrain. The space between your knees is air.</p>
+    </div>
+    <div class="machine">
+      <figure class="plate plate--tall">
+        <div class="frame"><img src="media/fig-pack-37cd325b.webp" width="760" height="950" loading="lazy" decoding="async" alt="The sealed battery pack at night, a hexagonal casing outlined in a thin lime light, sitting where an engine would be."></div>
+        <figcaption class="mono"><b>Fig. 01</b><span>The pack is the frame · 21.5 kWh, structural</span></figcaption>
+      </figure>
+      <div class="machine-side">
+        <div class="specs">
+          <div class="spec-row" data-rise><span class="k mono">Motor</span><span class="v">Rear hub, 28 kW</span></div>
+          <div class="spec-row" data-rise><span class="k mono">Torque</span><span class="v">182 Nm at zero</span></div>
+          <div class="spec-row" data-rise><span class="k mono">Pack</span><span class="v">21.5 kWh structural</span></div>
+          <div class="spec-row" data-rise><span class="k mono">Kerb weight</span><span class="v">168 kg</span></div>
+          <div class="spec-row" data-rise><span class="k mono">Gears</span><span class="v">None</span></div>
+          <div class="spec-row" data-rise><span class="k mono">Warranty</span><span class="v">8 years on the pack</span></div>
+        </div>
+        <figure class="plate plate--wide">
+          <div class="frame"><img src="media/fig-hub-f74ba2ab.webp" width="780" height="520" loading="lazy" decoding="async" alt="The rear wheel and swingarm on wet asphalt: the motor sits inside the hub, with no chain and no sprocket."></div>
+          <figcaption class="mono"><b>Fig. 02</b><span>The motor lives in the rear hub · 28 kW</span></figcaption>
+        </figure>
       </div>
     </div>
   </div>
@@ -409,24 +549,33 @@ footer{border-top:1px solid var(--rule-ink);padding-block:clamp(38px,6vh,72px) 3
   <div class="wrap">
     <p class="mono eyebrow">04 — Three of them</p>
     <div class="models">
-      <div class="model" data-rise>
-        <p class="tag mono">Type 04 · Naked</p>
-        <h3>Vaayu<br>Street</h3>
-        <p>The one without apologies. Flat bar, no screen, no storage, a seat that discourages passengers.</p>
-        <div class="foot"><span class="price">₹2,84,000</span><a href="#reserve" class="mono" style="color:var(--lime)">Reserve →</a></div>
-      </div>
-      <div class="model" data-rise>
-        <p class="tag mono">Type 06 · Tourer</p>
-        <h3>Vaayu<br>Long</h3>
-        <p>Same frame, larger pack, a screen that actually works at 90. For people who ride to other cities on purpose.</p>
-        <div class="foot"><span class="price">₹3,41,000</span><a href="#reserve" class="mono" style="color:var(--lime)">Reserve →</a></div>
-      </div>
-      <div class="model" data-rise>
-        <p class="tag mono">Type 01 · Track</p>
-        <h3>Vaayu<br>Zero</h3>
-        <p>Eighty units. No mirrors, no indicators, no number plate mount. Sold on the understanding that you own a trailer.</p>
-        <div class="foot"><span class="price">On application</span><a href="#reserve" class="mono" style="color:var(--lime)">Enquire →</a></div>
-      </div>
+      <article class="model">
+        <figure class="shot"><img src="media/model-street-9f774c3e.webp" width="1200" height="800" loading="lazy" decoding="async" alt="Vaayu Street parked on wet asphalt at night, side three-quarter, a lime line tracing its battery pack."></figure>
+        <div class="cell">
+          <p class="tag mono"><span>Type 04 · Naked</span><span>01 / 03</span></p>
+          <h3>Street</h3>
+          <p class="desc">The one without apologies. Flat bar, no screen, no storage, a seat that discourages passengers.</p>
+          <div class="foot"><span class="price">₹2,84,000</span><a href="#reserve" class="mono go">Reserve<span class="vh"> Vaayu Street</span> →</a></div>
+        </div>
+      </article>
+      <article class="model">
+        <figure class="shot"><img src="media/model-long-1e4afb8d.webp" width="920" height="614" loading="lazy" decoding="async" alt="The front of Vaayu Long: tank, fork and front wheel, the lime pack outline running down beside the fork."></figure>
+        <div class="cell">
+          <p class="tag mono"><span>Type 06 · Tourer</span><span>02 / 03</span></p>
+          <h3>Long</h3>
+          <p class="desc">Same frame, a larger pack and a longer seat. For people who ride to other cities on purpose.</p>
+          <div class="foot"><span class="price">₹3,41,000</span><a href="#reserve" class="mono go">Reserve<span class="vh"> Vaayu Long</span> →</a></div>
+        </div>
+      </article>
+      <article class="model">
+        <figure class="shot"><img src="media/model-zero-e3ec9883.webp" width="840" height="560" loading="lazy" decoding="async" alt="The seat and bare tail of Vaayu Zero, no number plate mount, a lime line along the tank below."></figure>
+        <div class="cell">
+          <p class="tag mono"><span>Type 01 · Track</span><span>03 / 03</span></p>
+          <h3>Zero</h3>
+          <p class="desc">Eighty units. No mirrors, no indicators, no number plate mount. Sold on the understanding that you own a trailer.</p>
+          <div class="foot"><span class="price">On application</span><a href="#reserve" class="mono go">Enquire<span class="vh"> about Vaayu Zero</span> →</a></div>
+        </div>
+      </article>
     </div>
   </div>
 </section>
@@ -435,32 +584,37 @@ footer{border-top:1px solid var(--rule-ink);padding-block:clamp(38px,6vh,72px) 3
 <section class="band bone" id="colours">
   <div class="wrap">
     <p class="mono eyebrow">05 — Four finishes</p>
-    <h2 class="statement" data-wipe>Pick one.<br>It is painted<br>by hand.</h2>
+    <h2 class="statement"><span class="ln"><span>Pick one.</span></span><span class="ln"><span>It is</span></span><span class="ln"><span>painted</span></span><span class="ln"><span>by hand.</span></span></h2>
+    <p class="lede" data-rise>Four coats, flatted by hand between each, twelve hours in the booth. Every finish costs the same, and every model comes in all four.</p>
     <div class="swatches">
-      <div class="sw" data-rise style="background:#0B0B0B"><span class="mono">Soot</span></div>
-      <div class="sw" data-rise style="background:#CCFF00"><span class="mono">Charge</span></div>
-      <div class="sw" data-rise style="background:#B5442A"><span class="mono">Oxide</span></div>
-      <div class="sw" data-rise style="background:#D8D3C7"><span class="mono">Bone</span></div>
+      <div class="sw" style="--bg:#0B0B0B;--fg:#EDEAE3"><span class="sw-name">Soot</span><span class="mono sw-code">01 · Satin</span></div>
+      <div class="sw" style="--bg:#CCFF00;--fg:#0B0B0B"><span class="sw-name">Charge</span><span class="mono sw-code">02 · Gloss</span></div>
+      <div class="sw" style="--bg:#B5442A;--fg:#EDEAE3"><span class="sw-name">Oxide</span><span class="mono sw-code">03 · Satin</span></div>
+      <div class="sw" style="--bg:#D8D3C7;--fg:#0B0B0B"><span class="sw-name">Bone</span><span class="mono sw-code">04 · Matte</span></div>
     </div>
-    <span data-line style="margin-top:clamp(30px,5vh,60px)"></span>
+    <p class="mono sw-note">Four finishes · every model · no surcharge</p>
   </div>
 </section>
 
 <!-- ═══ reserve ═══ -->
 <section class="band ink reserve" id="reserve">
   <div class="wrap">
-    <h2 class="statement" data-wipe>Ride it<br>in <span class="lime">March</span>.</h2>
-    <p class="lede" data-rise style="margin-inline:auto;text-align:center;">₹10,000 holds a build slot and is fully refundable until the frame is welded. Deliveries begin in Chennai, Bengaluru and Delhi.</p>
-    <a href="#top" class="big-pill">Reserve a build slot</a>
+    <p class="mono eyebrow eyebrow--c">06 — Build slots · Batch 01</p>
+    <h2 class="statement"><span class="ln"><span>Ride it</span></span><span class="ln"><span>in <span class="lime">March</span>.</span></span></h2>
+    <p class="lede" data-rise>₹10,000 holds a build slot and is fully refundable until the frame is welded. Deliveries begin in Chennai, Bengaluru and Delhi.</p>
+    <a href="#concept-note" class="big-pill">Reserve a build slot</a>
+    <p class="mono concept" id="concept-note">Concept site · nothing is reserved · <a href="mailto:hello@thegatewaydesigns.com?subject=A%20site%20like%20Vaayu">Commission one like it →</a> · <a href="/" target="_top">See the studio →</a></p>
   </div>
 </section>
+</main>
 
 <footer>
   <div class="wrap">
     <div class="foot-mark" aria-hidden="true">Vaayu</div>
+    <nav class="foot-nav mono" aria-label="Sections"><a href="#machine">Machine</a><a href="#models">Models</a><a href="#colours">Colours</a><a href="#top">Top ↑</a></nav>
     <div class="foot-rows mono">
-      <span>Vaayu Motors · Chennai</span>
-      <span>Type approval pending · ARAI</span>
+      <span>Vaayu Motors · Chennai · a concept, not a real vehicle</span>
+      <a href="/" target="_top" class="credit">Designed and built by The Gateway Designs ↗</a>
       <span>© 2026</span>
     </div>
   </div>
