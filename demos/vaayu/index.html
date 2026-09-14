@@ -104,6 +104,13 @@ header nav a:hover{color:var(--bone);}
 #herovid{position:absolute;inset:0;z-index:1;width:100%;height:100%;
   object-fit:cover;background:transparent;opacity:.45;
   mix-blend-mode:luminosity;pointer-events:none;}
+/* iOS will not autoplay any video in Low Power Mode, muted or not, and draws
+   its own play button over the frame instead. The plate is decoration with
+   no controls, so hide that button: the poster (the same still, dimmed the
+   same way) stands in. */
+#herovid::-webkit-media-controls,
+#herovid::-webkit-media-controls-start-playback-button,
+#herovid::-webkit-media-controls-overlay-play-button{display:none !important;-webkit-appearance:none;}
 .vignette{position:absolute;inset:0;z-index:2;pointer-events:none;
   background:linear-gradient(to bottom, rgba(11,11,11,.72) 0%, rgba(11,11,11,.18) 34%, rgba(11,11,11,.86) 100%);}
 
